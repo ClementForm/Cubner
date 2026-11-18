@@ -1,0 +1,999 @@
+{
+ "conteneur-10-pieds-dry-hc": {
+  "name": "Conteneur 10 pieds dry HC",
+  "url": "/produit/conteneurs/maritimes/conteneur-10-pieds-dry-hc/",
+  "range": "maritimes",
+  "len": "2,99 m",
+  "vol": "17,90 m³",
+  "area": "6,660 m²",
+  "pallets": "5 palettes Europe",
+  "weight": "1,45 T",
+  "int": [
+   "2 831 mm",
+   "2 352 mm",
+   "2 698 mm"
+  ],
+  "ext": [
+   "2 991 mm",
+   "2 438 mm",
+   "2 896 mm"
+  ],
+  "doors": [
+   null,
+   "2 340 mm",
+   "2 585 mm"
+  ],
+  "payload": "10 160 kg",
+  "tare": "1 450 kg",
+  "structure": "CORTEN High Cube entièrement soudée",
+  "floor": "Contreplaqué marine 28 mm"
+ },
+ "conteneur-10-pieds-dry": {
+  "name": "Conteneur 10 pieds dry",
+  "url": "/produit/conteneurs/maritimes/conteneur-10-pieds-dry/",
+  "range": "maritimes",
+  "len": "2,99 m",
+  "vol": "15,90 m³",
+  "area": "6,660 m²",
+  "pallets": "5 palettes Europe",
+  "weight": "1,45 T",
+  "int": [
+   "2 831 mm",
+   "2 352 mm",
+   "2 393 mm"
+  ],
+  "ext": [
+   "2 991 mm",
+   "2 438 mm",
+   "2 591 mm"
+  ],
+  "doors": [
+   null,
+   "2 340 mm",
+   "2 280 mm"
+  ],
+  "payload": "10 160 kg",
+  "tare": "1 450 kg",
+  "structure": "CORTEN entièrement soudée",
+  "floor": "Contreplaqué marine 28 mm"
+ },
+ "conteneur-8-pieds-dry": {
+  "name": "Conteneur 8 pieds dry",
+  "url": "/produit/conteneurs/maritimes/conteneur-8-pieds-dry/",
+  "range": "maritimes",
+  "len": "2,44 m",
+  "vol": "9,90 m³",
+  "area": "4,800 m²",
+  "pallets": "2 palettes Europe",
+  "int": [
+   "2 288 mm",
+   "2 100 mm",
+   "2 060 mm"
+  ],
+  "ext": [
+   "2 438 mm",
+   "2 200 mm",
+   "2 260 mm"
+  ],
+  "structure": "CORTEN entièrement soudée",
+  "floor": "Contreplaqué marine 28 mm"
+ },
+ "conteneur-6-pieds-dry": {
+  "name": "Conteneur 6 pieds dry",
+  "url": "/produit/conteneurs/maritimes/conteneur-6-pieds-dry/",
+  "range": "maritimes",
+  "len": "1,98 m",
+  "vol": "6,00 m³",
+  "area": "3,460 m²",
+  "pallets": "1 palette Europe",
+  "int": [
+   "1 860 mm",
+   "1 860 mm",
+   "1 750 mm"
+  ],
+  "ext": [
+   "1 980 mm",
+   "1 960 mm",
+   "1 910 mm"
+  ],
+  "structure": "CORTEN entièrement soudée",
+  "floor": "Contreplaqué marine 28 mm"
+ },
+ "conteneur-10-pieds-half-height": {
+  "name": "Conteneur 10 pieds half height",
+  "url": "/produit/conteneurs/maritimes/conteneur-10-pieds-half-height/",
+  "range": "maritimes",
+  "len": "2,99 m",
+  "vol": "7,30 m³",
+  "area": "6,660 m²",
+  "pallets": "5 palettes Europe",
+  "weight": "1,45 T",
+  "int": [
+   "2 831 mm",
+   "2 352 mm",
+   "1 090 mm"
+  ],
+  "ext": [
+   "2 991 mm",
+   "2 438 mm",
+   "1 295 mm"
+  ],
+  "doors": [
+   null,
+   "2 340 mm",
+   "1 020 mm"
+  ],
+  "payload": "10 160 kg",
+  "tare": "1 450 kg",
+  "structure": "CORTEN half height entièrement soudée",
+  "floor": "Contreplaqué marine 28 mm"
+ },
+ "conteneur-20-pieds-dry": {
+  "name": "Conteneur 20 pieds dry",
+  "url": "/produit/conteneurs/maritimes/conteneur-20-pieds-dry/",
+  "range": "maritimes",
+  "len": "6,06 m",
+  "vol": "33,20 m³",
+  "area": "13,870 m²",
+  "pallets": "11 palettes Europe",
+  "weight": "2,20 T",
+  "int": [
+   "5 898 mm",
+   "2 352 mm",
+   "2 393 mm"
+  ],
+  "ext": [
+   "6 058 mm",
+   "2 438 mm",
+   "2 591 mm"
+  ],
+  "doors": [
+   null,
+   "2 340 mm",
+   "2 280 mm"
+  ],
+  "payload": "28 280 kg",
+  "tare": "2 200 kg",
+  "structure": "CORTEN entièrement soudée",
+  "floor": "Contreplaqué marine 28 mm"
+ },
+ "conteneur-20-pieds-dry-hc": {
+  "name": "Conteneur 20 pieds dry HC",
+  "url": "/produit/conteneurs/maritimes/conteneur-20-pieds-dry-hc/",
+  "range": "maritimes",
+  "len": "6,06 m",
+  "vol": "37,40 m³",
+  "area": "13,870 m²",
+  "pallets": "11 palettes Europe",
+  "weight": "2,20 T",
+  "int": [
+   "5 898 mm",
+   "2 352 mm",
+   "2 698 mm"
+  ],
+  "ext": [
+   "6 058 mm",
+   "2 438 mm",
+   "2 896 mm"
+  ],
+  "doors": [
+   null,
+   "2 340 mm",
+   "2 585 mm"
+  ],
+  "payload": "28 280 kg",
+  "tare": "2 200 kg",
+  "structure": "CORTEN High Cube entièrement soudée",
+  "floor": "Contreplaqué marine 28 mm"
+ },
+ "conteneur-20-pieds-half-height": {
+  "name": "Conteneur 20 pieds half height",
+  "url": "/produit/conteneurs/maritimes/conteneur-20-pieds-half-height/",
+  "range": "maritimes",
+  "len": "6,06 m",
+  "vol": "15,10 m³",
+  "area": "13,870 m²",
+  "pallets": "11 palettes Europe",
+  "weight": "2,20 T",
+  "int": [
+   "5 898 mm",
+   "2 352 mm",
+   "1 090 mm"
+  ],
+  "ext": [
+   "6 058 mm",
+   "2 438 mm",
+   "1 295 mm"
+  ],
+  "doors": [
+   null,
+   "2 340 mm",
+   "1 020 mm"
+  ],
+  "payload": "28 280 kg",
+  "tare": "2 200 kg",
+  "structure": "CORTEN half height entièrement soudée",
+  "floor": "Contreplaqué marine 28 mm"
+ },
+ "conteneur-45-pieds-pallets-wide-hc": {
+  "name": "Conteneur 45 pieds pallets wide HC",
+  "url": "/produit/conteneurs/maritimes/conteneur-45-pieds-pallets-wide-hc/",
+  "range": "maritimes",
+  "len": "13,72 m",
+  "vol": "89,00 m³",
+  "area": "32,900 m²",
+  "pallets": "33 palettes Europe",
+  "int": [
+   "13 556 mm",
+   "2 426 mm",
+   "2 698 mm"
+  ],
+  "ext": [
+   "13 716 mm",
+   "2 500 mm",
+   "2 896 mm"
+  ],
+  "structure": "CORTEN 45 pieds pallets wide High Cube",
+  "floor": "Contreplaqué marine 28 mm"
+ },
+ "conteneur-40-pieds-dry": {
+  "name": "Conteneur 40 pieds dry",
+  "url": "/produit/conteneurs/maritimes/conteneur-40-pieds-dry/",
+  "range": "maritimes",
+  "len": "12,19 m",
+  "vol": "67,70 m³",
+  "area": "28,300 m²",
+  "pallets": "25 palettes Europe",
+  "weight": "3,80 T",
+  "int": [
+   "12 032 mm",
+   "2 352 mm",
+   "2 393 mm"
+  ],
+  "ext": [
+   "12 192 mm",
+   "2 438 mm",
+   "2 591 mm"
+  ],
+  "doors": [
+   null,
+   "2 340 mm",
+   "2 280 mm"
+  ],
+  "payload": "26 680 kg",
+  "tare": "3 800 kg",
+  "structure": "CORTEN entièrement soudée",
+  "floor": "Contreplaqué marine 28 mm"
+ },
+ "conteneur-40-pieds-dry-hc": {
+  "name": "Conteneur 40 pieds dry HC",
+  "url": "/produit/conteneurs/maritimes/conteneur-40-pieds-dry-hc/",
+  "range": "maritimes",
+  "len": "12,19 m",
+  "vol": "76,40 m³",
+  "area": "28,300 m²",
+  "pallets": "25 palettes Europe",
+  "weight": "3,80 T",
+  "int": [
+   "12 032 mm",
+   "2 352 mm",
+   "2 698 mm"
+  ],
+  "ext": [
+   "12 192 mm",
+   "2 438 mm",
+   "2 896 mm"
+  ],
+  "doors": [
+   null,
+   "2 340 mm",
+   "2 585 mm"
+  ],
+  "payload": "26 680 kg",
+  "tare": "3 800 kg",
+  "structure": "CORTEN High Cube entièrement soudée",
+  "floor": "Contreplaqué marine 28 mm"
+ },
+ "conteneur-40-pieds-hc-pallet-wide": {
+  "name": "Conteneur 40 pieds HC Pallet Wide",
+  "url": "/produit/conteneurs/maritimes/conteneur-40-pieds-hc-pallet-wide/",
+  "range": "maritimes",
+  "len": "12,19 m",
+  "vol": "67,70 m³",
+  "area": "26,425 m²",
+  "pallets": "20 palettes Europe",
+  "weight": "3,59 T",
+  "int": [
+   "12 029 mm",
+   "2 350 mm",
+   "2 398 mm"
+  ],
+  "ext": [
+   "12 192 mm",
+   "2 438 mm",
+   "2 591 mm"
+  ],
+  "doors": [
+   null,
+   "2 340 mm",
+   "2 280 mm"
+  ],
+  "payload": "26 460 kg",
+  "tare": "3 590 kg",
+  "structure": "CORTEN entièrement soudée",
+  "floor": "Contreplaqué MARINE 28 mm "
+ },
+ "conteneur-stockage-5-pieds": {
+  "name": "Conteneur stockage 5 pieds",
+  "url": "/produit/conteneurs/stockage/conteneur-stockage-5-pieds/",
+  "range": "stockage",
+  "len": "1,52 m",
+  "vol": "4,60 m³",
+  "area": "2,600 m²",
+  "int": [
+   "1 400 mm",
+   "1 860 mm",
+   "1 750 mm"
+  ],
+  "ext": [
+   "1 520 mm",
+   "1 960 mm",
+   "1 910 mm"
+  ],
+  "structure": "CORTEN stockage compact entièrement soudée",
+  "floor": "Contreplaqué marine"
+ },
+ "conteneur-stockage-6-pieds": {
+  "name": "Conteneur stockage 6 pieds",
+  "url": "/produit/conteneurs/stockage/conteneur-stockage-6-pieds/",
+  "range": "stockage",
+  "len": "1,98 m",
+  "vol": "6,00 m³",
+  "area": "3,460 m²",
+  "int": [
+   "1 860 mm",
+   "1 860 mm",
+   "1 750 mm"
+  ],
+  "ext": [
+   "1 980 mm",
+   "1 960 mm",
+   "1 910 mm"
+  ],
+  "structure": "CORTEN stockage entièrement soudée",
+  "floor": "Contreplaqué marine"
+ },
+ "conteneur-stockage-7-pieds": {
+  "name": "Conteneur stockage 7 pieds",
+  "url": "/produit/conteneurs/stockage/conteneur-stockage-7-pieds/",
+  "range": "stockage",
+  "len": "2,20 m",
+  "vol": "8,10 m³",
+  "area": "4,160 m²",
+  "int": [
+   "2 080 mm",
+   "2 000 mm",
+   "1 940 mm"
+  ],
+  "ext": [
+   "2 200 mm",
+   "2 100 mm",
+   "2 100 mm"
+  ],
+  "structure": "CORTEN stockage entièrement soudée",
+  "floor": "Contreplaqué marine"
+ },
+ "conteneur-stockage-8-pieds": {
+  "name": "Conteneur stockage 8 pieds",
+  "url": "/produit/conteneurs/stockage/conteneur-stockage-8-pieds/",
+  "range": "stockage",
+  "len": "2,44 m",
+  "vol": "9,90 m³",
+  "area": "4,800 m²",
+  "int": [
+   "2 288 mm",
+   "2 100 mm",
+   "2 060 mm"
+  ],
+  "ext": [
+   "2 438 mm",
+   "2 200 mm",
+   "2 260 mm"
+  ],
+  "structure": "CORTEN stockage entièrement soudée",
+  "floor": "Contreplaqué marine"
+ },
+ "conteneur-stockage-10-pieds": {
+  "name": "Conteneur stockage 10 pieds",
+  "url": "/produit/conteneurs/stockage/conteneur-stockage-10-pieds/",
+  "range": "stockage",
+  "len": "2,99 m",
+  "vol": "15,90 m³",
+  "area": "6,660 m²",
+  "pallets": "5 palettes Europe",
+  "weight": "1,45 T",
+  "int": [
+   "2 831 mm",
+   "2 352 mm",
+   "2 393 mm"
+  ],
+  "ext": [
+   "2 991 mm",
+   "2 438 mm",
+   "2 591 mm"
+  ],
+  "doors": [
+   null,
+   "2 340 mm",
+   "2 280 mm"
+  ],
+  "payload": "10 160 kg",
+  "tare": "1 450 kg",
+  "structure": "CORTEN stockage 10 pieds entièrement soudée",
+  "floor": "Contreplaqué marine 28 mm"
+ },
+ "conteneur-stockage-15-pieds": {
+  "name": "Conteneur stockage 15 pieds",
+  "url": "/produit/conteneurs/stockage/conteneur-stockage-15-pieds/",
+  "range": "stockage",
+  "len": "4,50 m",
+  "vol": "24,40 m³",
+  "area": "10,200 m²",
+  "pallets": "8 palettes Europe",
+  "int": [
+   "4 340 mm",
+   "2 352 mm",
+   "2 393 mm"
+  ],
+  "ext": [
+   "4 500 mm",
+   "2 438 mm",
+   "2 591 mm"
+  ],
+  "structure": "CORTEN stockage 15 pieds entièrement soudée",
+  "floor": "Contreplaqué marine 28 mm"
+ },
+ "conteneur-offshore-10-pieds": {
+  "name": "Conteneur off-shore 10 pieds",
+  "url": "/produit/conteneurs/offshores/conteneur-offshore-10-pieds/",
+  "range": "offshores",
+  "len": "2,99 m",
+  "vol": "15,90 m³",
+  "area": "6,660 m²",
+  "pallets": "5 palettes Europe",
+  "weight": "1,45 T",
+  "int": [
+   "2 831 mm",
+   "2 352 mm",
+   "2 393 mm"
+  ],
+  "ext": [
+   "2 991 mm",
+   "2 438 mm",
+   "2 591 mm"
+  ],
+  "doors": [
+   null,
+   "2 340 mm",
+   "2 280 mm"
+  ],
+  "payload": "10 160 kg",
+  "tare": "1 450 kg",
+  "structure": "CORTEN off-shore DNV 2.7-1 / CSC",
+  "floor": "Contreplaqué marine 28 mm"
+ },
+ "conteneur-offshore-20-pieds": {
+  "name": "Conteneur off-shore 20 pieds",
+  "url": "/produit/conteneurs/offshores/conteneur-offshore-20-pieds/",
+  "range": "offshores",
+  "len": "6,06 m",
+  "vol": "33,20 m³",
+  "area": "13,870 m²",
+  "pallets": "11 palettes Europe",
+  "weight": "2,20 T",
+  "int": [
+   "5 898 mm",
+   "2 352 mm",
+   "2 393 mm"
+  ],
+  "ext": [
+   "6 058 mm",
+   "2 438 mm",
+   "2 591 mm"
+  ],
+  "doors": [
+   null,
+   "2 340 mm",
+   "2 280 mm"
+  ],
+  "payload": "28 280 kg",
+  "tare": "2 200 kg",
+  "structure": "CORTEN off-shore DNV 2.7-1 / CSC",
+  "floor": "Contreplaqué marine 28 mm"
+ },
+ "conteneur-frigorifique-ice-max": {
+  "name": "Conteneur frigorifique ICE MAX capacité",
+  "url": "/produit/conteneurs/frigorifiques/conteneur-frigorifique-ice-max/",
+  "range": "frigorifiques",
+  "len": "12,19 m",
+  "vol": "67,80 m³",
+  "area": "26,520 m²",
+  "pallets": "20 palettes Europe",
+  "weight": "4,35 T",
+  "int": [
+   "11 583 mm",
+   "2 290 mm",
+   "2 555 mm"
+  ],
+  "ext": [
+   "12 192 mm",
+   "2 438 mm",
+   "2 896 mm"
+  ],
+  "doors": [
+   null,
+   "2 290 mm",
+   "2 500 mm"
+  ],
+  "payload": "26 130 kg",
+  "tare": "4 350 kg",
+  "structure": "CORTEN isolé — groupe froid Thermo King Magnum Plus",
+  "floor": "Sol plat antidérapant aluminium"
+ },
+ "conteneur-frigorifique-45-pieds-pallets-wide": {
+  "name": "Conteneur frigorifique 45 pieds pallets wide",
+  "url": "/produit/conteneurs/frigorifiques/conteneur-frigorifique-45-pieds-pallets-wide/",
+  "range": "frigorifiques",
+  "len": "13,72 m",
+  "vol": "81,40 m³",
+  "area": "31,800 m²",
+  "pallets": "30 palettes Europe",
+  "int": [
+   "13 150 mm",
+   "2 420 mm",
+   "2 555 mm"
+  ],
+  "ext": [
+   "13 716 mm",
+   "2 500 mm",
+   "2 896 mm"
+  ],
+  "structure": "CORTEN 45 pieds pallets wide isolé — groupe froid intégré",
+  "floor": "Plancher aluminium rainuré T-floor"
+ },
+ "conteneur-frigorifique-40-pieds-blast-hc": {
+  "name": "Conteneur frigorifique 40 pieds blast HC",
+  "url": "/produit/conteneurs/frigorifiques/conteneur-frigorifique-40-pieds-blast-hc/",
+  "range": "frigorifiques",
+  "len": "12,19 m",
+  "vol": "67,00 m³",
+  "area": "26,500 m²",
+  "pallets": "14 palettes Europe",
+  "int": [
+   "11 580 mm",
+   "2 290 mm",
+   "2 400 mm"
+  ],
+  "ext": [
+   "12 190 mm",
+   "2 440 mm",
+   "2 900 mm"
+  ],
+  "doors": [
+   null,
+   "1 400 mm",
+   "2 300 mm"
+  ],
+  "structure": "Acier CORTEN + intérieur inox — 5 groupes Thermo King Magnum Plus, isolation PU 100 mm",
+  "floor": "Plancher plat aluminium pour palettes et roll-containers"
+ },
+ "conteneur-frigorifique-40-pieds-hc": {
+  "name": "Conteneur frigorifique 40 pieds high cube",
+  "url": "/produit/conteneurs/frigorifiques/conteneur-frigorifique-40-pieds-hc/",
+  "range": "frigorifiques",
+  "len": "12,19 m",
+  "vol": "67,80 m³",
+  "area": "26,520 m²",
+  "pallets": "20 palettes Europe",
+  "weight": "4,35 T",
+  "int": [
+   "11 583 mm",
+   "2 290 mm",
+   "2 555 mm"
+  ],
+  "ext": [
+   "12 192 mm",
+   "2 438 mm",
+   "2 896 mm"
+  ],
+  "doors": [
+   null,
+   "2 290 mm",
+   "2 500 mm"
+  ],
+  "payload": "26 130 kg",
+  "tare": "4 350 kg",
+  "structure": "CORTEN isolé — groupe froid Thermo King Magnum Plus",
+  "floor": "Sol plat antidérapant aluminium"
+ },
+ "conteneur-frigorifique-20-pieds-atex": {
+  "name": "Conteneur frigorifique 20 pieds ATEX",
+  "url": "/produit/conteneurs/frigorifiques/conteneur-frigorifique-20-pieds-atex/",
+  "range": "frigorifiques",
+  "len": "6,06 m",
+  "vol": "28,30 m³",
+  "area": "12,510 m²",
+  "pallets": "10 palettes Europe",
+  "weight": "3,05 T",
+  "int": [
+   "5 455 mm",
+   "2 294 mm",
+   "2 275 mm"
+  ],
+  "ext": [
+   "6 058 mm",
+   "2 438 mm",
+   "2 591 mm"
+  ],
+  "doors": [
+   null,
+   "2 290 mm",
+   "2 261 mm"
+  ],
+  "payload": "27 430 kg",
+  "tare": "3 050 kg",
+  "structure": "CORTEN isolé PU ATEX — groupe froid zone explosible",
+  "floor": "Plancher aluminium rainuré T-floor"
+ },
+ "conteneur-frigorifique-20-pieds": {
+  "name": "Conteneur frigorifique 20 pieds",
+  "url": "/produit/conteneurs/frigorifiques/conteneur-frigorifique-20-pieds/",
+  "range": "frigorifiques",
+  "len": "6,06 m",
+  "vol": "28,30 m³",
+  "area": "12,510 m²",
+  "pallets": "10 palettes Europe",
+  "weight": "3,05 T",
+  "int": [
+   "5 455 mm",
+   "2 294 mm",
+   "2 275 mm"
+  ],
+  "ext": [
+   "6 058 mm",
+   "2 438 mm",
+   "2 591 mm"
+  ],
+  "doors": [
+   null,
+   "2 290 mm",
+   "2 261 mm"
+  ],
+  "payload": "27 430 kg",
+  "tare": "3 050 kg",
+  "structure": "CORTEN isolé PU — groupe froid intégré",
+  "floor": "Plancher aluminium rainuré T-floor"
+ },
+ "conteneur-frigorifique-20-pieds-hc": {
+  "name": "Conteneur frigorifique 20 pieds HC",
+  "url": "/produit/conteneurs/frigorifiques/conteneur-frigorifique-20-pieds-hc/",
+  "range": "frigorifiques",
+  "len": "6,06 m",
+  "vol": "32,10 m³",
+  "area": "12,510 m²",
+  "pallets": "10 palettes Europe",
+  "weight": "3,05 T",
+  "int": [
+   "5 455 mm",
+   "2 294 mm",
+   "2 575 mm"
+  ],
+  "ext": [
+   "6 058 mm",
+   "2 438 mm",
+   "2 896 mm"
+  ],
+  "doors": [
+   null,
+   "2 290 mm",
+   "2 261 mm"
+  ],
+  "payload": "27 430 kg",
+  "tare": "3 050 kg",
+  "structure": "CORTEN High Cube isolé PU — groupe froid intégré",
+  "floor": "Plancher aluminium rainuré T-floor"
+ },
+ "conteneur-frigorifique-10-pieds": {
+  "name": "Conteneur frigorifique 10 pieds",
+  "url": "/produit/conteneurs/frigorifiques/conteneur-frigorifique-10-pieds/",
+  "range": "frigorifiques",
+  "len": "2,99 m",
+  "vol": "12,50 m³",
+  "area": "5,480 m²",
+  "pallets": "4 palettes Europe",
+  "int": [
+   "2 390 mm",
+   "2 294 mm",
+   "2 275 mm"
+  ],
+  "ext": [
+   "2 991 mm",
+   "2 438 mm",
+   "2 591 mm"
+  ],
+  "structure": "CORTEN isolé PU — groupe froid intégré",
+  "floor": "Plancher aluminium rainuré T-floor"
+ },
+ "conteneur-frigorifique-10-pieds-hc": {
+  "name": "Conteneur frigorifique 10 pieds HC",
+  "url": "/produit/conteneurs/frigorifiques/conteneur-frigorifique-10-pieds-hc/",
+  "range": "frigorifiques",
+  "len": "2,99 m",
+  "vol": "14,10 m³",
+  "area": "5,480 m²",
+  "pallets": "4 palettes Europe",
+  "int": [
+   "2 390 mm",
+   "2 294 mm",
+   "2 575 mm"
+  ],
+  "ext": [
+   "2 991 mm",
+   "2 438 mm",
+   "2 896 mm"
+  ],
+  "structure": "CORTEN High Cube isolé PU — groupe froid intégré",
+  "floor": "Plancher aluminium rainuré T-floor"
+ },
+ "conteneur-frigorifique-iso-sans-groupe": {
+  "name": "Conteneur frigorifique ISO sans groupe froid",
+  "url": "/produit/conteneurs/frigorifiques/conteneur-frigorifique-iso-sans-groupe/",
+  "range": "frigorifiques",
+  "len": "6,06 m",
+  "vol": "28,30 m³",
+  "area": "12,510 m²",
+  "pallets": "10 palettes Europe",
+  "weight": "3,05 T",
+  "int": [
+   "5 455 mm",
+   "2 294 mm",
+   "2 275 mm"
+  ],
+  "ext": [
+   "6 058 mm",
+   "2 438 mm",
+   "2 591 mm"
+  ],
+  "doors": [
+   null,
+   "2 290 mm",
+   "2 261 mm"
+  ],
+  "payload": "27 430 kg",
+  "tare": "3 050 kg",
+  "structure": "CORTEN isolé PU — caisse ISO sans groupe froid",
+  "floor": "Plancher aluminium rainuré T-floor"
+ },
+ "conteneur-40-pieds-open-side-hc": {
+  "name": "Conteneur 40 pieds open side HC",
+  "url": "/produit/conteneurs/specifiques/conteneur-40-pieds-open-side-hc/",
+  "range": "specifiques",
+  "len": "12,19 m",
+  "vol": "76,40 m³",
+  "area": "28,300 m²",
+  "pallets": "25 palettes Europe",
+  "weight": "3,80 T",
+  "int": [
+   "12 032 mm",
+   "2 352 mm",
+   "2 698 mm"
+  ],
+  "ext": [
+   "12 192 mm",
+   "2 438 mm",
+   "2 896 mm"
+  ],
+  "doors": [
+   null,
+   "2 340 mm",
+   "2 280 mm"
+  ],
+  "payload": "26 680 kg",
+  "tare": "3 800 kg",
+  "structure": "CORTEN High Cube open side — ouverture sur grand côté",
+  "floor": "Contreplaqué marine 28 mm"
+ },
+ "conteneur-40-pieds-open-top": {
+  "name": "Conteneur 40 pieds open top",
+  "url": "/produit/conteneurs/specifiques/conteneur-40-pieds-open-top/",
+  "range": "specifiques",
+  "len": "12,19 m",
+  "vol": "67,70 m³",
+  "area": "28,300 m²",
+  "pallets": "25 palettes Europe",
+  "weight": "3,80 T",
+  "int": [
+   "12 032 mm",
+   "2 352 mm",
+   "2 393 mm"
+  ],
+  "ext": [
+   "12 192 mm",
+   "2 438 mm",
+   "2 591 mm"
+  ],
+  "doors": [
+   null,
+   "2 340 mm",
+   "2 280 mm"
+  ],
+  "payload": "26 680 kg",
+  "tare": "3 800 kg",
+  "structure": "CORTEN open top 40 pieds — toit bâché amovible",
+  "floor": "Contreplaqué marine 28 mm"
+ },
+ "conteneur-40-pieds-double-door": {
+  "name": "Conteneur 40 pieds double door",
+  "url": "/produit/conteneurs/specifiques/conteneur-40-pieds-double-door/",
+  "range": "specifiques",
+  "len": "12,19 m",
+  "vol": "67,70 m³",
+  "area": "28,300 m²",
+  "pallets": "25 palettes Europe",
+  "weight": "3,80 T",
+  "int": [
+   "12 032 mm",
+   "2 352 mm",
+   "2 393 mm"
+  ],
+  "ext": [
+   "12 192 mm",
+   "2 438 mm",
+   "2 591 mm"
+  ],
+  "doors": [
+   null,
+   "2 340 mm",
+   "2 280 mm"
+  ],
+  "payload": "26 680 kg",
+  "tare": "3 800 kg",
+  "structure": "CORTEN entièrement soudée — double door 40 pieds",
+  "floor": "Contreplaqué marine 28 mm"
+ },
+ "conteneur-20-pieds-open-top": {
+  "name": "Conteneur 20 pieds open top",
+  "url": "/produit/conteneurs/specifiques/conteneur-20-pieds-open-top/",
+  "range": "specifiques",
+  "len": "6,06 m",
+  "vol": "33,20 m³",
+  "area": "13,870 m²",
+  "pallets": "11 palettes Europe",
+  "weight": "2,20 T",
+  "int": [
+   "5 898 mm",
+   "2 352 mm",
+   "2 393 mm"
+  ],
+  "ext": [
+   "6 058 mm",
+   "2 438 mm",
+   "2 591 mm"
+  ],
+  "doors": [
+   null,
+   "2 340 mm",
+   "2 280 mm"
+  ],
+  "payload": "28 280 kg",
+  "tare": "2 200 kg",
+  "structure": "CORTEN open top — toit bâché amovible",
+  "floor": "Contreplaqué marine 28 mm"
+ },
+ "conteneur-20-pieds-double-door": {
+  "name": "Conteneur 20 pieds double door",
+  "url": "/produit/conteneurs/specifiques/conteneur-20-pieds-double-door/",
+  "range": "specifiques",
+  "len": "6,06 m",
+  "vol": "33,20 m³",
+  "area": "13,870 m²",
+  "pallets": "11 palettes Europe",
+  "weight": "2,20 T",
+  "int": [
+   "5 898 mm",
+   "2 352 mm",
+   "2 393 mm"
+  ],
+  "ext": [
+   "6 058 mm",
+   "2 438 mm",
+   "2 591 mm"
+  ],
+  "doors": [
+   null,
+   "2 340 mm",
+   "2 280 mm"
+  ],
+  "payload": "28 280 kg",
+  "tare": "2 200 kg",
+  "structure": "CORTEN entièrement soudée — double door (ouverture aux deux extrémités)",
+  "floor": "Contreplaqué marine 28 mm"
+ },
+ "conteneur-20-pieds-open-side": {
+  "name": "Conteneur 20 pieds open side",
+  "url": "/produit/conteneurs/specifiques/conteneur-20-pieds-open-side/",
+  "range": "specifiques",
+  "len": "6,06 m",
+  "vol": "33,20 m³",
+  "area": "13,870 m²",
+  "pallets": "11 palettes Europe",
+  "weight": "2,20 T",
+  "int": [
+   "5 898 mm",
+   "2 352 mm",
+   "2 393 mm"
+  ],
+  "ext": [
+   "6 058 mm",
+   "2 438 mm",
+   "2 591 mm"
+  ],
+  "doors": [
+   null,
+   "2 340 mm",
+   "2 280 mm"
+  ],
+  "payload": "28 280 kg",
+  "tare": "2 200 kg",
+  "structure": "CORTEN open side — ouverture sur grand côté",
+  "floor": "Contreplaqué marine 28 mm"
+ },
+ "conteneur-isotank": {
+  "name": "Conteneur ISOTANK",
+  "url": "/produit/conteneurs/specifiques/conteneur-isotank/",
+  "range": "specifiques",
+  "len": "6,06 m",
+  "vol": "24,00 m³",
+  "weight": "3,50 T",
+  "ext": [
+   "6 058 mm",
+   "2 438 mm",
+   "2 591 mm"
+  ],
+  "tare": "3 500 kg",
+  "structure": "Tank type 22K2 — cuve INOX 24 000 L, calorifugeage 50 mm, réchauffeur vapeur",
+  "floor": "Châssis ISO 20 pieds — vidange haute et basse gravitaire"
+ },
+ "conteneur-flat-rack-20-pieds": {
+  "name": "Conteneur flat rack 20 pieds",
+  "url": "/produit/conteneurs/specifiques/conteneur-flat-rack-20-pieds/",
+  "range": "specifiques",
+  "len": "6,06 m",
+  "weight": "2,75 T",
+  "ext": [
+   "6 058 mm",
+   "2 438 mm",
+   "2 591 mm"
+  ],
+  "payload": "31 000 kg",
+  "tare": "2 750 kg",
+  "structure": "Flat rack 20 pieds — parois d’extrémité rabattables",
+  "floor": "Plancher bois / acier pour colis hors gabarit"
+ },
+ "conteneur-flat-rack-40-pieds": {
+  "name": "Conteneur flat rack 40 pieds",
+  "url": "/produit/conteneurs/specifiques/conteneur-flat-rack-40-pieds/",
+  "range": "specifiques",
+  "len": "12,19 m",
+  "weight": "4,90 T",
+  "ext": [
+   "12 192 mm",
+   "2 438 mm",
+   "2 591 mm"
+  ],
+  "payload": "40 000 kg",
+  "tare": "4 900 kg",
+  "structure": "Flat rack 40 pieds — parois d’extrémité rabattables",
+  "floor": "Plancher bois / acier pour colis hors gabarit"
+ }
+}

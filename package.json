@@ -1,0 +1,8 @@
+{
+  "name": "cubner-calcub-pages-seo",
+  "private": true,
+  "description": "Génération des pages SEO CALCUB / Cubner à partir du fichier Excel de contenus",
+  "scripts": {
+    "build": "node build/generate.js"
+  }
+}

@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bibliothèque de composants | CALCUB</title>
+  <meta name="description" content="Page interne : tous les composants uniques des gabarits CALCUB (pilier, catégorie, produit), affichés une seule fois chacun.">
+  <meta name="robots" content="noindex, nofollow">
+
+  <link rel="preconnect" href="https://api.fontshare.com">
+  <link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700,800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/seo-page.css">
+  <link rel="stylesheet" href="assets/css/hub-page.css">
+
+  <!-- Styles propres à cette page de référence uniquement (étiquettes des composants) -->
+  <style>
+    .cl-intro { padding: 8px 0 48px; }
+    .cl-intro h1 { font-size: clamp(34px, 4vw, 52px); line-height: 1.08; margin: 0 0 14px; color: var(--ink); }
+    .cl-intro h1 em { font-style: normal; color: var(--calcub-red); }
+    .cl-intro > p { font-size: 18px; line-height: 1.7; color: var(--text); max-width: 760px; margin: 0 0 32px; }
+    .cl-legend { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 28px; }
+    .cl-index { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+    .cl-index__group { background: var(--bg-soft); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 20px; }
+    .cl-index__group h2 { font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 0 0 10px; }
+    .cl-index__group ol { margin: 0; padding: 0 0 0 20px; }
+    .cl-index__group li { font-size: 15px; line-height: 1.75; color: var(--muted); }
+    .cl-index__group a { color: var(--ink); text-decoration: none; }
+    .cl-index__group a:hover { color: var(--calcub-blue); text-decoration: underline; }
+
+    .cl-block { margin: 0 0 56px; scroll-margin-top: calc(var(--header-h) + 24px); }
+    .cl-group-title { font-size: 28px; color: var(--ink); margin: 72px 0 28px; padding-top: 28px; border-top: 2px solid var(--ink); }
+    .cl-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0 0 14px; }
+    .cl-meta__name { font-size: 16px; font-weight: 700; color: var(--ink); margin-right: 4px; }
+    .cl-meta code { font: 500 13px/1 ui-monospace, SFMono-Regular, Consolas, monospace; background: var(--calcub-blue-soft); color: var(--calcub-blue-dark); padding: 5px 8px; border-radius: 6px; }
+    .cl-tag { font-size: 12px; font-weight: 600; line-height: 1; padding: 5px 9px; border-radius: 99px; border: 1px solid var(--line); color: var(--muted); background: #fff; }
+    .cl-tag--produit { border-color: #f5c6b8; color: var(--calcub-red-dark); background: var(--calcub-red-soft); }
+    .cl-tag--pilier { border-color: #bfd2ea; color: var(--calcub-blue-dark); background: var(--calcub-blue-soft); }
+    .cl-tag--cat { border-color: #cfd6e2; color: var(--calcub-navy); background: #eef1f6; }
+    .cl-note { font-size: 14px; color: var(--muted); margin: 10px 0 0; }
+    .cl-frame { border: 1px dashed #cdd6e3; border-radius: var(--radius); padding: 0; overflow: hidden; }
+    .cl-frame--pad { padding: 28px; }
+    .cl-dark { background: var(--calcub-navy); border-radius: var(--radius); padding: 28px; display: flex; flex-wrap: wrap; gap: 12px; }
+    .cl-frame .topbar, .cl-frame .header { position: static; }
+    .cl-frame .footer { margin: 0; }
+    .cl-frame .related { padding: 0; }
+    .cl-frame .final-cta { margin: 0; }
+    .cl-progress-demo { position: relative; height: 6px; background: var(--line); border-radius: 99px; overflow: hidden; }
+    .cl-progress-demo .read-progress { position: absolute; inset: 0 auto 0 0; width: 45%; }
+    /* Dans le catalogue, chaque section produit/pilier a sa méta juste sous le titre */
+    .article .section .cl-meta { margin-top: -6px; margin-bottom: 22px; }
+    @media (max-width: 960px) { .cl-index { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (max-width: 560px) { .cl-index { grid-template-columns: 1fr; } .cl-frame--pad, .cl-dark { padding: 18px; } }
+  </style>
+</head>
+<body>
+
+<!-- ===================== Icônes (sprite fusionné des 3 pages sur mesure) ===================== -->
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+  <defs>
+    <symbol id="i-phone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></symbol>
+    <symbol id="i-cart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M2 3h3l2.7 12.4a2 2 0 0 0 2 1.6h8.6a2 2 0 0 0 2-1.6L22 7H6"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+    <symbol id="i-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></symbol>
+    <symbol id="i-counter" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9 5 3h14l2 6"/><path d="M3 9h18v3H3zM5 12v9h14v-9"/><path d="M3 9c0 1.5 1.5 2.5 3 2.5S9 10.5 9 9c0 1.5 1.5 2.5 3 2.5s3-1 3-2.5c0 1.5 1.5 2.5 3 2.5s3-1 3-2.5"/></symbol>
+    <symbol id="i-sparkle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v4M12 17v4M3 12h4M17 12h4"/><path d="m6 6 2.5 2.5M15.5 15.5 18 18M6 18l2.5-2.5M15.5 8.5 18 6"/></symbol>
+    <symbol id="i-recycle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 19H4.8a1.8 1.8 0 0 1-1.6-2.7L7.2 9.5"/><path d="M11 19h8.2a1.8 1.8 0 0 0 1.6-2.7l-1.2-2"/><path d="m14 16-3 3 3 3"/><path d="M8.3 13.6 7.2 9.5l-4.1 1.1"/><path d="m9.3 5.6 1.1-1.9a1.8 1.8 0 0 1 3.1 0l3.9 6.8"/><path d="m13.4 10.1 4.1 1.1 1.1-4.1"/></symbol>
+    <symbol id="i-euro" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6.5A7 7 0 1 0 18 17.5"/><path d="M4 10h9M4 14h9"/></symbol>
+    <symbol id="i-sign" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="10" rx="2"/><path d="M8 18v4M16 18v4M8 14v4M16 14v4"/><path d="M7 9h10"/></symbol>
+    <symbol id="i-bulb" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7V16h8v-1.3A7 7 0 0 0 12 2z"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+    <symbol id="i-container" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="1"/><path d="M6 9v6M10 9v6M14 9v6M18 9v6"/></symbol>
+    <symbol id="i-factory" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M2 21V10l6 4V10l6 4V4h6v17z"/><path d="M6 17h2M12 17h2M17 17h1"/></symbol>
+    <symbol id="i-doc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h5"/></symbol>
+    <symbol id="i-plan" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21V3h6v18z"/><path d="M3 7h3M3 11h3M3 15h3"/><path d="m14 21 1.5-5L20 3l2 1-4.5 13z"/><path d="m14 21 3.5-4"/></symbol>
+    <symbol id="i-truck" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M1 5h14v11H1zM15 9h4l3 3v4h-7z"/><circle cx="5.5" cy="18" r="2"/><circle cx="18.5" cy="18" r="2"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></symbol>
+    <symbol id="i-spray" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.7s6 6.3 6 11.3a6 6 0 0 1-12 0c0-5 6-11.3 6-11.3z"/><path d="M9.5 15a2.5 2.5 0 0 0 2.5 2.5"/></symbol>
+    <symbol id="i-floor" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M3 20 7 8h10l4 12z"/><path d="M5 14h14M9 8l-2 12M15 8l2 12"/></symbol>
+    <symbol id="i-bolt" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></symbol>
+    <symbol id="i-brush" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21v-4a3 3 0 0 1 3-3h0a3 3 0 0 1 3 3v0a4 4 0 0 1-4 4z"/><path d="M8 14 20 2l2 2L10 16"/></symbol>
+    <symbol id="i-tent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9h20l-2 4H4z"/><path d="M4 13v8M20 13v8M2 21h20"/><path d="M7 9V5h10v4"/></symbol>
+    <symbol id="i-snow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 2v20M3.3 7l17.4 10M3.3 17 20.7 7"/><path d="m9 4 3 2 3-2M9 20l3-2 3 2"/></symbol>
+    <symbol id="i-flame" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22a7 7 0 0 0 7-7c0-4-3-6-4-10-2 2-3 4-3 6-1-1-2-2-2-4-3 3-5 5-5 8a7 7 0 0 0 7 7z"/></symbol>
+    <symbol id="i-frame" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="1"/><path d="M3 3l18 18M21 3 3 21"/></symbol>
+    <symbol id="i-helmet" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 18h20"/><path d="M4 18v-2a8 8 0 0 1 16 0v2"/><path d="M10 9V5h4v4"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+    <symbol id="i-gear" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="7"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9 7 7M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1"/></symbol>
+    <symbol id="i-wheat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22V6"/><path d="M12 6c-1.5-1-2.5-2.5-2.5-4 1.5 0 2.5 1 2.5 2.5C12 3 13 2 14.5 2c0 1.5-1 3-2.5 4z"/><path d="M12 12c-2 0-3.5-1-4.5-2.5 2-.8 3.6-.2 4.5 1.3.9-1.5 2.5-2.1 4.5-1.3C15.5 11 14 12 12 12z"/><path d="M12 17.5c-2 0-3.5-1-4.5-2.5 2-.8 3.6-.2 4.5 1.3.9-1.5 2.5-2.1 4.5-1.3-1 1.5-2.5 2.5-4.5 2.5z"/></symbol>
+    <symbol id="i-cross" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M12 8v8M8 12h8"/></symbol>
+    <symbol id="i-townhall" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 10h20L12 3z"/><path d="M3 21h18M5 21V10M19 21V10M10 21v-5h4v5"/></symbol>
+    <symbol id="i-house" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11 12 3l9 8"/><path d="M5 9.5V21h14V9.5"/><path d="M10 21v-6h4v6"/></symbol>
+    <symbol id="i-ball" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m12 7.5 4 3-1.5 4.5h-5L8 10.5z"/><path d="M12 3v4.5M16 10.5l4.5-1.5M14.5 15l2.5 4M9.5 15 7 19M8 10.5 3.5 9"/></symbol>
+    <symbol id="i-layers" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 9 5-9 5-9-5z"/><path d="m3 12.5 9 5 9-5"/><path d="m3 17 9 5 9-5"/></symbol>
+    <symbol id="i-door" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M6 21V3h12v18"/><path d="M14.5 12h.01"/></symbol>
+    <symbol id="i-insta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".6" fill="currentColor"/></symbol>
+    <symbol id="i-linkedin" viewBox="0 0 24 24" fill="currentColor"><path d="M4 9h4v12H4zM6 3a2 2 0 1 1 0 4 2 2 0 0 1 0-4zM10 9h3.8v1.7h.1c.5-1 1.8-2 3.7-2 4 0 4.4 2.6 4.4 6V21h-4v-5.6c0-1.3 0-3-1.9-3s-2.1 1.4-2.1 2.9V21h-4z"/></symbol>
+    <symbol id="i-youtube" viewBox="0 0 24 24" fill="currentColor"><path d="M23 7.2a3 3 0 0 0-2.1-2.1C19 4.6 12 4.6 12 4.6s-7 0-8.9.5A3 3 0 0 0 1 7.2 31 31 0 0 0 .5 12 31 31 0 0 0 1 16.8a3 3 0 0 0 2.1 2.1c1.9.5 8.9.5 8.9.5s7 0 8.9-.5a3 3 0 0 0 2.1-2.1 31 31 0 0 0 .5-4.8 31 31 0 0 0-.5-4.8zM9.7 15V9l5.8 3z"/></symbol>
+    <symbol id="i-facebook" viewBox="0 0 24 24" fill="currentColor"><path d="M14 8h3V4h-3c-2.8 0-4.5 1.8-4.5 4.5V11H7v4h2.5v9h4v-9h3l.5-4h-3.5V9c0-.6.4-1 1-1z"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 22s7-6.1 7-12a7 7 0 0 0-14 0c0 5.9 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></symbol>
+    <symbol id="i-knife" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="13" width="20" height="3" rx="1"/><path d="M4 16v5M20 16v5"/><path d="M7 13V6l4 3v4M14 13V5"/></symbol>
+    <symbol id="i-hood" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2h4v6h-4z"/><path d="M10 8 4 15h16l-6-7"/><path d="M7 19c1-1 2 1 3 0M11 19c1-1 2 1 3 0M15 19c1-1 2 1 3 0"/></symbol>
+    <symbol id="i-water" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h7a3 3 0 0 1 3 3v2"/><path d="M4 4v6M14 12v1"/><path d="M14 16s-2 2.2-2 3.5a2 2 0 0 0 4 0c0-1.3-2-3.5-2-3.5z"/><path d="m17 9 3-3 2 2"/><path d="M20 6v7"/></symbol>
+    <symbol id="i-image" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></symbol>
+    <symbol id="i-list" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01"/></symbol>
+  </defs>
+</svg>
+
+<div class="read-progress" data-progress aria-hidden="true"></div>
+
+<!-- ===================== TOP BAR ===================== -->
+<div class="topbar">
+  <div class="container">
+    <div class="topbar__reviews">301 avis Google <span class="topbar__stars"><span>★★★★★</span> 4,8</span></div>
+    <div class="topbar__right">
+      <a class="topbar__links" href="#">À propos</a>
+      <a class="topbar__links" href="#">Blog</a>
+      <a class="topbar__phone" href="tel:+33553072682"><svg><use href="#i-phone"/></svg>+33 (0)5 53 07 26 82</a>
+      <a class="topbar__cta" href="#c-final-cta">Demander un devis</a>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== HEADER ===================== -->
+<header class="header">
+  <div class="container">
+    <a class="logo" href="/" aria-label="Cubner Groupe — accueil">
+      <img class="logo__img" src="assets/img/logo/cubner-groupe.png" alt="Cubner Groupe" width="201" height="69">
+    </a>
+    <nav class="nav" aria-label="Navigation principale">
+      <a href="conteneurs-maritimes.html">Conteneurs maritimes</a>
+      <a href="amenagement-containers.html" class="is-active">Aménagements</a>
+      <a href="modules-bungalows.html">Modules / Bungalows</a>
+      <a href="#">Services</a>
+      <a href="#">Boutique</a>
+    </nav>
+    <div class="header__icons">
+      <a href="#" aria-label="Mon compte"><svg><use href="#i-user"/></svg></a>
+      <a href="#" aria-label="Panier"><svg><use href="#i-cart"/></svg></a>
+      <button class="burger" aria-label="Menu"><svg><use href="#i-menu"/></svg></button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="container">
+
+    <nav class="breadcrumb" aria-label="Fil d'Ariane">
+      <a href="/">Accueil</a> / <a href="plan-du-site.html">Plan du site</a> / <span aria-current="page">Bibliothèque de composants</span>
+    </nav>
+
+    <!-- ===================== INTRO + INDEX ===================== -->
+    <section class="cl-intro">
+      <h1>Bibliothèque de <em>composants</em></h1>
+      <p>Chaque composant utilisé dans les gabarits CALCUB, affiché une seule fois avec son vrai balisage et ses vraies feuilles de style (<code>seo-page.css</code> + <code>hub-page.css</code>). Les étiquettes indiquent la classe racine et les gabarits qui l'utilisent.</p>
+      <div class="cl-legend">
+        <span class="cl-tag cl-tag--pilier">Pilier</span>
+        <span class="cl-tag cl-tag--cat">Catégorie</span>
+        <span class="cl-tag cl-tag--produit">Produit</span>
+        <span class="cl-tag">Toutes les pages</span>
+      </div>
+
+      <div class="cl-index">
+        <div class="cl-index__group">
+          <h2>Structure</h2>
+          <ol>
+            <li><a href="#c-topbar">Barre supérieure</a></li>
+            <li><a href="#c-header">En-tête</a></li>
+            <li><a href="#c-breadcrumb">Fil d'Ariane</a></li>
+            <li><a href="#c-progress">Barre de progression</a></li>
+            <li><a href="#c-buttons">Boutons</a></li>
+            <li><a href="#c-footer">Pied de page</a></li>
+          </ol>
+        </div>
+        <div class="cl-index__group">
+          <h2>Pleine largeur</h2>
+          <ol>
+            <li><a href="#c-hero">Hero produit</a></li>
+            <li><a href="#c-keyfacts">Repères clés</a></li>
+            <li><a href="#c-hub-hero">Hero pilier / catégorie</a></li>
+            <li><a href="#c-final-cta">CTA final</a></li>
+            <li><a href="#c-related">Cartes liées</a></li>
+            <li><a href="#c-families-related">Familles liées</a></li>
+            <li><a href="#c-siblings">Liens frères</a></li>
+          </ol>
+        </div>
+        <div class="cl-index__group">
+          <h2>Article produit</h2>
+          <ol>
+            <li><a href="#c-section-head">Titre numéroté + chapô</a></li>
+            <li><a href="#c-tldr">En bref</a></li>
+            <li><a href="#c-highlights">Points forts</a></li>
+            <li><a href="#c-equip">Équipements</a></li>
+            <li><a href="#c-options">Options</a></li>
+            <li><a href="#c-specs">Tableau des formats</a></li>
+            <li><a href="#c-pullquote">Citation</a></li>
+            <li><a href="#c-gallery">Galerie</a></li>
+            <li><a href="#c-gallery-todo">Galerie à venir</a></li>
+            <li><a href="#c-steps">Étapes</a></li>
+            <li><a href="#c-callout">Encadré</a></li>
+            <li><a href="#c-plain-list">Liste simple</a></li>
+            <li><a href="#c-faq">FAQ</a></li>
+          </ol>
+        </div>
+        <div class="cl-index__group">
+          <h2>Article pilier / catégorie</h2>
+          <ol>
+            <li><a href="#c-hub-head">Titre à biseau</a></li>
+            <li><a href="#c-morph">Transformation</a></li>
+            <li><a href="#c-base">Container de départ</a></li>
+            <li><a href="#c-families">Familles d'usage</a></li>
+            <li><a href="#c-workshop">Savoir-faire atelier</a></li>
+            <li><a href="#c-assets">Atouts</a></li>
+            <li><a href="#c-needs">Besoins</a></li>
+            <li><a href="#c-products">Solutions</a></li>
+            <li><a href="#c-finance">Bandeau financement</a></li>
+            <li><a href="#c-advice">Conseils</a></li>
+            <li><a href="#c-toc">Sommaire + CTA latéral</a></li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== STRUCTURE ===================== -->
+    <h2 class="cl-group-title">Structure</h2>
+
+    <div class="cl-block" id="c-topbar">
+      <div class="cl-meta"><span class="cl-meta__name">Barre supérieure</span><code>.topbar</code><span class="cl-tag">Toutes les pages</span></div>
+      <p class="cl-note">Affichée tout en haut de cette page (avis Google, liens, téléphone, bouton devis).</p>
+    </div>
+
+    <div class="cl-block" id="c-header">
+      <div class="cl-meta"><span class="cl-meta__name">En-tête</span><code>.header</code><code>.nav</code><code>.burger</code><span class="cl-tag">Toutes les pages</span></div>
+      <p class="cl-note">Affiché en haut de cette page : logo, navigation principale (lien actif <code>.is-active</code>), compte, panier, menu mobile.</p>
+    </div>
+
+    <div class="cl-block" id="c-breadcrumb">
+      <div class="cl-meta"><span class="cl-meta__name">Fil d'Ariane</span><code>.breadcrumb</code><span class="cl-tag">Toutes les pages</span></div>
+      <div class="cl-frame cl-frame--pad">
+        <nav class="breadcrumb" aria-label="Exemple de fil d'Ariane" style="margin:0">
+          <a href="/">Accueil</a> / <a href="amenagement-containers.html">Aménagements</a> / <a href="restauration-commerce.html">Restauration &amp; commerce</a> / <span aria-current="page">Container Snack / Food Truck</span>
+        </nav>
+      </div>
+    </div>
+
+    <div class="cl-block" id="c-progress">
+      <div class="cl-meta"><span class="cl-meta__name">Barre de progression de lecture</span><code>.read-progress</code><span class="cl-tag">Toutes les pages</span></div>
+      <div class="cl-progress-demo"><div class="read-progress" aria-hidden="true"></div></div>
+      <p class="cl-note">Fixée en haut de l'écran ; elle avance au fil de la lecture de l'article (visible en faisant défiler cette page).</p>
+    </div>
+
+    <div class="cl-block" id="c-buttons">
+      <div class="cl-meta"><span class="cl-meta__name">Boutons</span><code>.btn--red</code><code>.btn--ghost-light</code><span class="cl-tag">Toutes les pages</span></div>
+      <div class="cl-dark">
+        <a class="btn btn--red" href="#">Demander une étude <svg><use href="#i-arrow"/></svg></a>
+        <a class="btn btn--red" href="#">Décrire mon projet</a>
+        <a class="btn btn--ghost-light" href="#">Voir les équipements</a>
+        <a class="btn btn--ghost-light" href="tel:+33553072682"><svg><use href="#i-phone"/></svg>+33 (0)5 53 07 26 82</a>
+      </div>
+    </div>
+
+    <!-- ===================== PLEINE LARGEUR ===================== -->
+    <h2 class="cl-group-title">Composants pleine largeur</h2>
+
+    <div class="cl-block" id="c-hero">
+      <div class="cl-meta"><span class="cl-meta__name">Hero produit</span><code>.hero</code><code>.hero__badge</code><span class="cl-tag cl-tag--produit">Produit</span></div>
+      <section class="hero" style="margin-top:0;margin-bottom:0">
+        <img class="hero__img" src="assets/img/container-snack-food-truck.png" alt="Container aménagé en snack / food truck par CALCUB" width="1448" height="1086" onerror="this.style.display='none'">
+        <img class="hero__badge" src="assets/img/fabrique-en-france.png" alt="Fabriqué en France" width="202" height="71">
+        <div class="hero__content">
+          <p class="h1" style="font-size:clamp(34px,4vw,56px);line-height:1.05;font-weight:800;color:#fff;margin:0 0 16px">Container <em style="font-style:normal;color:#ff6a45">Snack</em><br>/ Food Truck</p>
+          <p class="hero__subtitle">Un kiosque de restauration rapide fabriqué sur-mesure : comptoir, cuisson et extraction intégrés, prêt à l'exploitation.</p>
+          <div class="hero__actions">
+            <a class="btn btn--red" href="#">Demander une étude <svg><use href="#i-arrow"/></svg></a>
+            <a class="btn btn--ghost-light" href="#">Voir les équipements</a>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="cl-block" id="c-keyfacts">
+      <div class="cl-meta"><span class="cl-meta__name">Repères clés</span><code>.keyfacts</code><code>.keyfact</code><span class="cl-tag cl-tag--produit">Produit</span></div>
+      <div class="keyfacts" style="margin:0">
+        <div class="keyfact"><span class="keyfact__icon"><svg><use href="#i-container"/></svg></span><div><strong>20 ou 40 pieds</strong><span>Container ISO, version High Cube</span></div></div>
+        <div class="keyfact"><span class="keyfact__icon"><svg><use href="#i-hood"/></svg></span><div><strong>Prêt à exploiter</strong><span>Comptoir, cuisson, extraction</span></div></div>
+        <div class="keyfact"><span class="keyfact__icon"><svg><use href="#i-factory"/></svg></span><div><strong>Atelier de Bergerac</strong><span>Fabrication contrôlée</span></div></div>
+        <div class="keyfact"><span class="keyfact__icon"><svg><use href="#i-doc"/></svg></span><div><strong>Devis sur étude</strong><span>Selon l'équipement choisi</span></div></div>
+      </div>
+    </div>
+
+    <div class="cl-block" id="c-hub-hero">
+      <div class="cl-meta"><span class="cl-meta__name">Hero pilier / catégorie</span><code>.hub-hero</code><code>.hub-hero__facts</code><span class="cl-tag cl-tag--pilier">Pilier</span><span class="cl-tag cl-tag--cat">Catégorie</span></div>
+      <section class="hub-hero" style="margin-top:0;margin-bottom:0">
+        <div class="hub-hero__panel">
+          <p style="color:#fff;font-size:clamp(34px,3.8vw,54px);line-height:1.08;font-weight:800;margin:0 0 18px">Aménagement de <em style="font-style:normal;color:#ff6a45">containers</em> sur&#8209;mesure</p>
+          <p class="hub-hero__subtitle">Des containers maritimes 20 et 40 pieds transformés en outils de travail, de l'étude technique jusqu'à la mise en service.</p>
+          <div class="hub-hero__actions">
+            <a class="btn btn--red" href="#">Décrire mon projet <svg><use href="#i-arrow"/></svg></a>
+            <a class="btn btn--ghost-light" href="#">Voir les familles d'usage</a>
+          </div>
+          <dl class="hub-hero__facts">
+            <div><dt>13</dt><dd>familles d'usage</dd></div>
+            <div><dt>20 / 40'</dt><dd>standard ou High Cube</dd></div>
+            <div><dt>Atelier</dt><dd>du gros œuvre à la finition</dd></div>
+          </dl>
+        </div>
+        <div class="hub-hero__media">
+          <img src="assets/img/amenagement-containers.jpg" alt="Container maritime transformé en module aménagé avec porte et fenêtres" width="1800" height="1200">
+          <img class="hub-hero__badge" src="assets/img/fabrique-en-france.png" alt="Fabriqué en France" width="202" height="71">
+        </div>
+      </section>
+    </div>
+
+    <div class="cl-block" id="c-final-cta">
+      <div class="cl-meta"><span class="cl-meta__name">CTA final</span><code>.final-cta</code><code>.accent</code><span class="cl-tag">Toutes les pages</span></div>
+      <section class="final-cta" style="margin:0">
+        <div>
+          <h2>Décrivez votre projet de <span class="accent">snack</span> ou de food truck fixe</h2>
+          <p>Décrivez votre projet à nos équipes pour recevoir une étude personnalisée et un devis établi selon le niveau d'équipement souhaité.</p>
+        </div>
+        <div class="final-cta__actions">
+          <a class="btn btn--red" href="#">Je décris mon projet <svg><use href="#i-arrow"/></svg></a>
+          <a class="btn btn--ghost-light" href="tel:+33553072682"><svg><use href="#i-phone"/></svg>+33 (0)5 53 07 26 82</a>
+        </div>
+      </section>
+    </div>
+
+    <div class="cl-block" id="c-related">
+      <div class="cl-meta"><span class="cl-meta__name">Cartes liées (maillage interne)</span><code>.related</code><code>.card</code><code>.card--all</code><span class="cl-tag cl-tag--produit">Produit</span></div>
+      <section class="related">
+        <h2>Nos autres <span class="accent">aménagements</span></h2>
+        <div class="related__grid">
+          <a class="card" href="container-bar-buvette.html">
+            <div class="card__img"><img src="assets/img/cartes/container-bar-buvette.jpg" alt="Containers aménagés en bar, éclairés par des guirlandes le soir" loading="lazy" width="900" height="600"></div>
+            <div class="card__body"><span class="card__kicker">Restauration &amp; commerce</span><h3 class="card__title">Container Bar / Buvette / Guinguette</h3><span class="card__link">Découvrir →</span></div>
+          </a>
+          <a class="card" href="container-restaurant-pizzeria.html">
+            <div class="card__img"><img src="assets/img/cartes/container-restaurant-pizzeria.jpg" style="object-position: center 85%" alt="Restaurant en containers sur plusieurs niveaux avec terrasse" loading="lazy" width="900" height="600"></div>
+            <div class="card__body"><span class="card__kicker">Restauration &amp; commerce</span><h3 class="card__title">Container Restaurant / Pizzeria</h3><span class="card__link">Découvrir →</span></div>
+          </a>
+          <a class="card" href="container-boutique-magasin.html">
+            <div class="card__img"><img src="assets/img/cartes/container-boutique-magasin.jpg" style="object-position: center 80%" alt="Boutiques aménagées dans des containers empilés avec vitrines" loading="lazy" width="900" height="600"></div>
+            <div class="card__body"><span class="card__kicker">Restauration &amp; commerce</span><h3 class="card__title">Container Boutique / Magasin</h3><span class="card__link">Découvrir →</span></div>
+          </a>
+          <a class="card card--all" href="restauration-commerce.html">
+            <div class="card__body"><span class="card__kicker">Voir toutes les solutions</span><h3 class="card__title">Toute la famille Restauration &amp; Commerce</h3><span class="card__link">Découvrir →</span></div>
+          </a>
+        </div>
+      </section>
+    </div>
+
+    <div class="cl-block" id="c-families-related">
+      <div class="cl-meta"><span class="cl-meta__name">Familles liées</span><code>.families--related</code><code>.fcard--all</code><span class="cl-tag cl-tag--cat">Catégorie</span></div>
+      <div class="families families--related">
+        <a class="fcard" href="restauration-commerce.html">
+          <img src="assets/img/familles/restauration.jpg" alt="" loading="lazy">
+          <span class="fcard__body"><span class="fcard__name">Restauration &amp; Commerce</span><span class="fcard__count">4 solutions<svg><use href="#i-arrow"/></svg></span></span>
+        </a>
+        <a class="fcard" href="frigorifiques-reefers.html">
+          <img src="assets/img/familles/frigorifiques.jpg" alt="" loading="lazy">
+          <span class="fcard__body"><span class="fcard__name">Frigorifiques / Reefers</span><span class="fcard__count">7 solutions<svg><use href="#i-arrow"/></svg></span></span>
+        </a>
+        <a class="fcard" href="evenementiel.html">
+          <img src="assets/img/familles/evenementiel.jpg" alt="" loading="lazy">
+          <span class="fcard__body"><span class="fcard__name">Événementiel</span><span class="fcard__count">6 solutions<svg><use href="#i-arrow"/></svg></span></span>
+        </a>
+        <a class="fcard fcard--all" href="amenagement-containers.html#familles">
+          <span class="fcard__body"><span class="fcard__name">Toutes les familles d'usage</span><span class="fcard__count">13 familles<svg><use href="#i-arrow"/></svg></span></span>
+        </a>
+      </div>
+    </div>
+
+    <div class="cl-block" id="c-siblings">
+      <div class="cl-meta"><span class="cl-meta__name">Liens frères</span><code>.siblings</code><code>.sibling--all</code><span class="cl-tag">Plan du site</span></div>
+      <div class="siblings">
+        <a class="sibling" href="container-snack-food-truck.html"><span>Container Snack / Food Truck</span></a>
+        <a class="sibling" href="container-bar-buvette.html"><span>Container Bar / Buvette / Guinguette</span></a>
+        <a class="sibling" href="container-restaurant-pizzeria.html"><span>Container Restaurant / Pizzeria</span></a>
+        <a class="sibling" href="container-boutique-magasin.html"><span>Container Boutique / Magasin</span></a>
+        <a class="sibling sibling--all" href="amenagement-containers.html"><span>Aménagement de containers (pilier)</span></a>
+        <a class="sibling sibling--all" href="modules-bungalows.html"><span>Modules &amp; Bungalows (pilier)</span></a>
+      </div>
+    </div>
+
+    <!-- ===================== ARTICLE + SOMMAIRE ===================== -->
+    <h2 class="cl-group-title">Composants d'article</h2>
+    <p class="cl-note" style="margin:-12px 0 32px">Cette partie est un vrai article : le sommaire à droite, la numérotation des sections et la progression de lecture sont générés par <code>seo-page.js</code>.</p>
+
+    <div class="article-layout">
+      <article class="article prose" data-article>
+
+        <!-- ===== PRODUIT ===== -->
+        <section class="section" id="c-section-head" data-toc-label="Titre numéroté + chapô">
+          <div class="section__head"><span class="section__num">01</span><div><h2>Titre de section numéroté</h2></div></div>
+          <div class="cl-meta"><code>.section__head</code><code>.section__num</code><code>.lead</code><span class="cl-tag cl-tag--produit">Produit</span></div>
+          <p class="lead">La restauration rapide et la vente à emporter exigent un point de service compact, visible et opérationnel rapidement. Le container transformé en snack offre une structure close, hygiénique et prête à l'exploitation.</p>
+          <p>Le Container Snack / Food Truck CALCUB est réalisé à partir d'un container ISO 20 ou 40 pieds, dont une ou plusieurs faces sont découpées pour recevoir un guichet de service et des ouvrants vitrés. <strong>Texte en gras</strong> pour les mots importants.</p>
+        </section>
+
+        <section class="section" id="c-tldr" data-toc-label="En bref">
+          <div class="section__head"><span class="section__num">02</span><div><h2>En bref</h2></div></div>
+          <div class="cl-meta"><code>.tldr</code><span class="cl-tag cl-tag--produit">Produit</span></div>
+          <div class="tldr">
+            <p class="tldr__title">En bref</p>
+            <ul>
+              <li><svg><use href="#i-container"/></svg><span>Container ISO 20 ou 40 pieds transformé en snack ou food truck fixe</span></li>
+              <li><svg><use href="#i-hood"/></svg><span>Comptoir, cuisson et extraction intégrés de série</span></li>
+              <li><svg><use href="#i-factory"/></svg><span>Fabrication sur-mesure dans notre atelier de Bergerac</span></li>
+              <li><svg><use href="#i-doc"/></svg><span>Devis établi sur étude, selon le niveau d'équipement</span></li>
+            </ul>
+          </div>
+        </section>
+
+        <section class="section" id="c-highlights" data-toc-label="Points forts">
+          <div class="section__head"><span class="section__num">03</span><div><h2>Points forts</h2></div></div>
+          <div class="cl-meta"><code>.highlights</code><code>.highlight</code><span class="cl-tag cl-tag--produit">Produit</span></div>
+          <div class="highlights">
+            <div class="highlight"><svg><use href="#i-frame"/></svg><strong>Ossature renforcée</strong><span>Rigidité d'origine préservée au niveau des découpes</span></div>
+            <div class="highlight"><svg><use href="#i-spray"/></svg><strong>Parois lessivables</strong><span>Isolation et doublage conformes à l'hygiène alimentaire</span></div>
+            <div class="highlight"><svg><use href="#i-floor"/></svg><strong>Sol antidérapant</strong><span>Revêtement étanche pour cuisine professionnelle</span></div>
+          </div>
+        </section>
+
+        <section class="section" id="c-equip" data-toc-label="Équipements">
+          <div class="section__head"><span class="section__num">04</span><div><h2>Équipements de série</h2></div></div>
+          <div class="cl-meta"><code>.equip-grid</code><code>.equip</code><code>.equip--wide</code><span class="cl-tag cl-tag--produit">Produit</span></div>
+          <div class="equip-grid">
+            <div class="equip"><span class="equip__icon"><svg><use href="#i-counter"/></svg></span><p>Comptoir de service avec guichet et volet roulant ou store banne</p></div>
+            <div class="equip"><span class="equip__icon"><svg><use href="#i-knife"/></svg></span><p>Plan de travail inox et zones de préparation séparées</p></div>
+            <div class="equip"><span class="equip__icon"><svg><use href="#i-hood"/></svg></span><p>Hotte d'extraction avec conduit et caisson de filtration</p></div>
+            <div class="equip"><span class="equip__icon"><svg><use href="#i-bolt"/></svg></span><p>Arrivée d'eau, évacuation et raccordement électrique triphasé</p></div>
+            <div class="equip equip--wide"><span class="equip__icon"><svg><use href="#i-brush"/></svg></span><p>Variante pleine largeur (<code>.equip--wide</code>) pour un nombre impair d'éléments</p></div>
+          </div>
+        </section>
+
+        <section class="section" id="c-options" data-toc-label="Options">
+          <div class="section__head"><span class="section__num">05</span><div><h2>Options en pastilles</h2></div></div>
+          <div class="cl-meta"><code>.options</code><code>.option</code><span class="cl-tag cl-tag--produit">Produit</span></div>
+          <div class="options">
+            <span class="option"><svg><use href="#i-brush"/></svg>Habillage extérieur floqué aux couleurs de l'enseigne</span>
+            <span class="option"><svg><use href="#i-tent"/></svg>Auvent ou terrasse amovible</span>
+            <span class="option"><svg><use href="#i-snow"/></svg>Groupe frigorifique ou chambre froide intégrée</span>
+            <span class="option"><svg><use href="#i-flame"/></svg>Équipement de cuisson spécifique</span>
+            <span class="option"><svg><use href="#i-sign"/></svg>Signalétique lumineuse en façade</span>
+          </div>
+        </section>
+
+        <section class="section" id="c-specs" data-toc-label="Tableau des formats">
+          <div class="section__head"><span class="section__num">06</span><div><h2>Tableau des formats à l'échelle</h2></div></div>
+          <div class="cl-meta"><code>.specs-table</code><code>[data-format]</code><span class="cl-tag cl-tag--produit">Produit</span></div>
+          <div class="table-wrap">
+            <table class="specs-table">
+              <caption class="sr-only">Comparatif des formats de container</caption>
+              <thead><tr><th scope="col">Format</th><th scope="col">Dimensions</th><th scope="col">Usage conseillé</th></tr></thead>
+              <tbody>
+                <tr data-format data-length="6.06" data-height="2.59"><th scope="row">20 pieds</th><td><div class="format__scale" aria-hidden="true"><div class="format__box"></div></div>6,06 × 2,44 × 2,59 m</td><td>Un poste de préparation et un guichet de service</td></tr>
+                <tr data-format data-length="12.19" data-height="2.59"><th scope="row">40 pieds</th><td><div class="format__scale" aria-hidden="true"><div class="format__box"></div></div>12,19 × 2,44 × 2,59 m</td><td>Zone de stockage ou second poste de cuisson</td></tr>
+                <tr data-format data-length="6.06" data-height="2.89"><th scope="row">High Cube</th><td><div class="format__scale" aria-hidden="true"><div class="format__box"></div></div>Hauteur intérieure 2,89 m</td><td>Installation de la hotte facilitée</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="section" id="c-pullquote" data-toc-label="Citation">
+          <div class="section__head"><span class="section__num">07</span><div><h2>Citation mise en avant</h2></div></div>
+          <div class="cl-meta"><code>.pullquote</code><span class="cl-tag cl-tag--produit">Produit</span></div>
+          <blockquote class="pullquote">Cette maîtrise de la fabrication en atelier garantit une structure homogène, étanche et conforme aux plans validés avec le client.</blockquote>
+        </section>
+
+        <section class="section" id="c-gallery" data-toc-label="Galerie">
+          <div class="section__head"><span class="section__num">08</span><div><h2>Galerie photos</h2></div></div>
+          <div class="cl-meta"><code>.gallery</code><code>[data-gallery]</code><code>.lightbox</code><span class="cl-tag cl-tag--produit">Produit</span></div>
+          <div class="gallery" data-gallery>
+            <div class="gallery__stage">
+              <div class="gallery__item"><img src="assets/img/galerie/container-kiosque-cafe.jpg" alt="Container aménagé en kiosque café avec comptoir de service" loading="lazy"></div>
+              <div class="gallery__item"><img src="assets/img/galerie/container-stand-marche.jpg" alt="Container ouvert transformé en stand sur un marché" loading="lazy"></div>
+              <div class="gallery__item"><img src="assets/img/galerie/containers-empiles-cafe.jpg" alt="Containers superposés aménagés en café" loading="lazy"></div>
+              <div class="gallery__item"><img src="assets/img/galerie/container-fresque-bleu.jpg" alt="Container bleu aménagé en point de vente avec fresque" loading="lazy"></div>
+              <div class="gallery__item"><img src="assets/img/galerie/containers-restaurant-terrasse.jpg" alt="Containers aménagés en restaurant avec terrasse" loading="lazy"></div>
+            </div>
+          </div>
+          <p class="cl-note">Vignettes, compteur, swipe et plein écran (lightbox) ajoutés par le script.</p>
+        </section>
+
+        <section class="section" id="c-gallery-todo" data-toc-label="Galerie à venir">
+          <div class="section__head"><span class="section__num">09</span><div><h2>Emplacement de galerie à venir</h2></div></div>
+          <div class="cl-meta"><code>.gallery-todo</code><span class="cl-tag cl-tag--produit">Produit (Excel)</span></div>
+          <div class="gallery-todo"><svg><use href="#i-image"/></svg><span>Galerie photos — réalisations à intégrer</span></div>
+        </section>
+
+        <section class="section" id="c-steps" data-toc-label="Étapes">
+          <div class="section__head"><span class="section__num">10</span><div><h2>Étapes d'accompagnement</h2></div></div>
+          <div class="cl-meta"><code>.steps</code><code>.step</code><span class="cl-tag cl-tag--pilier">Pilier</span><span class="cl-tag cl-tag--produit">Produit</span></div>
+          <ol class="steps">
+            <li class="step"><svg class="step__icon"><use href="#i-doc"/></svg><span class="step__label">Étape 1</span><strong>Étude du besoin</strong><span class="step__text">Contraintes du site d'implantation</span></li>
+            <li class="step"><svg class="step__icon"><use href="#i-plan"/></svg><span class="step__label">Étape 2</span><strong>Plan d'aménagement</strong><span class="step__text">Définition de l'intérieur</span></li>
+            <li class="step"><svg class="step__icon"><use href="#i-factory"/></svg><span class="step__label">Étape 3</span><strong>Fabrication</strong><span class="step__text">En atelier, à Bergerac</span></li>
+            <li class="step"><svg class="step__icon"><use href="#i-truck"/></svg><span class="step__label">Étape 4</span><strong>Livraison</strong><span class="step__text">Et mise en place sur site</span></li>
+          </ol>
+        </section>
+
+        <section class="section" id="c-callout" data-toc-label="Encadré">
+          <div class="section__head"><span class="section__num">11</span><div><h2>Encadré d'information</h2></div></div>
+          <div class="cl-meta"><code>.callout</code><span class="cl-tag cl-tag--produit">Produit</span></div>
+          <div class="callout">
+            <span class="callout__icon"><svg><use href="#i-clock"/></svg></span>
+            <div>
+              <p>Le délai de fabrication est communiqué après étude du projet et dépend du niveau d'équipement retenu et des éventuelles options demandées.</p>
+              <p>Ce délai est confirmé avant validation de la commande.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="c-plain-list" data-toc-label="Liste simple">
+          <div class="section__head"><span class="section__num">12</span><div><h2>Liste simple</h2></div></div>
+          <div class="cl-meta"><code>.plain-list</code><span class="cl-tag cl-tag--produit">Produit (Excel)</span></div>
+          <ul class="plain-list">
+            <li>Liste générée depuis les tirets « - » du fichier Excel</li>
+            <li>Comptoir de service avec guichet</li>
+            <li>Hotte d'extraction avec caisson de filtration</li>
+          </ul>
+        </section>
+
+        <section class="section" id="c-faq" data-toc-label="FAQ">
+          <div class="section__head"><span class="section__num">13</span><div><h2>Questions fréquentes</h2></div></div>
+          <div class="cl-meta"><code>.faq</code><code>.faq__item</code><span class="cl-tag cl-tag--produit">Produit (Modules)</span></div>
+          <div class="faq">
+            <details class="faq__item" open>
+              <summary>Quel est le tarif d'un container snack ?<svg><use href="#i-chevron"/></svg></summary>
+              <p>Le tarif est établi sur devis, selon le format retenu et le niveau d'équipement intégré.</p>
+            </details>
+            <details class="faq__item">
+              <summary>Quel délai de fabrication prévoir ?<svg><use href="#i-chevron"/></svg></summary>
+              <p>Le délai est communiqué après étude de votre projet et du niveau d'équipement retenu.</p>
+            </details>
+          </div>
+        </section>
+
+        <!-- ===== PILIER / CATÉGORIE ===== -->
+        <section class="section hub-section" id="c-hub-head" data-toc-label="Titre à biseau">
+          <div class="hub-section__head"><h2>Titre de section à biseau rouge</h2></div>
+          <div class="hub-section__body">
+            <div class="cl-meta"><code>.hub-section</code><code>.hub-section__head</code><span class="cl-tag cl-tag--pilier">Pilier</span><span class="cl-tag cl-tag--cat">Catégorie</span></div>
+            <p>Les pages pilier et catégorie remplacent le numéro de section par un petit biseau rouge au-dessus du titre.</p>
+          </div>
+        </section>
+
+        <section class="section hub-section" id="c-morph" data-toc-label="Transformation">
+          <div class="hub-section__head"><h2>Schéma de transformation</h2></div>
+          <div class="hub-section__body">
+            <div class="cl-meta"><code>.morph</code><span class="cl-tag cl-tag--pilier">Pilier</span></div>
+            <div class="morph" aria-hidden="true">
+              <div class="morph__from"><svg><use href="#i-container"/></svg><span>Container maritime brut</span></div>
+              <div class="morph__arrow"><svg><use href="#i-arrow"/></svg></div>
+              <ul class="morph__to">
+                <li>Bureau de chantier</li><li>Laboratoire</li><li>Poste de sécurité</li>
+                <li>Unité de production</li><li>Local commercial</li><li>Lieu de vie</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="section hub-section" id="c-base" data-toc-label="Container de départ">
+          <div class="hub-section__head"><h2>Container de départ</h2></div>
+          <div class="hub-section__body">
+            <div class="cl-meta"><code>.base</code><code>.base__opt</code><span class="cl-tag cl-tag--pilier">Pilier</span></div>
+            <div class="base">
+              <p class="base__title">Le container de départ</p>
+              <div class="base__grid">
+                <div class="base__item"><span class="base__label">Longueur</span><div class="base__opts">
+                  <div class="base__opt"><span class="base__viz"><i class="base__box" style="width:28px;height:18px"></i></span><b>20 pieds</b><small>6,06 m</small></div>
+                  <span class="base__or">ou</span>
+                  <div class="base__opt"><span class="base__viz"><i class="base__box" style="width:56px;height:18px"></i></span><b>40 pieds</b><small>12,19 m</small></div>
+                </div></div>
+                <div class="base__item"><span class="base__label">Hauteur</span><div class="base__opts">
+                  <div class="base__opt"><span class="base__viz"><i class="base__box" style="width:34px;height:23px"></i></span><b>Standard</b><small>2,59 m</small></div>
+                  <span class="base__or">ou</span>
+                  <div class="base__opt"><span class="base__viz"><i class="base__box" style="width:34px;height:26px"></i></span><b>High Cube</b><small>2,89 m</small></div>
+                </div></div>
+                <div class="base__item"><span class="base__label">Type</span><div class="base__opts">
+                  <div class="base__opt"><span class="base__viz"><svg><use href="#i-container"/></svg></span><b>Sec</b><small>standard</small></div>
+                  <span class="base__or">ou</span>
+                  <div class="base__opt"><span class="base__viz"><svg><use href="#i-snow"/></svg></span><b>Réfrigéré</b><small>reefer</small></div>
+                </div></div>
+                <div class="base__item"><span class="base__label">État</span><div class="base__opts">
+                  <div class="base__opt"><span class="base__viz"><svg><use href="#i-sparkle"/></svg></span><b>Neuf</b><small>premier voyage</small></div>
+                  <span class="base__or">ou</span>
+                  <div class="base__opt"><span class="base__viz"><svg><use href="#i-recycle"/></svg></span><b>Reconditionné</b><small>remis en état</small></div>
+                </div></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section hub-section hub-section--wide" id="c-families" data-toc-label="Familles d'usage">
+          <div class="hub-section__head"><h2>Cartes familles d'usage</h2></div>
+          <div class="hub-section__body">
+            <div class="cl-meta"><code>.families</code><code>.fcard</code><code>.fcard--cta</code><span class="cl-tag cl-tag--pilier">Pilier</span></div>
+          </div>
+          <div class="families">
+            <a class="fcard" href="restauration-commerce.html">
+              <img src="assets/img/familles/restauration.jpg" alt="" loading="lazy">
+              <span class="fcard__body"><span class="fcard__name">Restauration &amp; Commerce</span><span class="fcard__count">4 solutions<svg><use href="#i-arrow"/></svg></span></span>
+            </a>
+            <a class="fcard" href="chantier-btp.html">
+              <img src="assets/img/familles/chantier.jpg" alt="" loading="lazy">
+              <span class="fcard__body"><span class="fcard__name">Chantier / BTP</span><span class="fcard__count">7 solutions<svg><use href="#i-arrow"/></svg></span></span>
+            </a>
+            <a class="fcard fcard--cta" href="#">
+              <span class="fcard__body"><span class="fcard__name">Votre projet sur mesure</span><span class="fcard__text">Un besoin hors catégorie ? Nos équipes l'étudient.</span><span class="fcard__count">Décrire mon projet<svg><use href="#i-arrow"/></svg></span></span>
+            </a>
+          </div>
+        </section>
+
+        <section class="section hub-section" id="c-workshop" data-toc-label="Savoir-faire atelier">
+          <div class="hub-section__head"><h2>Bloc savoir-faire atelier</h2></div>
+          <div class="hub-section__body">
+            <div class="cl-meta"><code>.workshop</code><span class="cl-tag cl-tag--pilier">Pilier</span><span class="cl-tag cl-tag--cat">Catégorie</span></div>
+          </div>
+          <div class="workshop">
+            <p class="workshop__title">Maîtrisé en interne</p>
+            <ul class="workshop__list">
+              <li><svg><use href="#i-frame"/></svg>Découpe et renforcement de structure acier</li>
+              <li><svg><use href="#i-layers"/></svg>Isolation</li>
+              <li><svg><use href="#i-spray"/></svg>Étanchéité</li>
+              <li><svg><use href="#i-floor"/></svg>Revêtements de sol</li>
+              <li><svg><use href="#i-door"/></svg>Menuiseries</li>
+              <li><svg><use href="#i-container"/></svg>Bardage</li>
+              <li><svg><use href="#i-brush"/></svg>Peinture industrielle</li>
+              <li><svg><use href="#i-bolt"/></svg>Équipements électriques</li>
+            </ul>
+            <a class="workshop__link" href="fabrication-savoir-faire.html">Découvrir notre fabrication &amp; savoir-faire<svg><use href="#i-arrow"/></svg></a>
+          </div>
+        </section>
+
+        <section class="section hub-section" id="c-assets" data-toc-label="Atouts">
+          <div class="hub-section__head"><h2>Atouts</h2></div>
+          <div class="hub-section__body">
+            <div class="cl-meta"><code>.assets</code><code>.asset</code><span class="cl-tag cl-tag--pilier">Pilier</span></div>
+            <div class="assets">
+              <div class="asset"><h3>Ossature acier</h3><p>Résiste aux chocs, aux conditions climatiques extrêmes et à la corrosion saline.</p></div>
+              <div class="asset"><h3>Géométrie normalisée</h3><p>Transport, manutention et empilage facilités.</p></div>
+              <div class="asset"><h3>Coût maîtrisé</h3><p>Une plus grande part du budget pour l'aménagement utile.</p></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section hub-section" id="c-needs" data-toc-label="Besoins">
+          <div class="hub-section__head"><h2>Besoins du secteur</h2></div>
+          <div class="hub-section__body">
+            <div class="cl-meta"><code>.needs</code><span class="cl-tag cl-tag--cat">Catégorie</span></div>
+            <ul class="needs">
+              <li><span class="needs__icon"><svg><use href="#i-clock"/></svg></span>Délai d'implantation resserré</li>
+              <li><span class="needs__icon"><svg><use href="#i-euro"/></svg></span>Budget d'investissement maîtrisé</li>
+              <li><span class="needs__icon"><svg><use href="#i-sign"/></svg></span>Point de vente identifiable</li>
+              <li><span class="needs__icon"><svg><use href="#i-bulb"/></svg></span>Tester un concept avant un bail long</li>
+            </ul>
+          </div>
+        </section>
+
+        <section class="section hub-section" id="c-products" data-toc-label="Solutions">
+          <div class="hub-section__head"><h2>Solutions en lignes photo + texte</h2></div>
+          <div class="hub-section__body">
+            <div class="cl-meta"><code>.products</code><code>.product</code><span class="cl-tag cl-tag--cat">Catégorie</span></div>
+          </div>
+          <div class="products">
+            <article class="product">
+              <a class="product__img" href="container-snack-food-truck.html" tabindex="-1" aria-hidden="true"><img src="assets/img/galerie/container-kiosque-cafe.jpg" alt="" loading="lazy"></a>
+              <div class="product__body">
+                <h3><a href="container-snack-food-truck.html">Container Snack / Food Truck</a></h3>
+                <p>Le <strong>Container Snack / Food Truck</strong> répond aux besoins de la restauration rapide et de la vente à emporter : comptoir de service, plan de travail, équipement de cuisson compact.</p>
+                <a class="product__link" href="container-snack-food-truck.html">Découvrir le container snack<svg><use href="#i-arrow"/></svg></a>
+              </div>
+            </article>
+            <article class="product">
+              <a class="product__img" href="container-bar-buvette.html" tabindex="-1" aria-hidden="true"><img src="assets/img/cartes/container-bar-buvette.jpg" alt="" loading="lazy"></a>
+              <div class="product__body">
+                <h3><a href="container-bar-buvette.html">Container Bar / Buvette / Guinguette</a></h3>
+                <p>Le <strong>Container Bar / Buvette</strong> est conçu pour le service de boissons en événementiel et en terrasse.</p>
+                <a class="product__link" href="container-bar-buvette.html">Découvrir le container bar<svg><use href="#i-arrow"/></svg></a>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="section hub-section" id="c-finance" data-toc-label="Bandeau financement">
+          <div class="hub-section__head"><h2>Bandeau financement</h2></div>
+          <div class="hub-section__body">
+            <div class="cl-meta"><code>.finance</code><span class="cl-tag cl-tag--cat">Catégorie</span></div>
+          </div>
+          <a class="finance" href="#">
+            <span><strong>Louez ou financez votre container</strong>Des solutions pour lancer votre point de vente sans tout investir d'emblée.</span>
+            <svg><use href="#i-arrow"/></svg>
+          </a>
+        </section>
+
+        <section class="section hub-section" id="c-advice" data-toc-label="Conseils">
+          <div class="hub-section__head"><h2>Conseils</h2></div>
+          <div class="hub-section__body">
+            <div class="cl-meta"><code>.advice</code><span class="cl-tag cl-tag--cat">Catégorie</span></div>
+            <ul class="advice">
+              <li><svg><use href="#i-container"/></svg><span>Choix du format de container</span></li>
+              <li><svg><use href="#i-plan"/></svg><span>Implantation des équipements techniques</span></li>
+              <li><svg><use href="#i-doc"/></svg><span>Démarches administratives d'ouverture</span></li>
+            </ul>
+          </div>
+        </section>
+
+        <section class="section hub-section" id="c-toc" data-toc-label="Sommaire + CTA latéral">
+          <div class="hub-section__head"><h2>Sommaire et CTA latéral</h2></div>
+          <div class="hub-section__body">
+            <div class="cl-meta"><code>.toc</code><code>.aside-cta</code><span class="cl-tag">Toutes les pages</span></div>
+            <p>Colonne de droite, collante au défilement : sommaire généré à partir des sections, temps de lecture, section en cours et barre de progression ; dessous, l'encart d'appel à l'action. Replié en accordéon sous 960 px.</p>
+          </div>
+        </section>
+
+      </article>
+
+      <aside class="aside">
+        <div class="aside__sticky">
+          <nav class="toc" data-toc aria-label="Sommaire">
+            <div class="toc__head">
+              <span class="toc__title">Sommaire</span>
+              <span class="toc__current" data-toc-current></span>
+              <span class="toc__time"><svg><use href="#i-clock"/></svg><span data-reading-time></span></span>
+              <button class="toc__toggle" aria-label="Afficher le sommaire"><svg><use href="#i-chevron"/></svg></button>
+            </div>
+            <ol data-toc-list></ol>
+            <div class="toc__bar"><i data-progress></i></div>
+          </nav>
+
+          <div class="aside-cta">
+            <h3>Un projet de snack ?</h3>
+            <p>Recevez une étude personnalisée et un devis selon votre niveau d'équipement.</p>
+            <a class="btn btn--red" href="#c-final-cta">Décrire mon projet</a>
+            <a class="aside-cta__phone" href="tel:+33553072682"><svg><use href="#i-phone"/></svg>05 53 07 26 82</a>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <h2 class="cl-group-title" id="c-footer" style="scroll-margin-top:calc(var(--header-h) + 24px)">Pied de page</h2>
+    <p class="cl-note" style="margin:-12px 0 32px"><code>.footer</code> — affiché ci-dessous, identique sur toutes les pages.</p>
+
+  </div>
+</main>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer__logo">
+      <a class="logo" href="/" aria-label="Cubner Groupe — accueil"><img class="logo__img" src="assets/img/logo/cubner-groupe-blanc.png" alt="Cubner Groupe" width="201" height="69" loading="lazy"></a>
+    </div>
+    <div class="footer__cols">
+      <div>
+        <h4>Container</h4>
+        <ul><li><a href="conteneurs-maritimes.html">Maritime</a></li><li><a href="conteneurs-maritimes-standards.html">Standard</a></li><li><a href="conteneurs-specifiques.html">Spécifique</a></li><li><a href="conteneurs-occasion.html">Occasion</a></li><li><a href="conteneurs-stockage.html">Stockage</a></li><li><a href="conteneurs-offshore.html">Off-shore</a></li></ul>
+        <a class="footer__strong" href="modules-bungalows.html">Modules / Bungalows</a>
+        <a class="footer__strong" href="#">Demande de devis</a>
+      </div>
+      <div>
+        <h4>Aménagement</h4>
+        <ul><li><a href="restauration-commerce.html">Restauration &amp; commerce</a></li><li><a href="chantier-btp.html">Chantier / BTP</a></li><li><a href="energie-environnement.html">Énergie &amp; environnement</a></li><li><a href="industrie-specifique.html">Industrie &amp; spécifique</a></li><li><a href="frigorifiques-reefers.html">Frigorifique</a></li><li><a href="agroalimentaire.html">Agroalimentaire</a></li><li><a href="defense-et-securite.html">Défense et sécurité</a></li><li><a href="sante-humanitaire.html">Santé &amp; humanitaire</a></li><li><a href="evenementiel.html">Événementiel</a></li><li><a href="mairie-collectivites.html">Mairie &amp; collectivité</a></li><li><a href="pompier-sdis.html">Pompier SDISS</a></li><li><a href="habitations-logements-jardin.html">Habitation, logement &amp; jardin</a></li><li><a href="sport-loisirs.html">Sport &amp; loisir</a></li></ul>
+      </div>
+      <div>
+        <h4>Services</h4>
+        <ul><li><a href="#">Assistance et accompagnement</a></li><li><a href="#">Au service de votre métier</a></li><li><a href="#">Transport et déchargement</a></li><li><a href="#">Parc de stockage</a></li><li><a href="#">Rachat de container</a></li><li><a href="#">Livraison</a></li><li><a href="#">SAV</a></li></ul>
+      </div>
+      <div>
+        <h4>À propos</h4>
+        <ul><li><a href="#">Qui sommes-nous</a></li><li><a href="#">Engagement RSE</a></li><li><a href="fabrication-savoir-faire.html">Fabrication</a></li><li><a href="#">Nos dépôts</a></li><li><a href="#">Ressources</a></li><li><a href="#">Actualités</a></li><li><a href="#">Témoignages</a></li><li><a href="#">Nous contacter</a></li><li><a href="#">Blog</a></li></ul>
+      </div>
+      <div>
+        <h4>Boutique</h4>
+        <ul><li><a href="#">Cadenas</a></li><li><a href="#">Kit panneau solaire</a></li><li><a href="#">Pièce détachée</a></li><li><a href="#">Accessoire</a></li></ul>
+      </div>
+      <div>
+        <h4>Lien utile</h4>
+        <ul><li><a href="#">Comparateur de container</a></li><li><a href="#">Dimension container</a></li><li><a href="#">Fiche technique Groupe Froids</a></li><li><a href="#">Leasing avec options d'achat</a></li><li><a href="#">Garantie Cubner Glossair</a></li></ul>
+        <div class="footer__social">
+          <a href="#" aria-label="Instagram"><svg><use href="#i-insta"/></svg></a>
+          <a href="#" aria-label="LinkedIn"><svg><use href="#i-linkedin"/></svg></a>
+          <a href="#" aria-label="YouTube"><svg><use href="#i-youtube"/></svg></a>
+          <a href="#" aria-label="Facebook"><svg><use href="#i-facebook"/></svg></a>
+        </div>
+        <a class="footer__phone" href="tel:+33553072682">+33 (0)5 53 07 26 82</a>
+        <p>Cubner Siège social<br>21 Bis Avenue de l'Automobile<br>24750 TRÉLISSAC – France</p>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="footer__bottom">
+      <a href="#">Mentions légales</a><a href="#">Politique de confidentialité</a><a href="#">CGV</a><a href="#">CGU</a>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/seo-page.js"></script>
+</body>
+</html>

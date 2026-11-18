@@ -1,0 +1,257 @@
+/* ==========================================================================
+   CALCUB — Page « hub » (catégorie : Aménagement de containers)
+   À charger APRÈS seo-page.css (réutilise ses variables, header, footer,
+   boutons, étapes, CTA final…)
+   ========================================================================== */
+
+/* ---------- HERO : panneau bleu + photo séparés par une coupe en biais ---------- */
+.hub-hero {
+  position: relative; isolation: isolate; overflow: hidden;
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  min-height: 540px; border-radius: 18px; background: var(--calcub-navy); color: #fff;
+  /* même débord que le hero des pages produit */
+  width: min(1360px, calc(100vw - 32px));
+  margin-left: calc(50% - min(680px, 50vw - 16px));
+}
+.hub-hero__panel { position: relative; z-index: 2; padding: 64px 40px 40px 60px; display: flex; flex-direction: column; justify-content: center; }
+.hub-hero h1 { color: #fff; font-size: clamp(34px, 3.8vw, 54px); line-height: 1.08; margin-bottom: 18px; }
+.hub-hero h1 em { font-style: normal; color: #ff6a45; }
+.hub-hero__subtitle { font-size: 18px; line-height: 1.6; color: rgba(255,255,255,.82); margin-bottom: 28px; max-width: 480px; }
+.hub-hero__actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.hub-hero__facts {
+  display: grid; grid-template-columns: repeat(3, auto); justify-content: start; gap: 0 36px;
+  margin: 44px 0 0; padding-top: 22px; border-top: 1px solid rgba(255,255,255,.14);
+}
+.hub-hero__facts dt { font-size: 24px; font-weight: 700; color: #fff; line-height: 1.1; }
+.hub-hero__facts dd { margin: 4px 0 0; font-size: 13px; color: rgba(255,255,255,.65); }
+
+.hub-hero__media { position: relative; margin-left: -90px; }
+.hub-hero__media > img:first-child {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+  clip-path: polygon(90px 0, 100% 0, 100% 100%, 0 100%);
+}
+.hub-hero__media::before { /* liseré rouge le long de la coupe */
+  content: ""; position: absolute; top: 0; bottom: 0; left: 0; width: 104px; z-index: 1;
+  background: var(--calcub-red); clip-path: polygon(90px 0, 104px 0, 14px 100%, 0 100%);
+}
+.hub-hero__badge { position: absolute; right: 24px; top: 24px; z-index: 2; width: 140px; height: auto; filter: drop-shadow(0 6px 16px rgba(12,43,85,.2)); }
+
+/* ---------- Sections (dans la colonne de l'article, sommaire à droite) ---------- */
+.hub-section__head { margin-bottom: 22px; }
+.hub-section__head::before { /* petit biseau rouge au-dessus du titre */
+  content: ""; display: block; width: 34px; height: 8px; margin-bottom: 18px;
+  background: var(--calcub-red); clip-path: polygon(6px 0, 100% 0, calc(100% - 6px) 100%, 0 100%);
+}
+.hub-section__body > :last-child { margin-bottom: 0; }
+.hub-section > .families, .hub-section > .workshop, .hub-section > .steps { margin-top: 36px; }
+.hub-section > .steps { margin-bottom: 0; }
+
+/* ---------- 1. Brut → outil de travail ---------- */
+.morph { display: grid; grid-template-columns: 160px 52px minmax(0, 1fr); align-items: center; margin-top: 32px; }
+.morph__from {
+  display: grid; justify-items: center; gap: 10px; text-align: center;
+  background: var(--bg-soft); border-radius: var(--radius); padding: 24px 14px;
+}
+.morph__from svg { width: 46px; height: 46px; color: var(--muted); }
+.morph__from span { max-width: 110px; font-size: 14px; font-weight: 600; color: var(--ink); line-height: 1.35; }
+.morph__arrow { display: grid; place-items: center; color: var(--calcub-red); }
+.morph__arrow svg { width: 26px; height: 26px; }
+.morph__to { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.morph__to li {
+  padding: 12px 16px; border-radius: 10px; background: #fff; border: 1px solid var(--line);
+  font-size: 15px; font-weight: 600; color: var(--ink); transition: border-color .2s, color .2s;
+}
+.morph__to li:hover { border-color: var(--calcub-blue); color: var(--calcub-blue); }
+
+/* ---------- 2. Container de départ : une ligne par critère ---------- */
+.base { margin-top: 34px; }
+.prose .base__title { font-size: 17px; font-weight: 700; color: var(--ink); margin: 0 0 12px; }
+.base__grid { border: 1px solid var(--line); border-radius: 14px; background: #fff; }
+.base__item { display: grid; grid-template-columns: 110px minmax(0, 1fr) 28px minmax(0, 1fr); align-items: center; gap: 0 12px; padding: 14px 20px; }
+.base__item + .base__item { border-top: 1px solid var(--line); }
+.base__label { font-size: 14px; font-weight: 600; color: var(--muted); }
+.base__opts { display: contents; }
+.base__opt { display: grid; grid-template-columns: 58px auto; justify-content: start; grid-template-rows: auto auto; column-gap: 12px; align-items: center; }
+.base__viz { grid-row: 1 / 3; display: flex; align-items: flex-end; height: 32px; color: var(--calcub-blue); }
+.base__viz svg { width: 26px; height: 26px; }
+.base__box { /* container dessiné à l'échelle */
+  display: block; position: relative; border-radius: 3px;
+  background: repeating-linear-gradient(90deg, var(--calcub-blue) 0 5px, #1258ac 5px 8px);
+}
+.base__box::after { content: ""; position: absolute; right: 3px; top: 3px; bottom: 3px; width: 2px; background: rgba(255,255,255,.4); }
+.base__opt b { font-size: 16px; line-height: 1.2; color: var(--ink); }
+.base__opt small { font-size: 12.5px; line-height: 1.3; color: var(--muted); }
+.base__or { font-size: 13px; color: var(--muted); text-align: center; }
+
+/* ---------- 3. Familles d'usage : cartes photo ---------- */
+.families { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.fcard {
+  position: relative; isolation: isolate; overflow: hidden; display: flex; align-items: flex-end;
+  aspect-ratio: 4 / 3.6; border-radius: 14px; background: var(--calcub-navy); color: #fff;
+}
+.fcard img { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; object-fit: cover; transition: transform .6s ease; }
+.fcard::before { /* dégradé bleu marine pour la lisibilité */
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  background: linear-gradient(180deg, rgba(12,43,85,0) 30%, rgba(12,43,85,.65) 62%, rgba(12,43,85,.95) 100%);
+  transition: background .3s;
+}
+.fcard__body { display: block; width: 100%; padding: 18px 18px 16px; }
+.fcard__body::before { /* biseau rouge CALCUB */
+  content: ""; display: block; width: 26px; height: 6px; margin-bottom: 10px;
+  background: var(--calcub-red); clip-path: polygon(5px 0, 100% 0, calc(100% - 5px) 100%, 0 100%);
+  transition: width .3s;
+}
+.fcard__name { display: block; font-size: 18px; font-weight: 700; line-height: 1.25; }
+.fcard__count { display: flex; align-items: center; gap: 6px; margin-top: 6px; font-size: 13.5px; color: rgba(255,255,255,.78); }
+.fcard__count svg { width: 16px; height: 16px; transition: transform .25s; }
+.fcard:hover img { transform: scale(1.06); }
+.fcard:hover .fcard__body::before { width: 44px; }
+.fcard:hover .fcard__count svg { transform: translateX(4px); }
+
+/* Carte « Votre projet sur mesure » (complète la dernière rangée) */
+.fcard--cta { grid-column: span 2; aspect-ratio: auto; background: var(--calcub-red); }
+.fcard--cta::before { display: none; }
+.fcard--cta .fcard__body { padding: 22px 24px; }
+.fcard--cta .fcard__body::before { background: #fff; }
+.fcard--cta .fcard__name { font-size: 22px; }
+.fcard__text { display: block; margin-top: 6px; font-size: 15px; color: rgba(255,255,255,.88); }
+.fcard--cta .fcard__count { color: #fff; font-weight: 700; margin-top: 14px; }
+.fcard--cta:hover { background: var(--calcub-red-dark); }
+
+@media (max-width: 640px) {
+  .families { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .fcard { aspect-ratio: 4 / 4.4; }
+  .fcard__body { padding: 14px 12px 12px; }
+  .fcard__name { font-size: 15px; }
+  .fcard__count { font-size: 12.5px; }
+  .fcard--cta { grid-column: span 1; }
+  .fcard--cta .fcard__body { padding: 14px 12px; }
+  .fcard--cta .fcard__name { font-size: 16px; }
+  .fcard__text { font-size: 12.5px; }
+}
+
+/* lien « Fabrication & Savoir-faire » sous le bloc atelier */
+.workshop__link { position: relative; z-index: 1; display: inline-flex; align-items: center; gap: 8px; margin-top: 22px; font-size: 15px; font-weight: 700; color: #fff; }
+.workshop__link svg { width: 18px; height: 18px; color: #ff6a45; transition: transform .2s; }
+.workshop__link:hover svg { transform: translateX(4px); }
+
+/* ---------- 4. Atelier ---------- */
+.workshop { position: relative; overflow: hidden; background: var(--calcub-navy); color: #fff; border-radius: 18px; padding: 34px 36px 36px; }
+.workshop::after { /* symbole CALCUB en filigrane */
+  content: ""; position: absolute; right: -40px; bottom: -50px; width: 220px; height: 224px; pointer-events: none;
+  background: url("../img/calcub-symbole-blanc.svg") no-repeat center / contain; opacity: .05;
+}
+.prose .workshop__title { font-size: 20px; font-weight: 700; color: #fff; margin: 0 0 22px; }
+.workshop__list {
+  position: relative; z-index: 1; list-style: none; margin: 0; padding: 0;
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px;
+  background: rgba(255,255,255,.12); border-radius: 12px; overflow: hidden;
+}
+.workshop__list li { display: flex; flex-direction: column; gap: 14px; padding: 20px 20px 22px; background: var(--calcub-navy); font-size: 15px; font-weight: 600; line-height: 1.4; color: #fff; }
+.workshop__list svg { width: 28px; height: 28px; color: #ff6a45; }
+
+/* ---------- 5. Atouts ---------- */
+.assets { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 30px; }
+.asset { border-top: 3px solid var(--calcub-navy); padding-top: 16px; }
+.section .asset h3 { font-size: 18px; margin: 0 0 6px; }
+.prose .asset p { font-size: 15px; line-height: 1.55; color: var(--muted); margin: 0; }
+
+/* ---------- CTA final ---------- */
+.article-layout ~ .final-cta { margin-bottom: 80px; }
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+@media (max-width: 1100px) {
+  .workshop__list { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 960px) {
+  .hub-hero { grid-template-columns: 1fr; min-height: 0; }
+  .hub-hero__panel { padding: 40px 32px 32px; order: 2; }
+  .hub-hero__media { margin-left: 0; height: 280px; order: 1; }
+  .hub-hero__media > img:first-child { clip-path: none; }
+  .hub-hero__media::before { top: auto; right: 0; width: auto; height: 10px; clip-path: none; }
+}
+@media (max-width: 640px) {
+  .hub-hero__panel { padding: 30px 22px 26px; }
+  .hub-hero__media { height: 220px; }
+  .hub-hero__badge { width: 110px; right: 14px; top: 14px; }
+  .hub-hero__subtitle { font-size: 16px; }
+  .hub-hero__facts { grid-template-columns: repeat(3, 1fr); gap: 0 14px; margin-top: 30px; }
+  .hub-hero__facts dt { font-size: 19px; }
+  .hub-hero__facts dd { font-size: 12px; }
+  .morph { grid-template-columns: 1fr; gap: 10px; }
+  .morph__from { grid-template-columns: auto 1fr; justify-items: start; align-items: center; text-align: left; padding: 14px 18px; }
+  .morph__from svg { width: 34px; height: 34px; }
+  .morph__arrow { transform: rotate(90deg); }
+  .base__item { grid-template-columns: minmax(0, 1fr) 22px minmax(0, 1fr); gap: 8px 8px; padding: 14px 16px; }
+  .base__label { grid-column: 1 / -1; }
+  .base__opt { grid-template-columns: 1fr; }
+  .base__viz { grid-row: auto; height: 28px; margin-bottom: 6px; }
+  .morph__from span { max-width: none; }
+  .workshop { padding: 26px 20px; }
+  .assets { grid-template-columns: 1fr; gap: 18px; }
+}
+
+
+/* ==========================================================================
+   PAGES FAMILLE (ex. Restauration & Commerce)
+   ========================================================================== */
+/* Besoins / contraintes */
+.needs { list-style: none; margin: 30px 0 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.needs li { display: flex; flex-direction: column; gap: 12px; padding: 16px; border-radius: 12px; background: var(--bg-soft); font-size: 15px; font-weight: 600; line-height: 1.35; color: var(--ink); }
+.needs__icon { width: 40px; height: 40px; border-radius: 10px; background: #fff; color: var(--calcub-red); display: grid; place-items: center; }
+.needs__icon svg { width: 22px; height: 22px; }
+
+/* Les solutions de la famille : une ligne photo + texte par produit */
+.products { display: grid; gap: 14px; margin-top: 36px; }
+.product {
+  display: grid; grid-template-columns: 250px minmax(0, 1fr); overflow: hidden;
+  background: #fff; border: 1px solid var(--line); border-radius: var(--radius);
+  transition: border-color .2s, box-shadow .2s;
+}
+.product:hover { border-color: #c9d6e8; box-shadow: var(--shadow); }
+.product__img { position: relative; display: block; min-height: 210px; overflow: hidden; background: var(--bg-soft); }
+.product__img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .6s ease; }
+.product:hover .product__img img { transform: scale(1.05); }
+.product__body { padding: 22px 26px 22px; display: flex; flex-direction: column; }
+.section .product h3 { font-size: 20px; margin: 0 0 8px; }
+.product h3 a:hover { color: var(--calcub-red); }
+.prose .product p { font-size: 16px; line-height: 1.65; margin: 0 0 14px; }
+.product__link { margin-top: auto; align-self: flex-start; display: inline-flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 700; color: var(--calcub-red); }
+.product__link svg { width: 16px; height: 16px; transition: transform .2s; }
+.product__link:hover svg { transform: translateX(4px); }
+
+/* Bandeau location / financement */
+.finance {
+  display: flex; align-items: center; justify-content: space-between; gap: 20px; margin-top: 14px;
+  padding: 18px 24px; border-radius: var(--radius); background: var(--calcub-red-soft); color: var(--text); font-size: 15px;
+  transition: background .2s;
+}
+.finance strong { display: block; font-size: 17px; color: var(--calcub-red); margin-bottom: 2px; }
+.finance svg { flex: none; width: 22px; height: 22px; color: var(--calcub-red); transition: transform .2s; }
+.finance:hover { background: #fbe2da; }
+.finance:hover svg { transform: translateX(4px); }
+
+/* Conseil */
+.advice { list-style: none; margin: 28px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.advice li { display: flex; align-items: center; gap: 14px; padding: 16px 18px; border: 1px solid var(--line); border-radius: 12px; font-size: 15px; font-weight: 600; line-height: 1.35; color: var(--ink); }
+.advice svg { flex: none; width: 26px; height: 26px; color: var(--calcub-blue); }
+
+/* Autres familles (bas de page) */
+.families--related { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.fcard--all { background: var(--calcub-navy); aspect-ratio: auto; }
+.fcard--all::before { display: none; }
+.fcard--all:hover { background: var(--calcub-blue); }
+
+@media (max-width: 960px) {
+  .needs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .advice { grid-template-columns: 1fr; }
+  .families--related { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 640px) {
+  .product { grid-template-columns: 1fr; }
+  .product__img { min-height: 180px; }
+  .product__body { padding: 18px; }
+  .finance { padding: 16px 18px; }
+}
