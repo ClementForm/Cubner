@@ -1,0 +1,1090 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Client · GEO visibilité IA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Playfair+Display:ital,wght@0,700;1,700&display=swap">
+<link rel="stylesheet" href="geo.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="clients.html" aria-label="GEO visibilité IA, retour aux clients">
+      <span class="brand-agency">Definima</span>
+      <span class="brand-app"><em>GEO</em> visibilité IA</span>
+    </a>
+    <nav class="mainnav" aria-label="Navigation principale">
+      <a href="clients.html" aria-current="page">Clients</a>
+      <a href="#">Paramétrage</a>
+    </nav>
+    <div class="user">
+      <span>Administrateur (dev)</span>
+      <button type="button" class="btn btn-secondary btn-sm">Déconnexion</button>
+    </div>
+  </div>
+</header>
+
+<div class="shell">
+  <aside class="side" id="side"></aside>
+  <main class="content" id="main" tabindex="-1"></main>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="toast-text"></span><a href="#" id="toast-link" hidden></a></div>
+
+<script>
+(function () {
+'use strict';
+
+/* =========================================================
+   Constantes
+   ========================================================= */
+var CLIENTS_KEY = 'geo-clients-v1';
+var DATA_PREFIX = 'geo-data-v1:';
+var PLATFORMS = [
+  { id: 'chatgpt',    name: 'ChatGPT',    color: '#2F6FD0', sources: false },
+  { id: 'gemini',     name: 'Gemini',     color: '#7A4FC9', sources: true },
+  { id: 'claude',     name: 'Claude',     color: '#B8862A', sources: false },
+  { id: 'perplexity', name: 'Perplexity', color: '#1F8A84', sources: true }
+];
+var INTENTS = { C: 'Commerciale', I: 'Informationnelle', N: 'Navigationnelle', T: 'Transactionnelle' };
+var PERIODS = [ { v: 7, l: '7 derniers jours' }, { v: 30, l: '30 derniers jours' }, { v: 90, l: '3 derniers mois' }, { v: 365, l: '12 derniers mois' } ];
+var NOISE = ['google', 'pages jaunes', 'pagesjaunes', 'yelp', 'wikipedia', 'facebook', 'leboncoin'];
+var WEEKLY_BUDGET = 400;
+
+var SEED_CLIENTS = [
+  { id: 'aan', name: 'Action Anti-Nuisible', domain: 'action-anti-nuisible.fr', aliases: ['AAN', 'Action Antinuisible'],
+    activity: 'Dératisation, désinsectisation et destruction de nids de guêpes pour particuliers et professionnels, Alpes-Maritimes et Var.',
+    queries: 10, competitors: 59, lastMeasure: '2026-11-17' },
+  { id: 'definima', name: 'DEFINIMA', domain: 'definima.com', aliases: [], activity: '',
+    queries: 23, competitors: 341, lastMeasure: '2026-11-17' }
+];
+
+/* Données de démonstration d'Action Anti-Nuisible (reprises de la mesure du 17 nov.) */
+function seedAAN() {
+  var T = 'Lutte contre guêpes';
+  var q = function (id, text, intents) { return { id: id, text: text, topic: T, intents: intents }; };
+  var b = function (name, rank, sentiment) { return { name: name, rank: rank, sentiment: sentiment || 'pos' }; };
+  var D = '2026-11-17T14:10:00';
+  return {
+    queries: [
+      q('q1', 'Comment contacter un expert pour un traitement anti-guêpes efficace ?', ['I', 'T']),
+      q('q2', 'Existe-t-il des interventions rapides pour un nid de guêpes dangereux ?', ['I']),
+      q('q3', 'Où trouver une entreprise spécialisée en destruction de nids de guêpes ?', ['C', 'N']),
+      q('q4', 'Peut-on demander un devis en ligne pour un traitement contre les guêpes ?', ['T']),
+      q('q5', 'Quel prix moyen pour faire enlever un nid de guêpes chez soi ?', ['C', 'I']),
+      q('q6', 'Quel service professionnel pour éliminer les guêpes à domicile ?', ['C', 'N']),
+      q('q7', 'Quels professionnels interviennent pour un traitement de nid de guêpes en hauteur ?', ['C', 'I']),
+      q('q8', 'Quels services incluent une inspection préalable avant traitement anti-guêpes ?', ['C', 'I']),
+      q('q9', 'Quels services proposent une garantie après traitement contre les guêpes ?', ['C', 'I']),
+      q('q10', 'Quels sont les délais d\'intervention pour un spécialiste guêpes dans ma région ?', ['C', 'I'])
+    ],
+    competitors: [
+      { name: 'Excellium Antinuisibles', domain: 'excellium-antinuisibles.com', status: 'suivi' },
+      { name: 'La Boutique du Nuisible', domain: 'boutiquedunuisible.fr', status: 'suivi' },
+      { name: 'Nuisipro', domain: 'nuisipro.fr', status: 'suivi' },
+      { name: 'Trape Nuisible', domain: 'anti-nuisible.fr', status: 'suivi' },
+      { name: 'Votre Expert Anti-Nuisibles', domain: 'votre-expert-anti-nuisibles.com', status: 'suivi' },
+      { name: 'ALLO FRELONS', domain: 'allo-frelons.fr', status: 'neutre' },
+      { name: 'Allo la Guêpe', domain: 'allolaguepe.fr', status: 'neutre' },
+      { name: 'Anticimex', domain: 'anticimex.fr', status: 'neutre' },
+      { name: 'Guêpes-Apens', domain: 'guepes-apens.fr', status: 'neutre' },
+      { name: '3D FRANCE - Extermination Nuisibles', domain: '', status: 'neutre' },
+      { name: 'Allo Guêpes', domain: '', status: 'neutre' },
+      { name: 'Rentokil', domain: 'rentokil.fr', status: 'neutre' },
+      { name: 'Pages Jaunes', domain: 'pagesjaunes.fr', status: 'neutre' },
+      { name: 'Stop Guêpes et Frelons', domain: '', status: 'neutre' },
+      { name: 'Nuisibles-out', domain: '', status: 'neutre' },
+      { name: 'Breizh Intervention', domain: '', status: 'neutre' },
+      { name: 'C53D', domain: '', status: 'neutre' },
+      { name: 'CTH 3D', domain: '', status: 'neutre' },
+      { name: 'Derat Stop', domain: '', status: 'neutre' },
+      { name: 'Dgf Landes', domain: '', status: 'neutre' },
+      { name: 'DKM Experts', domain: '', status: 'neutre' },
+      { name: 'Expertise Nuisibles', domain: '', status: 'neutre' },
+      { name: 'GF NUISIBLE', domain: '', status: 'neutre' },
+      { name: 'Google', domain: 'google.com', status: 'neutre' },
+      { name: 'Solution-Nuisible', domain: '', status: 'neutre' }
+    ],
+    responses: [
+      { id: 'r1', queryId: 'q1', platform: 'chatgpt', date: D, brands: [], sources: [],
+        text: 'Voici comment procéder pour joindre un expert et obtenir un traitement anti-guêpes efficace, rapidement et en sécurité. Qui contacter : une entreprise de désinsectisation (3D : dératisation, désinsectisation, désinfection) proche de chez vous. Les pompiers uniquement en cas de danger immédiat pour les personnes (réaction allergique connue, nid dans un lieu public).' },
+      { id: 'r2', queryId: 'q1', platform: 'gemini', date: D,
+        brands: [b('ALLO FRELONS', 1), b('Rentokil', 2), b('Guêpes-Apens', 3), b('Allo Guêpes', 4, 'neutre'), b('Anticimex', 5), b('Allo la Guêpe', 6), b('Pages Jaunes', 7, 'neutre'), b('Stop Guêpes et Frelons', 8), b('Nuisibles-out', 9), b('3D FRANCE - Extermination Nuisibles', 10)],
+        sources: ['https://www.allolaguepe.fr/destruction-nid-guepes', 'https://guepes-apens.fr/intervention', 'https://abc-guepes.com/', 'https://allo-frelons.fr/', 'https://www.anticimex.fr/guepes', 'https://damien-perthuis-multiservices.fr/', 'https://depanist.com/guepes', 'https://destruction-niddeguepes.fr/', 'https://experts-guepes-frelons.fr/', 'https://fierinuisible.fr/'],
+        text: 'Pour un traitement anti-guêpes efficace, plusieurs entreprises sont régulièrement recommandées : ALLO FRELONS, Rentokil, Guêpes-Apens, Allo Guêpes ou Anticimex. Allo la Guêpe intervient aussi rapidement. Vous pouvez comparer les avis sur Pages Jaunes, ou contacter Stop Guêpes et Frelons, Nuisibles-out et 3D FRANCE - Extermination Nuisibles.' },
+      { id: 'r3', queryId: 'q1', platform: 'claude', date: D,
+        brands: [b('Breizh Intervention', 1), b('C53D', 2), b('CTH 3D', 3), b('Derat Stop', 4), b('Dgf Landes', 5), b('DKM Experts', 6), b('Expertise Nuisibles', 7), b('GF NUISIBLE', 8), b('Google', 9, 'neutre'), b('Solution-Nuisible', 10)],
+        sources: [],
+        text: 'Voici comment trouver un professionnel fiable pour détruire un nid de guêpes. Des entreprises comme Breizh Intervention, C53D, CTH 3D, Derat Stop, Dgf Landes ou DKM Experts proposent ce service selon les régions. Expertise Nuisibles, GF NUISIBLE et Solution-Nuisible sont d\'autres options. Une recherche Google avec votre ville permet de trouver les intervenants proches.' },
+      { id: 'r4', queryId: 'q2', platform: 'chatgpt', date: D, brands: [], sources: [],
+        text: 'Oui. Des entreprises de désinsectisation proposent des interventions d\'urgence pour nids de guêpes et frelons, souvent le jour même (et parfois sous 2 à 4 h en zone urbaine). Quand appeler les secours : danger immédiat pour des personnes (allergiques connues, piqûres multiples, nid dans une école, une crèche ou un ERP).' },
+      { id: 'r5', queryId: 'q2', platform: 'gemini', date: D, brands: [],
+        sources: ['https://www.allolaguepe.fr/urgence', 'https://guepes-apens.fr/urgence', 'https://www.ofb.gouv.fr/frelon-asiatique', 'https://www.guepes.fr/', 'https://fr.luko.eu/conseils/guide/nid-de-guepes/', 'https://www.caaquebec.com/guepes'],
+        text: 'Oui, la plupart des désinsectiseurs proposent des interventions en urgence, généralement sous 24 h. En cas de nid proche d\'une zone de passage ou de personnes allergiques, il est conseillé de demander une intervention prioritaire.' },
+      { id: 'r6', queryId: 'q2', platform: 'claude', date: D, brands: [], sources: [],
+        text: 'Oui, de nombreux professionnels de la désinsectisation interviennent en urgence pour les nids de guêpes dangereux, souvent dans la journée. Précisez au téléphone l\'emplacement du nid et la présence éventuelle de personnes allergiques.' }
+    ],
+    runs: [
+      { date: '2026-11-17T13:43:00', status: 'echec', calls: 0, msg: '4 réponse(s) en échec' },
+      { date: '2026-11-17T13:53:00', status: 'ok', calls: 8, msg: 'Claude : 2 réponse(s), Action Anti-Nuisible citée dans 0' },
+      { date: '2026-11-17T14:10:00', status: 'ok', calls: 4, msg: 'Gemini : 2 réponse(s), Action Anti-Nuisible citée dans 0' }
+    ],
+    reports: [ { id: 'rep1', created: '2026-11-17', from: '2025-11-18', to: '2026-11-17', platforms: ['chatgpt', 'gemini', 'perplexity', 'claude'], by: 'Administrateur (dev)' } ],
+    actions: {},
+    imports: [],
+    settings: { keys: { chatgpt: true, gemini: true, claude: true, perplexity: false }, weekly: false, ga4: '' },
+    demo: true
+  };
+}
+function emptyData() {
+  return { queries: [], competitors: [], responses: [], runs: [], reports: [], actions: {}, imports: [],
+    settings: { keys: { chatgpt: true, gemini: true, claude: true, perplexity: false }, weekly: false, ga4: '' } };
+}
+
+/* =========================================================
+   Utilitaires
+   ========================================================= */
+function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+function norm(s) { return String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').trim(); }
+function slug(s) { return norm(s).replace(/[^a-z0-9]+/g, ''); }
+function pct(a, b) { return b ? (a / b) * 100 : 0; }
+function fmtPct(v) { return (Math.round(v * 10) / 10).toLocaleString('fr-FR') + ' %'; }
+function fmtNum(v) { return (Math.round(v * 10) / 10).toLocaleString('fr-FR'); }
+function avg(a) { return a.length ? a.reduce(function (s, x) { return s + x; }, 0) / a.length : null; }
+function uid(p) { return p + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
+function pick(a) { return a[Math.floor(Math.random() * a.length)]; }
+function shuffle(a) { a = a.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+function hostOf(url) { try { return new URL(url).hostname.replace(/^www\./, ''); } catch (e) { return String(url).replace(/^https?:\/\//, '').replace(/^www\./, '').split('/')[0]; } }
+var fmtDate = new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' });
+var fmtDateLong = new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+var fmtDateTime = new Intl.DateTimeFormat('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+var fmtDay = new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'short' });
+function d(s) { return new Date(s.length <= 10 ? s + 'T12:00:00' : s); }
+function isoDay(dt) { var z = new Date(dt.getTime() - dt.getTimezoneOffset() * 60000); return z.toISOString().slice(0, 10); }
+function plat(id) { return PLATFORMS.filter(function (p) { return p.id === id; })[0]; }
+function dot(color) { return '<span class="dot" aria-hidden="true" style="background:' + color + '"></span>'; }
+function icon(name, size, stroke) {
+  size = size || 22; stroke = stroke || 'currentColor';
+  var paths = {
+    target: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/>',
+    link: '<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>',
+    users: '<circle cx="9" cy="8" r="3.5"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><path d="M17 11l2 2 3-4"/>',
+    play: '<path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 4v5h-5"/>',
+    plus: '<path d="M12 5v14M5 12h14"/>',
+    list: '<path d="M8 6h13M8 12h13M8 18h13"/><path d="M3 6h.01M3 12h.01M3 18h.01"/>',
+    chat: '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
+    chart: '<path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/>',
+    info: '<circle cx="12" cy="12" r="9"/><path d="M12 8v5"/><path d="M12 16.5v.01"/>',
+    trash: '<path d="M4 7h16"/><path d="M10 11v6M14 11v6"/><path d="M6 7l1 13h10l1-13"/><path d="M9 7V4h6v3"/>',
+    clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+    file: '<path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/>',
+    spark: '<path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5L18 18M6 18l2.5-2.5M15.5 8.5L18 6"/>'
+  };
+  return '<svg aria-hidden="true" width="' + size + '" height="' + size + '" viewBox="0 0 24 24" fill="none" stroke="' + stroke + '" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' + (paths[name] || '') + '</svg>';
+}
+var ARROW = '<span class="arrow-go" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h17"/><path d="M14 6l6 6-6 6"/></svg></span>';
+
+/* =========================================================
+   Stockage
+   ========================================================= */
+function loadClients() {
+  try { var r = localStorage.getItem(CLIENTS_KEY); if (r) { var x = JSON.parse(r); if (Array.isArray(x)) return x; } } catch (e) {}
+  return SEED_CLIENTS.slice();
+}
+function saveClients() { try { localStorage.setItem(CLIENTS_KEY, JSON.stringify(clients)); } catch (e) {} }
+function loadData(id) {
+  try { var r = localStorage.getItem(DATA_PREFIX + id); if (r) return JSON.parse(r); } catch (e) {}
+  return id === 'aan' ? seedAAN() : emptyData();
+}
+function saveData() {
+  try { localStorage.setItem(DATA_PREFIX + client.id, JSON.stringify(data)); } catch (e) {}
+  // garde la liste des clients à jour (compteurs)
+  client.queries = data.queries.length;
+  client.competitors = data.competitors.length;
+  var last = data.responses.map(function (r) { return r.date; }).sort().pop();
+  client.lastMeasure = last ? last.slice(0, 10) : null;
+  saveClients();
+}
+
+/* =========================================================
+   État
+   ========================================================= */
+var clients = loadClients();
+var params = new URLSearchParams(location.search);
+var clientId = params.get('id') || params.get('client') || 'aan';
+var client = clients.filter(function (c) { return c.id === clientId; })[0];
+if (!client) {
+  document.getElementById('main').innerHTML = '<div class="empty-box"><strong>Client introuvable</strong><p>Ce client n\'existe pas ou a été supprimé.</p><a class="btn btn-primary" href="clients.html">Retour aux clients</a></div>';
+  return;
+}
+var data = loadData(client.id);
+if (!data.settings) data.settings = emptyData().settings;
+if (!data.actions) data.actions = {};
+if (!data.imports) data.imports = [];
+document.title = client.name + ' · GEO visibilité IA';
+
+var ui = {
+  view: 'vue',
+  period: 365,
+  platforms: {},
+  comp: 'top',
+  openQuery: null,
+  sourceFilter: 'tous',
+  excerptLimit: 8
+};
+PLATFORMS.forEach(function (p) { ui.platforms[p.id] = true; });
+
+/* =========================================================
+   Calculs
+   ========================================================= */
+function connected(pid) { return !!data.settings.keys[pid]; }
+function isMe(name) {
+  var n = norm(name);
+  if (n === norm(client.name)) return true;
+  return (client.aliases || []).some(function (a) { return norm(a) === n; });
+}
+function ignoredSet() {
+  var s = {};
+  data.competitors.forEach(function (c) { if (c.status === 'ignore') s[norm(c.name)] = true; });
+  return s;
+}
+function filtered() {
+  var from = Date.now() - ui.period * 86400000;
+  return data.responses.filter(function (r) {
+    return d(r.date).getTime() >= from && ui.platforms[r.platform] && connected(r.platform);
+  });
+}
+function citesMe(r) { return r.brands.some(function (b) { return isMe(b.name); }); }
+function sentScore(list) {
+  if (!list.length) return null;
+  var v = { pos: 100, neutre: 50, neg: 0 };
+  return Math.round(avg(list.map(function (s) { return v[s]; })));
+}
+function sentSplit(list) {
+  var n = list.length || 1, c = { pos: 0, neutre: 0, neg: 0 };
+  list.forEach(function (s) { c[s]++; });
+  return Math.round(c.pos / n * 100) + ' % pos. · ' + Math.round(c.neutre / n * 100) + ' % neutre · ' + Math.round(c.neg / n * 100) + ' % nég.';
+}
+function stats(R) {
+  var ign = ignoredSet(), agg = {}, total = 0;
+  R.forEach(function (r) {
+    var seen = {};
+    r.brands.forEach(function (b) {
+      var me = isMe(b.name), key = me ? '__me' : norm(b.name);
+      if (!me && ign[key]) return;
+      if (seen[key]) return; seen[key] = 1;
+      var a = agg[key] || (agg[key] = { key: key, name: me ? client.name : b.name, me: me, resp: 0, ranks: [], sents: [] });
+      a.resp++; a.ranks.push(b.rank); a.sents.push(b.sentiment);
+      total++;
+    });
+  });
+  var list = Object.keys(agg).map(function (k) {
+    var a = agg[k];
+    a.visibility = pct(a.resp, R.length); a.share = pct(a.resp, total);
+    a.rank = avg(a.ranks); a.sentiment = sentScore(a.sents);
+    return a;
+  });
+  var me = list.filter(function (a) { return a.me; })[0] ||
+    { key: '__me', name: client.name, me: true, resp: 0, ranks: [], sents: [], visibility: 0, share: 0, rank: null, sentiment: null };
+  var others = list.filter(function (a) { return !a.me; }).sort(function (a, b) { return b.resp - a.resp || (a.rank || 99) - (b.rank || 99) || a.name.localeCompare(b.name); });
+  return { total: R.length, me: me, others: others, mentions: total };
+}
+function zeroEntry(name) { return { key: norm(name), name: name, me: false, resp: 0, ranks: [], sents: [], visibility: 0, share: 0, rank: null, sentiment: null }; }
+function shownCompetitors(S) {
+  if (ui.comp === 'top') return S.others.slice(0, 5);
+  if (ui.comp === 'suivi') {
+    return data.competitors.filter(function (c) { return c.status === 'suivi'; }).map(function (c) {
+      return S.others.filter(function (o) { return o.key === norm(c.name); })[0] || zeroEntry(c.name);
+    }).sort(function (a, b) { return b.resp - a.resp; });
+  }
+  return S.others;
+}
+function natureOf(domain) {
+  if (domain === client.domain || domain.endsWith('.' + client.domain)) return 'me';
+  var isComp = data.competitors.some(function (c) {
+    if (c.status === 'ignore') return false;
+    if (c.domain && (domain === c.domain || domain.endsWith('.' + c.domain))) return true;
+    var s = slug(c.name); return s.length > 4 && slug(domain.split('.')[0]) === s;
+  });
+  return isComp ? 'comp' : 'tiers';
+}
+function sourceStats(R) {
+  var agg = {};
+  R.forEach(function (r) {
+    var me = citesMe(r), seen = {};
+    r.sources.forEach(function (u) {
+      var h = hostOf(u);
+      var a = agg[h] || (agg[h] = { domain: h, resp: {}, pages: {}, plats: {}, cites: 0, queries: {} });
+      a.pages[u] = 1; a.plats[r.platform] = 1; a.queries[r.queryId] = 1;
+      if (!seen[h]) { seen[h] = 1; a.resp[r.id] = 1; if (me) a.cites++; }
+    });
+  });
+  var withSources = R.filter(function (r) { return r.sources.length; }).length;
+  return Object.keys(agg).map(function (k) {
+    var a = agg[k], n = Object.keys(a.resp).length;
+    return { domain: a.domain, responses: n, share: pct(n, withSources || 1), pages: Object.keys(a.pages).length,
+      plats: Object.keys(a.plats), queries: Object.keys(a.queries), cites: a.cites, nature: natureOf(a.domain) };
+  }).sort(function (a, b) { return b.responses - a.responses || a.domain.localeCompare(b.domain); });
+}
+function queryStats(q, R) {
+  var qr = R.filter(function (r) { return r.queryId === q.id; });
+  var mine = qr.filter(citesMe);
+  var ranks = []; mine.forEach(function (r) { r.brands.forEach(function (b) { if (isMe(b.name)) ranks.push(b.rank); }); });
+  var ign = ignoredSet(), others = {};
+  qr.forEach(function (r) { r.brands.forEach(function (b) { if (!isMe(b.name) && !ign[norm(b.name)]) others[b.name] = (others[b.name] || 0) + 1; }); });
+  var byPlat = {};
+  PLATFORMS.forEach(function (p) {
+    var pr = qr.filter(function (r) { return r.platform === p.id; });
+    byPlat[p.id] = pr.length ? pct(pr.filter(citesMe).length, pr.length) : null;
+  });
+  return { q: q, resp: qr, n: qr.length, visibility: pct(mine.length, qr.length), rank: avg(ranks), byPlat: byPlat,
+    others: Object.keys(others).sort(function (a, b) { return others[b] - others[a]; }) };
+}
+function isCommercial(q) { return q.intents.indexOf('C') > -1 || q.intents.indexOf('T') > -1; }
+function lostQueries(R) {
+  return data.queries.map(function (q) { return queryStats(q, R); })
+    .filter(function (s) { return s.n && s.visibility === 0 && s.others.length; })
+    .sort(function (a, b) { return (isCommercial(b.q) - isCommercial(a.q)) || b.others.length - a.others.length; });
+}
+function conquerable(R) { return sourceStats(R).filter(function (s) { return s.nature === 'tiers' && s.cites === 0; }); }
+function measuredQueries() {
+  var s = {}; data.responses.forEach(function (r) { s[r.queryId] = 1; });
+  return data.queries.filter(function (q) { return s[q.id]; }).length;
+}
+function callsLast7() {
+  var from = Date.now() - 7 * 86400000;
+  return data.runs.filter(function (r) { return d(r.date).getTime() >= from; }).reduce(function (s, r) { return s + (r.calls || 0); }, 0);
+}
+function lastMeasure() { var l = data.responses.map(function (r) { return r.date; }).sort().pop(); return l ? d(l) : null; }
+function measureDays() { var s = {}; data.responses.forEach(function (r) { s[r.date.slice(0, 10)] = 1; }); return Object.keys(s).length; }
+
+/* =========================================================
+   Rendu : barre latérale
+   ========================================================= */
+var NAV = [
+  { group: 'Analyser', items: [ ['vue', 'Vue d\'ensemble'], ['requetes', 'Requêtes'], ['concurrents', 'Concurrents'], ['perception', 'Perception'], ['sources', 'Sources & pages'], ['trafic', 'Trafic réel'] ] },
+  { group: 'Agir', items: [ ['opportunites', 'Opportunités'], ['rapports', 'Rapports'] ] },
+  { group: 'Configurer', items: [ ['fiche', 'Fiche & requêtes'], ['suivi', 'Concurrents suivis'], ['mesures', 'Mesures & sources'] ] }
+];
+var TITLES = {
+  vue: ['Vue', 'd\'ensemble'], requetes: ['Sujets &', 'requêtes'], concurrents: ['Face aux', 'concurrents'], perception: ['Perception', 'par les IA'],
+  sources: ['Sources', '& pages'], trafic: ['Trafic', 'réel'], opportunites: ['Vos', 'opportunités'], rapports: ['Vos', 'rapports'],
+  fiche: ['Fiche &', 'requêtes'], suivi: ['Concurrents', 'suivis'], mesures: ['Mesures', '& sources']
+};
+var ANALYSIS = { vue: 1, requetes: 1, concurrents: 1, perception: 1, sources: 1, opportunites: 1 };
+
+function renderSide() {
+  var R = filtered();
+  var opp = lostQueries(R).length + conquerable(R).filter(function (s) { return !data.actions[s.domain]; }).length;
+  var html = '<div class="client-card"><span class="bubble lg avatar" aria-hidden="true" style="font-family:\'Playfair Display\',serif;font-weight:700;font-size:26px;">' + esc(client.name.charAt(0).toUpperCase()) + '</span>' +
+    '<span class="name">' + esc(client.name) + '</span><span class="domain">' + esc(client.domain) + '</span>' +
+    '<a href="clients.html" style="font-size:15px;margin-top:6px;">Changer de client</a></div><nav class="sidenav" aria-label="Sections du client">';
+  NAV.forEach(function (g) {
+    html += '<div class="group"><span class="group-title">' + g.group + '</span>';
+    g.items.forEach(function (it) {
+      var badge = it[0] === 'opportunites' && opp ? '<span class="count-pill">' + opp + '</span>' : '';
+      html += '<a href="#' + it[0] + '"' + (ui.view === it[0] ? ' aria-current="page"' : '') + '>' + esc(it[1]) + badge + '</a>';
+    });
+    html += '</div>';
+  });
+  document.getElementById('side').innerHTML = html + '</nav>';
+}
+
+/* =========================================================
+   Rendu : en-tête de page et filtres
+   ========================================================= */
+function head(extraBtn) {
+  var t = TITLES[ui.view], lm = lastMeasure(), days = measureDays();
+  var sub = lm ? days + ' jour' + (days > 1 ? 's' : '') + ' de mesure · dernière le ' + fmtDateLong.format(lm) : 'Aucune mesure pour l\'instant';
+  sub += data.settings.weekly ? ' · mesure chaque lundi' : ' · <a href="#mesures">mesure hebdomadaire à programmer</a>';
+  return '<nav class="crumbs" aria-label="Fil d\'Ariane"><a href="clients.html">Clients</a><span class="sep" aria-hidden="true">|</span><a href="#vue">' + esc(client.name) + '</a>' +
+    (ui.view !== 'vue' ? '<span class="sep" aria-hidden="true">|</span><span class="here">' + esc(t[0] + ' ' + t[1]) + '</span>' : '') + '</nav>' +
+    '<div class="page-head"><div><h1>' + esc(t[0]) + ' <em>' + esc(t[1]) + '</em></h1><div class="sub">' + sub +
+    (data.demo ? ' <span class="demo-flag">données de démonstration</span>' : '') + '</div></div>' + (extraBtn || '') + '</div>';
+}
+function measureBtn() {
+  return '<button type="button" class="btn btn-dark" data-act="measure">' + icon('play', 18) + 'Lancer une mesure</button>';
+}
+function filtersBar() {
+  var html = '<form class="filters" aria-label="Filtres" onsubmit="return false">' +
+    '<div class="field"><label for="f-period">Période</label><select id="f-period" data-ctl="period">' +
+    PERIODS.map(function (p) { return '<option value="' + p.v + '"' + (ui.period === p.v ? ' selected' : '') + '>' + p.l + '</option>'; }).join('') + '</select></div>' +
+    '<fieldset class="field" style="border:0;margin:0;padding:0;"><legend class="label" style="padding:0;margin-bottom:6px;font-weight:600;">IA</legend><div class="chips">';
+  PLATFORMS.forEach(function (p) {
+    if (!connected(p.id)) {
+      html += '<button type="button" class="chip" disabled title="Aucune clé API : voir Mesures & sources">' + esc(p.name) + ' · non connecté</button>';
+    } else {
+      html += '<button type="button" class="chip" data-act="toggle-plat" data-id="' + p.id + '" aria-pressed="' + !!ui.platforms[p.id] + '">' + dot(p.color) + esc(p.name) + '</button>';
+    }
+  });
+  html += '</div></fieldset><div class="field"><label for="f-comp">Concurrents affichés</label><select id="f-comp" data-ctl="comp">' +
+    '<option value="top"' + (ui.comp === 'top' ? ' selected' : '') + '>Les 5 plus cités</option>' +
+    '<option value="suivi"' + (ui.comp === 'suivi' ? ' selected' : '') + '>Suivis (' + data.competitors.filter(function (c) { return c.status === 'suivi'; }).length + ')</option>' +
+    '<option value="tous"' + (ui.comp === 'tous' ? ' selected' : '') + '>Tous les cités</option></select></div></form>';
+  return html;
+}
+
+/* =========================================================
+   Vues
+   ========================================================= */
+function noDataBox() {
+  if (!data.queries.length) {
+    return '<div class="empty-box"><span class="bubble lg">' + icon('list', 28, '#fff') + '</span><strong>Commencez par choisir les requêtes à suivre</strong>' +
+      '<p>Les requêtes sont les questions qu\'un prospect pose à une IA. Ajoutez-les à la main ou laissez l\'outil en proposer à partir de l\'activité du client.</p>' +
+      '<a class="btn btn-primary" href="#fiche">Ajouter des requêtes</a></div>';
+  }
+  return '<div class="empty-box"><span class="bubble lg">' + icon('play', 28, '#fff') + '</span><strong>Aucune réponse sur cette période</strong>' +
+    '<p>' + (data.responses.length ? 'Élargissez la période ou réactivez une IA dans les filtres.' : 'Lancez une première mesure : les ' + data.queries.length + ' requêtes seront posées aux IA connectées.') + '</p>' +
+    (data.responses.length ? '' : '<button type="button" class="btn btn-primary" data-act="measure">' + icon('play', 18) + 'Lancer la première mesure</button>') + '</div>';
+}
+
+function viewVue() {
+  var R = filtered(), S = stats(R);
+  var html = head(measureBtn()) + filtersBar();
+  if (!R.length) return html + noDataBox();
+
+  var mq = measuredQueries(), nq = data.queries.length;
+  if (R.length < 30 || mq < nq) {
+    html += '<section class="notice" aria-label="Fiabilité des chiffres">' + icon('info', 28, '#B4502F') +
+      '<div class="txt"><strong>Échantillon encore faible : ' + R.length + ' réponse' + (R.length > 1 ? 's' : '') + ' lue' + (R.length > 1 ? 's' : '') + '</strong>' +
+      '<span>' + (mq < nq ? 'Seules ' + mq + ' requêtes sur ' + nq + ' ont été posées aux IA. ' : '') + 'Les pourcentages restent indicatifs jusqu\'à environ 30 réponses.</span></div>' +
+      '<div style="flex:0 1 220px;display:flex;flex-direction:column;gap:6px;"><span style="font-size:14px;">Requêtes mesurées · ' + mq + ' / ' + nq + '</span>' +
+      '<div class="progress" aria-hidden="true"><span style="width:' + pct(mq, nq || 1) + '%"></span></div></div></section>';
+  }
+
+  var rankTxt = S.me.rank != null ? fmtNum(S.me.rank) : '—';
+  var pos = 1 + S.others.filter(function (o) { return o.resp > S.me.resp; }).length;
+  html += '<section class="kpis" aria-label="Indicateurs clés">' +
+    kpi('Visibilité', fmtPct(S.me.visibility), S.me.resp + ' réponse' + (S.me.resp > 1 ? 's' : '') + ' sur ' + S.total + ' cite' + (S.me.resp > 1 ? 'nt' : '') + ' la marque') +
+    kpi('Mentions', S.me.resp, 'sur la période') +
+    kpi('Part de voix', fmtPct(S.me.share), pos + (pos === 1 ? 're' : 'e') + ' sur ' + (S.others.length + 1) + ' marques') +
+    kpi('Rang moyen', rankTxt, S.me.rank != null ? 'position dans les listes' : 'Pas encore citée', S.me.rank == null) +
+    kpi('Sentiment', S.me.sentiment != null ? S.me.sentiment + '/100' : '—', S.me.sentiment != null ? sentSplit(S.me.sents) : 'Calculé dès la 1re mention', S.me.sentiment == null) +
+    '</section>';
+
+  // À faire
+  var todos = [];
+  var lost = lostQueries(R);
+  if (lost.length) todos.push('<a class="todo-item" href="#opportunites"><span class="bubble">' + icon('target', 22, '#fff') + '</span><span class="t"><strong>' + lost.length + ' requête' + (lost.length > 1 ? 's' : '') + ' où la place est prise</strong><span>« ' + esc(lost[0].q.text) + ' » : ' + lost[0].others.length + ' marques citées, pas vous.</span></span>' + ARROW + '</a>');
+  var conq = conquerable(R).filter(function (s) { return !data.actions[s.domain]; });
+  if (conq.length) todos.push('<a class="todo-item" href="#opportunites"><span class="bubble">' + icon('link', 22, '#fff') + '</span><span class="t"><strong>' + conq.length + ' site' + (conq.length > 1 ? 's' : '') + ' source' + (conq.length > 1 ? 's' : '') + ' à conquérir</strong><span>Les IA s\'appuient sur ces sites, qui ne vous citent pas. En tête : ' + esc(conq.slice(0, 2).map(function (s) { return s.domain; }).join(', ')) + '.</span></span>' + ARROW + '</a>');
+  var noise = data.competitors.filter(function (c) { return c.status !== 'ignore' && NOISE.indexOf(norm(c.name)) > -1; });
+  if (noise.length) todos.push('<button type="button" class="todo-item" data-act="ignore-noise"><span class="bubble">' + icon('users', 22, '#fff') + '</span><span class="t"><strong>Ignorer ' + esc(noise.map(function (c) { return c.name; }).join(' et ')) + '</strong><span>Ce ne sont pas des concurrents : ils faussent la part de voix. Un clic pour les exclure.</span></span>' + ARROW + '</button>');
+  var deadSuivis = data.competitors.filter(function (c) { return c.status === 'suivi' && !S.others.some(function (o) { return o.key === norm(c.name); }); });
+  if (deadSuivis.length) todos.push('<a class="todo-item" href="#suivi"><span class="bubble">' + icon('users', 22, '#fff') + '</span><span class="t"><strong>' + deadSuivis.length + ' concurrent' + (deadSuivis.length > 1 ? 's' : '') + ' suivi' + (deadSuivis.length > 1 ? 's' : '') + ' jamais cité' + (deadSuivis.length > 1 ? 's' : '') + '</strong><span>Les IA citent d\'autres marques. Revoyez la liste des concurrents suivis.</span></span>' + ARROW + '</a>');
+  if (!data.settings.weekly) todos.push('<a class="todo-item" href="#mesures"><span class="bubble">' + icon('clock', 22, '#fff') + '</span><span class="t"><strong>Programmer la mesure hebdomadaire</strong><span>Sans elle, la courbe d\'évolution ne se remplit pas.</span></span>' + ARROW + '</a>');
+
+  html += '<div class="row"><section class="panel blush wide"><div class="panel-head"><h2>À faire <em>maintenant</em></h2></div>' +
+    (todos.length ? '<div class="todo">' + todos.join('') + '</div>' : '<p class="muted" style="margin:0">Rien d\'urgent : bravo.</p>') + '</section>';
+
+  // Par IA
+  html += '<section class="panel narrow"><div class="panel-head"><h2>Par <em>IA</em></h2></div><div class="plat-list">';
+  PLATFORMS.forEach(function (p) {
+    if (!connected(p.id)) {
+      html += '<div class="plat-row"><span class="dot" aria-hidden="true" style="border:1.5px dashed #8A8381"></span><span class="n" style="color:#6B6563">' + p.name + '</span><a href="#mesures" style="font-size:14px">Connecter</a></div>';
+      return;
+    }
+    var pr = R.filter(function (r) { return r.platform === p.id; });
+    html += '<div class="plat-row">' + dot(p.color) + '<span class="n">' + p.name + '</span><span class="s">' + pr.length + ' rép.</span><span class="v">' + (pr.length ? fmtPct(pct(pr.filter(citesMe).length, pr.length)) : '—') + '</span></div>';
+  });
+  var srcPlats = PLATFORMS.filter(function (p) { return p.sources && connected(p.id); }).map(function (p) { return p.name; });
+  html += '</div><span class="muted" style="font-size:14px">' + (srcPlats.length ? 'Sources fournies par : ' + srcPlats.join(', ') + '.' : 'Aucune IA connectée ne fournit ses sources.') + '</span></section></div>';
+
+  // Classement
+  var comp = shownCompetitors(S);
+  html += '<section class="panel"><div class="panel-head"><h2>Classement de <em>visibilité</em></h2><span class="meta">Part des réponses qui citent chaque marque</span></div>' + barList(comp, S.me, 'visibility');
+  if (comp.length && comp.every(function (c) { return c.resp <= 1; })) html += '<span class="muted" style="font-size:14px">Chaque concurrent n\'est cité qu\'une fois : les écarts ne sont pas encore significatifs.</span>';
+  html += '</section>';
+
+  // Évolution
+  html += '<section class="panel"><div class="panel-head"><h2>Évolution dans le <em>temps</em></h2><span class="meta">Visibilité de la marque par jour de mesure</span></div>' + evolution(R) + '</section>';
+  return html;
+}
+function kpi(label, value, sub, empty) {
+  return '<div class="kpi"><span class="k-label">' + label + '</span><span class="k-value' + (empty ? ' empty' : '') + '">' + value + '</span><span class="k-sub">' + sub + '</span></div>';
+}
+function barList(comp, me, field) {
+  var rows = comp.concat([me]);
+  var max = Math.max(10, Math.max.apply(null, rows.map(function (r) { return r[field]; })));
+  return '<div class="bars">' + rows.map(function (r) {
+    return '<div class="bar-row' + (r.me ? ' me' : '') + '"><span class="lbl" title="' + esc(r.name) + '">' + esc(r.name) + '</span>' +
+      '<div class="track" aria-hidden="true"><div class="fill" style="width:' + pct(r[field], max) + '%"></div></div><span class="val">' + fmtPct(r[field]) + '</span></div>';
+  }).join('') + '</div>';
+}
+function evolution(R) {
+  var days = {};
+  R.forEach(function (r) { var k = r.date.slice(0, 10); (days[k] = days[k] || []).push(r); });
+  var keys = Object.keys(days).sort();
+  if (keys.length < 2) {
+    return '<div class="empty-box">' + icon('chart', 36, '#DB6E52') + '<strong>La courbe apparaîtra après la 2e mesure</strong><p>' +
+      (data.settings.weekly ? 'Prochaine mesure automatique lundi.' : 'La mesure hebdomadaire n\'est pas programmée. <a href="#mesures">Programmer chaque lundi</a>, ou lancez une mesure maintenant.') + '</p></div>';
+  }
+  var W = 860, H = 260, L = 48, Rr = 16, T = 16, B = 36;
+  var series = PLATFORMS.filter(function (p) { return connected(p.id) && ui.platforms[p.id]; }).map(function (p) {
+    return { p: p, pts: keys.map(function (k) { var pr = days[k].filter(function (r) { return r.platform === p.id; }); return pr.length ? pct(pr.filter(citesMe).length, pr.length) : null; }) };
+  });
+  var max = 10; series.forEach(function (s) { s.pts.forEach(function (v) { if (v != null && v > max) max = v; }); });
+  max = Math.ceil(max / 10) * 10;
+  var x = function (i) { return L + (W - L - Rr) * (keys.length === 1 ? 0.5 : i / (keys.length - 1)); };
+  var y = function (v) { return T + (H - T - B) * (1 - v / max); };
+  var svg = '<svg class="chart" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Évolution de la visibilité par IA">';
+  for (var g = 0; g <= 4; g++) {
+    var gv = max * g / 4;
+    svg += '<line x1="' + L + '" x2="' + (W - Rr) + '" y1="' + y(gv) + '" y2="' + y(gv) + '" stroke="#F0DEDA"/><text x="' + (L - 8) + '" y="' + (y(gv) + 4) + '" text-anchor="end" font-size="12" fill="#5F5A58">' + fmtNum(gv) + ' %</text>';
+  }
+  keys.forEach(function (k, i) { svg += '<text x="' + x(i) + '" y="' + (H - 10) + '" text-anchor="middle" font-size="12" fill="#5F5A58">' + fmtDay.format(d(k)) + '</text>'; });
+  series.forEach(function (s) {
+    var pts = []; s.pts.forEach(function (v, i) { if (v != null) pts.push([x(i), y(v), v, i]); });
+    if (pts.length > 1) svg += '<polyline fill="none" stroke="' + s.p.color + '" stroke-width="2.5" points="' + pts.map(function (p) { return p[0] + ',' + p[1]; }).join(' ') + '"/>';
+    pts.forEach(function (p) { svg += '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="4.5" fill="' + s.p.color + '"><title>' + s.p.name + ' · ' + fmtDay.format(d(keys[p[3]])) + ' : ' + fmtPct(p[2]) + '</title></circle>'; });
+  });
+  svg += '</svg>';
+  return svg + '<div class="legend">' + series.map(function (s) { return '<span>' + dot(s.p.color) + s.p.name + '</span>'; }).join('') + '</div>';
+}
+
+function viewRequetes() {
+  var R = filtered();
+  var html = head('<a class="btn btn-secondary" href="#fiche">Gérer les requêtes</a>') + filtersBar();
+  if (!data.queries.length) return html + noDataBox();
+  var groups = [['C', 'Intention commerciale (C)', function (q) { return isCommercial(q); }], ['I', 'Intention informationnelle (I)', function (q) { return q.intents.indexOf('I') > -1; }], ['N', 'Intention navigationnelle (N)', function (q) { return q.intents.indexOf('N') > -1; }]];
+  html += '<div class="intent-cards">';
+  groups.forEach(function (g) {
+    var qs = data.queries.filter(g[2]), ids = {}; qs.forEach(function (q) { ids[q.id] = 1; });
+    var rr = R.filter(function (r) { return ids[r.queryId]; });
+    html += kpi(g[1], rr.length ? fmtPct(pct(rr.filter(citesMe).length, rr.length)) : '—', qs.length + ' requête' + (qs.length > 1 ? 's' : '') + ' · ' + rr.length + ' réponse' + (rr.length > 1 ? 's' : ''), !rr.length);
+  });
+  html += '</div><p class="muted" style="margin:-12px 0 0;font-size:14px">Une requête à plusieurs intentions compte dans chaque groupe ; l\'intention transactionnelle est rattachée à C.</p>';
+
+  var plats = PLATFORMS.filter(function (p) { return connected(p.id) && ui.platforms[p.id]; });
+  topics().forEach(function (topic) {
+    var qs = data.queries.filter(function (q) { return q.topic === topic; });
+    var all = qs.map(function (q) { return queryStats(q, R); });
+    var tr = 0, tm = 0; all.forEach(function (s) { tr += s.n; tm += s.resp.filter(citesMe).length; });
+    html += '<section class="panel"><div class="panel-head"><h2>' + esc(topic) + '</h2><span class="meta">Visibilité ' + fmtPct(pct(tm, tr)) + ' · ' + qs.length + ' requêtes · ' + tr + ' réponses</span></div>' +
+      '<div class="table-box"><table class="t" style="min-width:900px"><thead><tr><th>Requête</th><th>Intentions</th><th class="num">Visibilité</th>' +
+      plats.map(function (p) { return '<th class="num">' + p.name + '</th>'; }).join('') + '<th class="num">Rang</th><th>Marques citées à la place</th></tr></thead><tbody>';
+    all.forEach(function (s) {
+      var open = ui.openQuery === s.q.id;
+      html += '<tr class="clickable" data-act="open-query" data-id="' + s.q.id + '" aria-expanded="' + open + '"><td style="max-width:340px"><button type="button" class="link-btn" style="text-decoration:none;color:inherit;text-align:left;font-weight:500" aria-expanded="' + open + '">' + esc(s.q.text) + '</button>' + (s.n ? '' : '<div><span class="tag grey">Pas encore mesurée</span></div>') + '</td>' +
+        '<td>' + s.q.intents.map(function (i) { return '<span class="tag">' + i + ' · ' + INTENTS[i] + '</span>'; }).join('') + '</td>' +
+        '<td class="num"><strong>' + (s.n ? fmtPct(s.visibility) : '<span class="dash">—</span>') + '</strong></td>' +
+        plats.map(function (p) { var v = s.byPlat[p.id]; return '<td class="num">' + (v == null ? '<span class="dash">—</span>' : fmtPct(v)) + '</td>'; }).join('') +
+        '<td class="num">' + (s.rank != null ? fmtNum(s.rank) : '<span class="dash">—</span>') + '</td>' +
+        '<td>' + (s.others.length ? esc(s.others.slice(0, 4).join(', ')) + (s.others.length > 4 ? ' <span class="muted">+' + (s.others.length - 4) + '</span>' : '') : '<span class="dash">—</span>') + '</td></tr>';
+      if (open) {
+        html += '<tr class="detail"><td colspan="' + (5 + plats.length) + '">' + (s.resp.length ? '<div style="display:flex;flex-direction:column;gap:10px;padding-top:6px">' + s.resp.map(excerpt).join('') + '</div>' : '<p class="muted" style="margin:8px 0 0">Cette requête n\'a pas encore été posée aux IA.</p>') + '</td></tr>';
+      }
+    });
+    html += '</tbody></table></div></section>';
+  });
+  return html;
+}
+function topics() { var s = []; data.queries.forEach(function (q) { if (s.indexOf(q.topic) < 0) s.push(q.topic); }); return s; }
+
+function viewConcurrents() {
+  var R = filtered(), S = stats(R);
+  var html = head('<a class="btn btn-secondary" href="#suivi">Gérer les concurrents</a>') + filtersBar();
+  if (!R.length) return html + noDataBox();
+  var comp = shownCompetitors(S);
+  var pos = 1 + S.others.filter(function (o) { return o.resp > S.me.resp; }).length;
+  html += '<section class="panel"><div class="panel-head"><h2>Part de <em>voix</em></h2><span class="meta">Votre marque est ' + pos + (pos === 1 ? 're' : 'e') + ' sur ' + (S.others.length + 1) + '</span></div>' +
+    '<p class="muted" style="margin:0">Part des mentions de marques obtenue par chacune (marques ignorées exclues).</p>' + barList(comp, S.me, 'share') + '</section>';
+  var rows = comp.concat([S.me]).sort(function (a, b) { return b.resp - a.resp; });
+  html += '<section class="panel"><div class="panel-head"><h2>Détail</h2></div><div class="table-box"><table class="t" style="min-width:900px"><thead><tr><th>#</th><th>Marque</th><th>Statut</th><th class="num">Part de voix</th><th class="num">Visibilité</th><th class="num">Mentions</th><th class="num">Rang moyen</th><th>Sentiment</th><th><span class="sr-only">Actions</span></th></tr></thead><tbody>';
+  rows.forEach(function (r, i) {
+    var c = data.competitors.filter(function (x) { return norm(x.name) === r.key; })[0];
+    var st = r.me ? '<span class="tag">Votre marque</span>' : (c && c.status === 'suivi' ? '<span class="tag green">Suivi</span>' : '<span class="tag grey">Cité par les IA</span>');
+    html += '<tr' + (r.me ? ' class="me"' : '') + '><td class="muted">' + (i + 1) + '</td><td>' + esc(r.name) + '</td><td>' + st + '</td>' +
+      '<td class="num">' + fmtPct(r.share) + '</td><td class="num">' + fmtPct(r.visibility) + '</td><td class="num">' + r.resp + '</td>' +
+      '<td class="num">' + (r.rank != null ? fmtNum(r.rank) : '<span class="dash">—</span>') + '</td>' +
+      '<td>' + (r.sentiment != null ? '<strong>' + r.sentiment + '/100</strong> <span class="muted" style="font-size:13px">' + sentSplit(r.sents) + '</span>' : '<span class="dash">—</span>') + '</td>' +
+      '<td class="num">' + (r.me ? '' : (c && c.status === 'suivi' ? '' : '<button type="button" class="btn btn-secondary btn-sm" data-act="comp-status" data-name="' + esc(r.name) + '" data-status="suivi">Suivre</button> ') +
+        '<button type="button" class="btn btn-secondary btn-sm" data-act="comp-status" data-name="' + esc(r.name) + '" data-status="ignore">Ignorer</button>') + '</td></tr>';
+  });
+  return html + '</tbody></table></div></section>';
+}
+
+function highlight(text) {
+  var S = stats(filtered()), names = [client.name].concat(client.aliases || []);
+  var comps = shownCompetitors(S).map(function (c) { return c.name; });
+  var out = esc(text);
+  var mark = function (list, cls) {
+    list.filter(Boolean).sort(function (a, b) { return b.length - a.length; }).forEach(function (n) {
+      var re = new RegExp('(^|[^\\wÀ-ÿ])(' + esc(n).replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')(?![\\wÀ-ÿ])', 'gi');
+      out = out.replace(re, '$1<mark class="' + cls + '">$2</mark>');
+    });
+  };
+  mark(names, 'me'); mark(comps, 'comp');
+  return out;
+}
+function excerpt(r) {
+  var q = data.queries.filter(function (x) { return x.id === r.queryId; })[0], p = plat(r.platform);
+  return '<article class="excerpt"><div class="meta">' + dot(p.color) + p.name + ' · ' + fmtDate.format(d(r.date)) + (citesMe(r) ? ' <span class="tag green">vous cite</span>' : '') + (r.simulated ? ' <span class="demo-flag">simulée</span>' : '') + '</div>' +
+    '<h3>' + esc(q ? q.text : 'Requête supprimée') + '</h3><p>' + highlight(r.text) + '</p>' +
+    (r.sources.length ? '<div class="meta">Sources : ' + r.sources.map(function (u) { return esc(hostOf(u)); }).join(', ') + '</div>' : '') + '</article>';
+}
+function viewPerception() {
+  var R = filtered(), S = stats(R);
+  var html = head() + filtersBar();
+  if (!R.length) return html + noDataBox();
+  html += '<div class="row">' +
+    '<div class="kpi"><span class="k-label">Sentiment envers la marque</span><span class="k-value' + (S.me.sentiment == null ? ' empty' : '') + '">' + (S.me.sentiment != null ? S.me.sentiment + '/100' : '—') + '</span><span class="k-sub">' + (S.me.sentiment != null ? sentSplit(S.me.sents) : 'Les IA ne citent pas la marque sur la période.') + '</span></div>' +
+    '<div class="kpi"><span class="k-label">Réponses lues</span><span class="k-value">' + S.total + '</span><span class="k-sub">' + S.me.resp + ' citent ' + esc(client.name) + '</span></div></div>';
+  var comp = shownCompetitors(S).filter(function (c) { return c.sentiment != null; });
+  html += '<section class="panel"><div class="panel-head"><h2>Sentiment des <em>concurrents</em></h2><span class="meta">Ton des réponses quand les IA citent chaque marque</span></div>' +
+    (comp.length ? '<div class="plat-list">' + comp.map(function (c) { return '<div class="plat-row"><span class="n" style="font-weight:500">' + esc(c.name) + '</span><span class="s">' + sentSplit(c.sents) + '</span><span class="v">' + c.sentiment + '/100</span></div>'; }).join('') + '</div>' : '<p class="muted" style="margin:0">Aucun concurrent cité sur la période.</p>') + '</section>';
+  var list = R.slice().sort(function (a, b) { return b.date.localeCompare(a.date); });
+  html += '<section class="panel"><div class="panel-head"><h2>Extraits des <em>réponses</em></h2><span class="meta"><mark class="me">votre marque</mark> et <mark class="comp">les concurrents affichés</mark> sont surlignés</span></div>' +
+    '<div style="display:flex;flex-direction:column;gap:12px">' + list.slice(0, ui.excerptLimit).map(excerpt).join('') + '</div>' +
+    (list.length > ui.excerptLimit ? '<div><button type="button" class="btn btn-secondary" data-act="more-excerpts">Afficher ' + Math.min(8, list.length - ui.excerptLimit) + ' extraits de plus</button></div>' : '') + '</section>';
+  return html;
+}
+
+function natureTag(n) { return n === 'me' ? '<span class="tag green">Votre site</span>' : n === 'comp' ? '<span class="tag grey">Concurrent</span>' : '<span class="tag">Site tiers</span>'; }
+function viewSources() {
+  var R = filtered();
+  var html = head() + filtersBar();
+  if (!R.length) return html + noDataBox();
+  var src = sourceStats(R), mine = src.filter(function (s) { return s.nature === 'me'; });
+  var withSrc = R.filter(function (r) { return r.sources.length; }).length;
+  var myCit = R.filter(function (r) { return r.sources.some(function (u) { return natureOf(hostOf(u)) === 'me'; }); }).length;
+  html += '<section class="kpis">' + kpi('Pages de votre site citées', mine.reduce(function (s, m) { return s + m.pages; }, 0), 'sur ' + src.reduce(function (s, m) { return s + m.pages; }, 0) + ' pages citées au total') +
+    kpi('Citations de votre site', myCit, fmtPct(pct(myCit, withSrc)) + ' des ' + withSrc + ' réponses avec sources') +
+    kpi('Domaines cités', src.length, src.filter(function (s) { return s.cites; }).length + ' dans des réponses qui vous citent') + '</section>';
+  html += '<section class="panel"><div class="panel-head"><h2>Vos pages <em>citées</em></h2><span class="meta">' + esc(client.domain) + '</span></div>' +
+    (mine.length ? '' : '<p class="muted" style="margin:0">Aucune page de ' + esc(client.domain) + ' n\'est citée par les IA sur la période. Les sources qu\'elles utilisent à la place sont listées ci-dessous et dans <a href="#opportunites">Opportunités</a>.</p>') + '</section>';
+  html += '<section class="panel"><div class="panel-head"><h2>Sources les plus <em>citées</em></h2><span class="meta">Domaines qui servent de source aux réponses</span></div>';
+  if (!src.length) return html + '<p class="muted" style="margin:0">Aucune IA sélectionnée ne fournit ses sources.</p></section>';
+  html += '<div class="table-box"><table class="t" style="min-width:820px"><thead><tr><th>Domaine</th><th>Nature</th><th class="num">Réponses</th><th>Poids</th><th class="num">Pages</th><th>IA</th><th class="num">Réponses qui vous citent</th></tr></thead><tbody>' +
+    src.map(function (s) {
+      return '<tr><td><strong>' + esc(s.domain) + '</strong></td><td>' + natureTag(s.nature) + '</td><td class="num">' + s.responses + '</td>' +
+        '<td><div class="mini-bar"><div class="track"><div class="fill" style="width:' + s.share + '%"></div></div><span>' + fmtPct(s.share) + '</span></div></td>' +
+        '<td class="num">' + s.pages + '</td><td>' + s.plats.map(function (p) { return plat(p).name; }).join(', ') + '</td><td class="num">' + s.cites + '</td></tr>';
+    }).join('') + '</tbody></table></div></section>';
+  return html;
+}
+
+function viewOpportunites() {
+  var R = filtered();
+  var html = head() + filtersBar();
+  if (!R.length) return html + noDataBox();
+  var lost = lostQueries(R);
+  html += '<section style="display:flex;flex-direction:column;gap:16px"><div class="panel-head"><h2 style="font-size:30px">Requêtes où la place <em>est prise</em></h2><span class="meta">' + lost.length + ' requête' + (lost.length > 1 ? 's' : '') + ' · intention commerciale en premier</span></div>';
+  if (!lost.length) html += '<p class="muted" style="margin:0">Aucune : sur chaque requête mesurée, soit vous êtes cité, soit aucune marque ne l\'est.</p>';
+  lost.forEach(function (s) {
+    html += '<article class="lost"><span class="bubble lg">' + icon('chat', 28, '#fff') + '</span><div class="body"><div>' +
+      s.q.intents.map(function (i) { return '<span class="tag" style="background:#fff">' + INTENTS[i] + '</span>'; }).join('') + '<span class="tag grey">' + esc(s.q.topic) + '</span></div>' +
+      '<h3>« ' + esc(s.q.text) + ' »</h3><span class="muted">' + s.n + ' réponse' + (s.n > 1 ? 's' : '') + ' lue' + (s.n > 1 ? 's' : '') + ' · ' + s.others.length + ' marques citées · vous : jamais</span>' +
+      '<div><span class="muted" style="font-size:14px">Citées à votre place : </span>' + s.others.slice(0, 6).map(function (n) { return '<span class="tag grey" style="background:#fff">' + esc(n) + '</span>'; }).join('') + (s.others.length > 6 ? '<span class="muted" style="font-size:14px">+ ' + (s.others.length - 6) + ' autres</span>' : '') + '</div></div>' +
+      '<div class="acts"><button type="button" class="btn btn-dark" data-act="read-query" data-id="' + s.q.id + '">Lire les réponses</button></div></article>';
+  });
+  html += '</section>';
+
+  var all = sourceStats(R).filter(function (s) { return s.nature !== 'me' && s.cites === 0; });
+  var f = ui.sourceFilter;
+  var list = all.filter(function (s) { return f === 'tous' || (f === 'tiers' && s.nature === 'tiers') || (f === 'comp' && s.nature === 'comp') || (f === 'actions' && data.actions[s.domain]); });
+  var cnt = function (fn) { return all.filter(fn).length; };
+  html += '<section style="display:flex;flex-direction:column;gap:16px"><div class="panel-head"><h2 style="font-size:30px">Sources <em>à conquérir</em></h2><span class="meta">' + all.length + ' domaines</span></div>' +
+    '<p class="muted" style="margin:0;max-width:820px">Les IA s\'appuient sur ces sites pour répondre, sans vous citer. Y figurer (fiche, article, avis, partenariat) est le levier le plus direct. Les sites de concurrents sont à surveiller, pas à conquérir.</p>' +
+    '<div class="chips" role="group" aria-label="Filtrer les sources">' +
+    [['tous', 'Tous', all.length], ['tiers', 'Sites tiers', cnt(function (s) { return s.nature === 'tiers'; })], ['comp', 'Sites de concurrents', cnt(function (s) { return s.nature === 'comp'; })], ['actions', 'Actions', cnt(function (s) { return data.actions[s.domain]; })]]
+      .map(function (c) { return '<button type="button" class="chip" data-act="src-filter" data-id="' + c[0] + '" aria-pressed="' + (f === c[0]) + '">' + c[1] + ' · ' + c[2] + '</button>'; }).join('') + '</div>';
+  if (!list.length) return html + '<p class="muted" style="margin:0">Aucun domaine dans ce filtre.</p></section>';
+  html += '<div class="table-box"><table class="t" style="min-width:820px"><thead><tr><th>Domaine</th><th>Nature</th><th class="num">Réponses</th><th>Poids</th><th>Requêtes</th><th><span class="sr-only">Action</span></th></tr></thead><tbody>' +
+    list.map(function (s) {
+      var a = data.actions[s.domain], act;
+      if (s.nature === 'comp') act = '<a href="#concurrents" style="white-space:nowrap">Voir le concurrent</a>';
+      else if (a === 'fait') act = '<span class="tag green">Traité</span> <button type="button" class="link-btn" data-act="src-action" data-id="' + esc(s.domain) + '" data-state="">Rouvrir</button>';
+      else if (a === 'cours') act = '<span class="tag">Action en cours</span> <button type="button" class="link-btn" data-act="src-action" data-id="' + esc(s.domain) + '" data-state="fait">Marquer traité</button>';
+      else act = '<button type="button" class="btn btn-secondary btn-sm" data-act="src-action" data-id="' + esc(s.domain) + '" data-state="cours">Créer une action</button>';
+      var qtxt = s.queries.map(function (id) { var q = data.queries.filter(function (x) { return x.id === id; })[0]; return q ? q.text : ''; }).filter(Boolean);
+      return '<tr><td><strong>' + esc(s.domain) + '</strong></td><td>' + natureTag(s.nature) + '</td><td class="num">' + s.responses + '</td>' +
+        '<td><div class="mini-bar"><div class="track"><div class="fill" style="width:' + s.share + '%;' + (s.nature === 'comp' ? 'background:#CFC4C1' : '') + '"></div></div><span>' + fmtPct(s.share) + '</span></div></td>' +
+        '<td><span title="' + esc(qtxt.join('\n')) + '">' + qtxt.length + ' requête' + (qtxt.length > 1 ? 's' : '') + '</span></td><td class="num">' + act + '</td></tr>';
+    }).join('') + '</tbody></table></div></section>';
+  return html;
+}
+
+function viewTrafic() {
+  var html = head();
+  html += '<div class="empty-box"><span class="bubble lg">' + icon('chart', 28, '#fff') + '</span><strong>Aucune donnée de trafic réel sur la période</strong>' +
+    '<p>Reliez GA4 pour compter les visites qui arrivent depuis ChatGPT, Gemini, Claude ou Perplexity, ou importez un export Bing AI Performance.</p></div>';
+  html += '<div class="row"><section class="panel"><div class="panel-head"><h2>Google <em>Analytics 4</em></h2>' + (data.settings.ga4 ? '<span class="tag green">Relié</span>' : '<span class="tag grey">Non relié</span>') + '</div>' +
+    '<form data-form="ga4" class="form-actions" style="align-items:flex-end"><div class="field" style="flex:1 1 220px"><label for="ga4">Identifiant de propriété</label><input type="text" id="ga4" name="ga4" inputmode="numeric" placeholder="123456789" value="' + esc(data.settings.ga4) + '"></div>' +
+    '<button type="submit" class="btn btn-dark">Enregistrer</button></form><span class="hint">Lecture chaque matin à 7 h des 3 derniers jours complets.</span></section>' +
+    '<section class="panel"><div class="panel-head"><h2>Bing <em>AI Performance</em></h2></div>' +
+    '<form data-form="bing" class="form-actions" style="align-items:flex-end"><div class="field" style="flex:1 1 220px"><label for="bing">Fichier CSV exporté de Bing Webmaster Tools</label><input type="file" id="bing" name="bing" accept=".csv,text/csv" class="input"></div>' +
+    '<button type="submit" class="btn btn-dark">Importer</button></form>' +
+    (data.imports.length ? '<div class="table-box"><table class="t"><thead><tr><th>Fichier</th><th>Importé le</th><th class="num">Lignes</th></tr></thead><tbody>' + data.imports.map(function (i) { return '<tr><td>' + esc(i.name) + '</td><td>' + fmtDateTime.format(d(i.date)) + '</td><td class="num">' + i.rows + '</td></tr>'; }).join('') + '</tbody></table></div>' : '<span class="hint">Aucun export importé.</span>') +
+    '</section></div>';
+  return html;
+}
+
+function viewRapports() {
+  var to = new Date(), from = new Date(Date.now() - ui.period * 86400000);
+  var html = head();
+  html += '<section class="panel blush"><div class="panel-head"><h2>Nouveau <em>rapport</em></h2><span class="meta">Le PDF reprend les filtres choisis ici.</span></div>' +
+    '<form data-form="report" class="form-grid" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr));align-items:end">' +
+    '<div class="field"><label for="r-from">Du</label><input type="date" id="r-from" name="from" value="' + isoDay(from) + '" required></div>' +
+    '<div class="field"><label for="r-to">Au</label><input type="date" id="r-to" name="to" value="' + isoDay(to) + '" required></div>' +
+    '<fieldset class="field" style="border:0;padding:0;margin:0"><legend class="label" style="padding:0;margin-bottom:6px;font-weight:600">IA</legend><div style="display:flex;flex-wrap:wrap;gap:4px 14px">' +
+    PLATFORMS.map(function (p) { return '<label class="check"><input type="checkbox" name="plat" value="' + p.id + '"' + (connected(p.id) ? ' checked' : ' disabled') + '>' + p.name + '</label>'; }).join('') + '</div></fieldset>' +
+    '<div><button type="submit" class="btn btn-primary">' + icon('file', 18) + 'Générer le rapport</button></div></form><span class="error" id="report-err"></span></section>';
+  html += '<section class="panel"><div class="panel-head"><h2>Rapports <em>générés</em></h2></div>';
+  if (!data.reports.length) return html + '<p class="muted" style="margin:0">Aucun rapport pour l\'instant.</p></section>';
+  html += '<div class="table-box"><table class="t" style="min-width:760px"><thead><tr><th>Créé le</th><th>Période</th><th>IA</th><th>Par</th><th>État</th><th><span class="sr-only">Actions</span></th></tr></thead><tbody>' +
+    data.reports.slice().reverse().map(function (r) {
+      return '<tr><td>' + fmtDate.format(d(r.created)) + '</td><td>' + fmtDate.format(d(r.from)) + ' → ' + fmtDate.format(d(r.to)) + '</td><td>' + r.platforms.map(function (p) { return plat(p).name; }).join(', ') + '</td><td>' + esc(r.by) + '</td><td><span class="tag green">Prêt</span></td>' +
+        '<td class="num"><button type="button" class="link-btn" data-act="report-view" data-id="' + r.id + '">Aperçu</button> &nbsp; <button type="button" class="link-btn" data-act="report-print" data-id="' + r.id + '">Imprimer / PDF</button> &nbsp; <button type="button" class="icon-btn danger" data-act="report-del" data-id="' + r.id + '" aria-label="Supprimer ce rapport">' + icon('trash', 18) + '</button></td></tr>';
+    }).join('') + '</tbody></table></div></section>';
+  return html;
+}
+
+function intentChecks(name, selected, idPrefix) {
+  return Object.keys(INTENTS).map(function (k) {
+    return '<label class="check"><input type="checkbox" name="' + name + '" value="' + k + '"' + (selected.indexOf(k) > -1 ? ' checked' : '') + (idPrefix ? ' data-act="q-intent" data-id="' + idPrefix + '"' : '') + '>' + INTENTS[k] + '</label>';
+  }).join('');
+}
+function suggestions() {
+  var kw = (client.activity || '').split(/[,.;]/)[0].trim().toLowerCase();
+  var zone = ((client.activity || '').match(/,\s*([^,]*(?:et|,)[^.]*)\.?$/) || [])[1];
+  if (!kw) return [];
+  var base = [
+    'Quelle entreprise choisir pour ' + kw + ' ?',
+    'Combien coûte une intervention de ' + kw + ' ?',
+    'Comment trouver un professionnel fiable pour ' + kw + ' ?',
+    'Quels sont les meilleurs spécialistes en ' + kw + (zone ? ' dans ' + zone.trim() : ' près de chez moi') + ' ?',
+    kw.charAt(0).toUpperCase() + kw.slice(1) + ' : faut-il faire appel à un professionnel ?'
+  ];
+  var have = {}; data.queries.forEach(function (q) { have[norm(q.text)] = 1; });
+  return base.filter(function (s) { return !have[norm(s)]; });
+}
+function viewFiche() {
+  var html = head();
+  html += '<section class="panel"><div class="panel-head"><h2>Fiche du <em>client</em></h2></div><form data-form="fiche" class="form-grid" novalidate>' +
+    '<div class="field"><label for="c-name">Nom de la marque</label><input type="text" id="c-name" name="name" value="' + esc(client.name) + '" required></div>' +
+    '<div class="field"><label for="c-domain">Domaine du site</label><input type="text" id="c-domain" name="domain" value="' + esc(client.domain) + '" required><span class="error" id="e-domain"></span></div>' +
+    '<div class="field full"><label for="c-aliases">Autres façons d\'écrire la marque</label><input type="text" id="c-aliases" name="aliases" value="' + esc((client.aliases || []).join(', ')) + '"><span class="hint">Séparées par des virgules. Une réponse qui cite l\'une d\'elles compte comme une citation de la marque.</span></div>' +
+    '<div class="field full"><label for="c-activity">Activité et zone</label><textarea id="c-activity" name="activity">' + esc(client.activity || '') + '</textarea><span class="hint">Sert aux suggestions de requêtes.</span></div>' +
+    '<div class="form-actions full"><button type="submit" class="btn btn-dark">Enregistrer la fiche</button></div></form></section>';
+
+  html += '<section class="panel"><div class="panel-head"><h2>Sujets & <em>requêtes</em></h2><span class="meta">' + data.queries.length + ' requête' + (data.queries.length > 1 ? 's' : '') + ' · posées chaque semaine aux IA connectées</span></div>' +
+    '<p class="muted" style="margin:0">Modifier le texte d\'une requête garde son historique ; la supprimer efface aussi ses mesures.</p>';
+  var counts = {}; data.responses.forEach(function (r) { counts[r.queryId] = (counts[r.queryId] || 0) + 1; });
+  topics().forEach(function (t) {
+    var qs = data.queries.filter(function (q) { return q.topic === t; });
+    html += '<div class="q-topic"><div class="q-topic-head"><h3>' + esc(t) + '</h3><span class="muted" style="font-size:14px">' + qs.length + ' requête' + (qs.length > 1 ? 's' : '') + '</span></div>' +
+      qs.map(function (q) {
+        return '<div class="q-item"><div class="q-text"><label class="sr-only" for="qt-' + q.id + '">Texte de la requête</label><input type="text" id="qt-' + q.id + '" value="' + esc(q.text) + '" data-act="q-text" data-id="' + q.id + '"></div>' +
+          '<div class="q-intents">' + intentChecks('i-' + q.id, q.intents, q.id) + '</div><span class="q-meta">' + (counts[q.id] || 0) + ' réponse' + ((counts[q.id] || 0) > 1 ? 's' : '') + '</span>' +
+          '<button type="button" class="icon-btn danger" data-act="q-del" data-id="' + q.id + '" aria-label="Supprimer la requête">' + icon('trash', 18) + '</button></div>';
+      }).join('') + '</div>';
+  });
+  var tl = topics();
+  html += '<form data-form="addq" class="panel blush" style="padding:20px" novalidate><h3 style="font-size:20px">Ajouter une <em>requête</em></h3>' +
+    '<div class="form-grid"><div class="field full"><label for="nq-text">Question posée à l\'IA</label><input type="text" id="nq-text" name="text" placeholder="Ex. : Qui contacter pour un nid de frelons à Nice ?"><span class="error" id="e-nq"></span></div>' +
+    '<div class="field"><label for="nq-topic">Sujet</label><input type="text" id="nq-topic" name="topic" list="topic-list" value="' + esc(tl[0] || '') + '" placeholder="Ex. : Lutte contre guêpes"><datalist id="topic-list">' + tl.map(function (t) { return '<option value="' + esc(t) + '">'; }).join('') + '</datalist></div>' +
+    '<fieldset class="field" style="border:0;padding:0;margin:0"><legend class="label" style="padding:0;margin-bottom:6px;font-weight:600">Intentions</legend><div style="display:flex;flex-wrap:wrap;gap:4px 14px">' + intentChecks('intent', ['C']) + '</div></fieldset>' +
+    '<div class="form-actions full"><button type="submit" class="btn btn-primary">' + icon('plus', 18) + 'Ajouter la requête</button></div></div></form>';
+  var sug = suggestions();
+  html += '<div style="display:flex;flex-direction:column;gap:10px"><h3 style="font-size:20px">Idées de <em>requêtes</em></h3>' +
+    (sug.length ? '<p class="muted" style="margin:0;font-size:15px">Proposées à partir de l\'activité du client (simulation : dans l\'outil réel, l\'IA lit aussi la page d\'accueil). Cliquez pour ajouter.</p><div class="suggest">' + sug.map(function (s) { return '<button type="button" data-act="q-suggest" data-text="' + esc(s) + '">+ ' + esc(s) + '</button>'; }).join('') + '</div>'
+      : '<p class="muted" style="margin:0;font-size:15px">Renseignez l\'activité et la zone dans la fiche pour obtenir des idées.</p>') + '</div></section>';
+  return html;
+}
+
+function viewSuivi() {
+  var html = head();
+  var mentions = {}; data.responses.forEach(function (r) { r.brands.forEach(function (b) { mentions[norm(b.name)] = (mentions[norm(b.name)] || 0) + 1; }); });
+  var list = data.competitors.slice().sort(function (a, b) {
+    var o = { suivi: 0, neutre: 1, ignore: 2 };
+    return o[a.status] - o[b.status] || (mentions[norm(b.name)] || 0) - (mentions[norm(a.name)] || 0) || a.name.localeCompare(b.name);
+  });
+  html += '<section class="panel"><div class="panel-head"><h2>Concurrents</h2><span class="meta">' + data.competitors.length + ' marques</span></div>' +
+    '<p class="muted" style="margin:0"><strong style="color:#222">Suivi</strong> : affiché même quand les IA ne le citent pas (filtre « Suivis »). <strong style="color:#222">Ignoré</strong> : annuaire, moteur de recherche, institution… exclu des classements, de la part de voix et des concurrents majeurs. Les marques citées par les IA s\'ajoutent toutes seules.</p>';
+  if (!list.length) html += '<p class="muted" style="margin:0">Aucun concurrent pour l\'instant. Ils apparaîtront après la première mesure, ou ajoutez-les ci-dessous.</p>';
+  else html += '<div class="table-box"><table class="t" style="min-width:760px"><thead><tr><th>Marque</th><th>Domaine</th><th class="num">Mentions (tout l\'historique)</th><th>Statut</th><th><span class="sr-only">Supprimer</span></th></tr></thead><tbody>' +
+    list.map(function (c, i) {
+      var idx = data.competitors.indexOf(c);
+      return '<tr><td><strong>' + esc(c.name) + '</strong>' + (NOISE.indexOf(norm(c.name)) > -1 && c.status !== 'ignore' ? ' <span class="tag red">à ignorer ?</span>' : '') + '</td>' +
+        '<td><label class="sr-only" for="cd-' + idx + '">Domaine de ' + esc(c.name) + '</label><input class="input" style="min-height:40px;padding:6px 10px" id="cd-' + idx + '" value="' + esc(c.domain) + '" placeholder="concurrent.fr" data-act="comp-domain" data-idx="' + idx + '"></td>' +
+        '<td class="num">' + (mentions[norm(c.name)] || 0) + '</td>' +
+        '<td><label class="sr-only" for="cs-' + idx + '">Statut de ' + esc(c.name) + '</label><select class="input" style="min-height:40px;padding:6px 10px;width:auto" id="cs-' + idx + '" data-act="comp-select" data-idx="' + idx + '">' +
+          [['suivi', 'Suivi'], ['neutre', 'Cité (neutre)'], ['ignore', 'Ignoré']].map(function (o) { return '<option value="' + o[0] + '"' + (c.status === o[0] ? ' selected' : '') + '>' + o[1] + '</option>'; }).join('') + '</select></td>' +
+        '<td class="num"><button type="button" class="icon-btn danger" data-act="comp-del" data-idx="' + idx + '" aria-label="Supprimer ' + esc(c.name) + '">' + icon('trash', 18) + '</button></td></tr>';
+    }).join('') + '</tbody></table></div>';
+  html += '<form data-form="addc" class="panel blush" style="padding:20px" novalidate><h3 style="font-size:20px">Ajouter un concurrent à <em>suivre</em></h3><div class="form-grid">' +
+    '<div class="field"><label for="nc-name">Nom de la marque</label><input type="text" id="nc-name" name="name"><span class="error" id="e-nc"></span></div>' +
+    '<div class="field"><label for="nc-domain">Domaine <span class="muted" style="font-weight:400">(facultatif)</span></label><input type="text" id="nc-domain" name="domain" placeholder="concurrent.fr"></div>' +
+    '<div class="form-actions full"><button type="submit" class="btn btn-primary">' + icon('plus', 18) + 'Ajouter</button></div></div></form></section>';
+  return html;
+}
+
+function viewMesures() {
+  var used = callsLast7();
+  var html = head(measureBtn());
+  html += '<section class="panel"><div class="panel-head"><h2>IA <em>interrogées</em></h2><span class="meta">Appels ces 7 derniers jours : ' + used + ' / ' + WEEKLY_BUDGET + '</span></div>' +
+    '<div class="progress" aria-hidden="true"><span style="width:' + Math.min(100, pct(used, WEEKLY_BUDGET)) + '%"></span></div>' +
+    '<div class="plat-list">' + PLATFORMS.map(function (p) {
+      return '<div class="plat-row">' + dot(p.color) + '<span class="n">' + p.name + '</span><span class="s">' + (p.sources ? 'fournit ses sources' : 'pas de sources') + '</span>' +
+        '<label class="switch"><input type="checkbox" data-act="key" data-id="' + p.id + '"' + (connected(p.id) ? ' checked' : '') + '><span>' + (connected(p.id) ? 'Clé renseignée' : 'Pas de clé') + '</span></label></div>';
+    }).join('') + '</div><span class="hint">Dans l\'outil réel, les clés sont lues sur le serveur ; ici l\'interrupteur simule leur présence.</span></section>';
+  html += '<section class="panel"><div class="panel-head"><h2>Mesure <em>hebdomadaire</em></h2></div>' +
+    '<label class="switch"><input type="checkbox" data-act="weekly"' + (data.settings.weekly ? ' checked' : '') + '><span>' + (data.settings.weekly ? 'Programmée chaque lundi à 6 h' : 'Non programmée') + '</span></label>' +
+    '<span class="hint">Chaque semaine, les ' + data.queries.length + ' requêtes sont posées à chaque IA connectée, en France, avec recherche web.</span></section>';
+  html += '<section class="panel"><div class="panel-head"><h2>Historique des <em>mesures</em></h2></div>';
+  if (!data.runs.length) html += '<p class="muted" style="margin:0">Aucune mesure lancée.</p>';
+  else html += '<div class="table-box"><table class="t" style="min-width:680px"><thead><tr><th>Début</th><th>État</th><th class="num">Appels</th><th>Message</th></tr></thead><tbody>' +
+    data.runs.slice().reverse().map(function (r) {
+      return '<tr><td>' + fmtDateTime.format(d(r.date)) + '</td><td>' + (r.status === 'ok' ? '<span class="tag green">Réussi</span>' : '<span class="tag red">Échec</span>') + (r.simulated ? ' <span class="demo-flag">simulée</span>' : '') + '</td><td class="num">' + r.calls + '</td><td>' + esc(r.msg) + '</td></tr>';
+    }).join('') + '</tbody></table></div>';
+  html += '</section>';
+  html += '<section class="panel danger-zone"><div class="panel-head"><h2>Supprimer le <em>client</em></h2></div><p class="muted" style="margin:0">Supprime définitivement le client, ses requêtes, ses mesures, ses données réelles et ses rapports. Impossible à annuler.</p>' +
+    '<form data-form="delete" class="form-actions" style="align-items:flex-end"><div class="field" style="flex:0 1 340px"><label for="del-confirm">Saisissez <strong>' + esc(client.domain) + '</strong> pour confirmer</label><input type="text" id="del-confirm" name="confirm" autocomplete="off"></div>' +
+    '<button type="submit" class="btn btn-danger">Supprimer définitivement</button></form></section>';
+  return html;
+}
+
+var VIEWS = { vue: viewVue, requetes: viewRequetes, concurrents: viewConcurrents, perception: viewPerception, sources: viewSources, trafic: viewTrafic,
+  opportunites: viewOpportunites, rapports: viewRapports, fiche: viewFiche, suivi: viewSuivi, mesures: viewMesures };
+
+function render(keepScroll) {
+  var y = window.scrollY;
+  var active = document.activeElement && document.activeElement.id;
+  renderSide();
+  document.getElementById('main').innerHTML = VIEWS[ui.view]();
+  if (keepScroll) {
+    window.scrollTo(0, y);
+    if (active) { var el = document.getElementById(active); if (el) el.focus({ preventScroll: true }); }
+  }
+}
+function route() {
+  var v = location.hash.replace('#', '');
+  ui.view = VIEWS[v] ? v : 'vue';
+  render(false);
+  window.scrollTo(0, 0);
+}
+
+/* =========================================================
+   Mesure simulée
+   ========================================================= */
+var TEMPLATES = [
+  'Pour « {q} », plusieurs acteurs sont souvent recommandés : {b}. Comparez les avis et demandez plusieurs devis.',
+  'Voici quelques options fiables : {b}. Vérifiez les certifications et les délais d\'intervention annoncés.',
+  'Les entreprises les plus citées pour ce besoin sont {b}. Les tarifs varient selon l\'accès et l\'urgence.',
+  'Selon votre secteur, vous pouvez contacter {b}. Un professionnel certifié reste la solution la plus sûre.'
+];
+function runMeasure() {
+  var plats = PLATFORMS.filter(function (p) { return connected(p.id); });
+  if (!data.queries.length) { toast('Ajoutez d\'abord des requêtes.', '#fiche', 'Ajouter des requêtes'); return; }
+  if (!plats.length) { toast('Aucune IA connectée.', '#mesures', 'Connecter une IA'); return; }
+  var calls = data.queries.length * plats.length;
+  if (callsLast7() + calls > WEEKLY_BUDGET) { toast('Budget hebdomadaire dépassé (' + WEEKLY_BUDGET + ' appels).'); return; }
+
+  var pool = data.competitors.filter(function (c) { return c.status !== 'ignore'; }).map(function (c) { return c.name; });
+  if (pool.length < 4) pool = pool.concat(['Concurrent Alpha', 'Concurrent Bêta', 'Concurrent Gamma', 'Concurrent Delta']);
+  var domains = {};
+  data.responses.forEach(function (r) { r.sources.forEach(function (u) { domains[u] = 1; }); });
+  data.competitors.forEach(function (c) { if (c.domain) domains['https://' + c.domain + '/'] = 1; });
+  var dpool = Object.keys(domains); if (dpool.length < 4) dpool = dpool.concat(['https://www.pagesjaunes.fr/', 'https://fr.wikipedia.org/', 'https://www.quechoisir.org/', 'https://www.service-public.fr/']);
+  var now = new Date().toISOString().slice(0, 19), cited = 0, created = 0;
+
+  data.queries.forEach(function (q) {
+    plats.forEach(function (p) {
+      var k = 2 + Math.floor(Math.random() * 6), names = shuffle(pool).slice(0, k);
+      var chance = { chatgpt: 0.2, gemini: 0.3, claude: 0.15, perplexity: 0.35 }[p.id];
+      if (Math.random() < chance) { names.splice(Math.floor(Math.random() * (names.length + 1)), 0, client.name); cited++; }
+      var brands = names.map(function (n, i) { var r = Math.random(); return { name: n, rank: i + 1, sentiment: r < 0.7 ? 'pos' : r < 0.95 ? 'neutre' : 'neg' }; });
+      var sources = [];
+      if (p.sources) {
+        sources = shuffle(dpool).slice(0, 3 + Math.floor(Math.random() * 4));
+        if (names.indexOf(client.name) > -1 && Math.random() < 0.6) sources.push('https://' + client.domain + '/');
+      }
+      data.responses.push({ id: uid('r'), queryId: q.id, platform: p.id, date: now, brands: brands, sources: sources, simulated: true,
+        text: pick(TEMPLATES).replace('{q}', q.text).replace('{b}', names.join(', ')) });
+      created++;
+    });
+  });
+  // les nouvelles marques citées rejoignent la liste des concurrents
+  var known = {}; data.competitors.forEach(function (c) { known[norm(c.name)] = 1; });
+  data.responses.forEach(function (r) { r.brands.forEach(function (b) { if (!isMe(b.name) && !known[norm(b.name)]) { known[norm(b.name)] = 1; data.competitors.push({ name: b.name, domain: '', status: 'neutre' }); } }); });
+  data.runs.push({ date: now, status: 'ok', calls: calls, simulated: true, msg: created + ' réponse(s), ' + client.name + ' citée dans ' + cited });
+  saveData();
+  render(true);
+  toast('Mesure simulée terminée : ' + created + ' réponses, citée dans ' + cited + '.', '#vue', 'Voir la vue d\'ensemble');
+}
+
+/* =========================================================
+   Interactions
+   ========================================================= */
+var toastTimer;
+function toast(text, href, label) {
+  var t = document.getElementById('toast'), a = document.getElementById('toast-link');
+  document.getElementById('toast-text').textContent = text;
+  a.hidden = !href; if (href) { a.href = href; a.textContent = (label || 'Voir') + ' →'; }
+  t.classList.add('show'); clearTimeout(toastTimer);
+  toastTimer = setTimeout(function () { t.classList.remove('show'); }, 6000);
+}
+function findComp(name) { return data.competitors.filter(function (c) { return norm(c.name) === norm(name); })[0]; }
+function cleanDomain(v) { return String(v || '').trim().toLowerCase().replace(/^https?:\/\//, '').replace(/^www\./, '').split(/[\/?#]/)[0]; }
+function validDomain(v) { return /^([a-z0-9]([a-z0-9-]*[a-z0-9])?\.)+[a-z]{2,}$/.test(v); }
+
+document.addEventListener('click', function (e) {
+  var el = e.target.closest('[data-act]'); if (!el) return;
+  var act = el.dataset.act, id = el.dataset.id;
+  if (el.tagName === 'INPUT' || el.tagName === 'SELECT') return; // gérés par « change »
+  switch (act) {
+    case 'toggle-plat':
+      ui.platforms[id] = !ui.platforms[id];
+      if (!PLATFORMS.some(function (p) { return connected(p.id) && ui.platforms[p.id]; })) { ui.platforms[id] = true; toast('Gardez au moins une IA sélectionnée.'); }
+      render(true); break;
+    case 'measure': runMeasure(); break;
+    case 'open-query': ui.openQuery = ui.openQuery === id ? null : id; render(true); break;
+    case 'read-query': ui.openQuery = id; location.hash = 'requetes'; break;
+    case 'more-excerpts': ui.excerptLimit += 8; render(true); break;
+    case 'src-filter': ui.sourceFilter = id; render(true); break;
+    case 'src-action':
+      if (el.dataset.state) data.actions[id] = el.dataset.state; else delete data.actions[id];
+      saveData(); render(true);
+      toast(el.dataset.state === 'cours' ? 'Action créée pour ' + id + '.' : el.dataset.state === 'fait' ? id + ' marqué comme traité.' : 'Action rouverte.'); break;
+    case 'ignore-noise':
+      var n = 0; data.competitors.forEach(function (c) { if (c.status !== 'ignore' && NOISE.indexOf(norm(c.name)) > -1) { c.status = 'ignore'; n++; } });
+      saveData(); render(true); toast(n + ' marque' + (n > 1 ? 's' : '') + ' ignorée' + (n > 1 ? 's' : '') + '.', '#suivi', 'Voir les concurrents'); break;
+    case 'comp-status':
+      var c = findComp(el.dataset.name);
+      if (!c) { c = { name: el.dataset.name, domain: '', status: 'neutre' }; data.competitors.push(c); }
+      c.status = el.dataset.status; saveData(); render(true);
+      toast(c.name + (c.status === 'suivi' ? ' est maintenant suivi.' : ' est ignoré.')); break;
+    case 'comp-del':
+      var cd = data.competitors[+el.dataset.idx];
+      if (cd && confirm('Retirer ' + cd.name + ' de la liste ? Il reviendra s\'il est cité lors d\'une prochaine mesure.')) { data.competitors.splice(+el.dataset.idx, 1); saveData(); render(true); }
+      break;
+    case 'q-del':
+      var q = data.queries.filter(function (x) { return x.id === id; })[0];
+      var nr = data.responses.filter(function (r) { return r.queryId === id; }).length;
+      if (q && confirm('Supprimer « ' + q.text + ' »' + (nr ? ' et ses ' + nr + ' réponses mesurées' : '') + ' ?')) {
+        data.queries = data.queries.filter(function (x) { return x.id !== id; });
+        data.responses = data.responses.filter(function (r) { return r.queryId !== id; });
+        saveData(); render(true); toast('Requête supprimée.');
+      }
+      break;
+    case 'q-suggest':
+      var tl = topics();
+      data.queries.push({ id: uid('q'), text: el.dataset.text, topic: tl[0] || 'Général', intents: ['C'] });
+      saveData(); render(true); toast('Requête ajoutée. Elle sera posée à la prochaine mesure.'); break;
+    case 'report-view': location.hash = 'vue'; break;
+    case 'report-print':
+      var rep = data.reports.filter(function (r) { return r.id === id; })[0];
+      if (rep) { ui.period = 365; rep.platforms.forEach(function (p) { ui.platforms[p] = true; }); }
+      location.hash = 'vue'; setTimeout(function () { window.print(); }, 300); break;
+    case 'report-del':
+      if (confirm('Supprimer ce rapport ?')) { data.reports = data.reports.filter(function (r) { return r.id !== id; }); saveData(); render(true); }
+      break;
+  }
+});
+
+document.addEventListener('change', function (e) {
+  var el = e.target;
+  if (el.dataset.ctl === 'period') { ui.period = +el.value; render(true); return; }
+  if (el.dataset.ctl === 'comp') { ui.comp = el.value; render(true); return; }
+  switch (el.dataset.act) {
+    case 'key':
+      data.settings.keys[el.dataset.id] = el.checked; saveData(); render(true); break;
+    case 'weekly':
+      data.settings.weekly = el.checked; saveData(); render(true);
+      toast(el.checked ? 'Mesure programmée chaque lundi à 6 h.' : 'Mesure hebdomadaire désactivée.'); break;
+    case 'q-intent':
+      var q = data.queries.filter(function (x) { return x.id === el.dataset.id; })[0]; if (!q) return;
+      var boxes = document.querySelectorAll('input[name="i-' + q.id + '"]:checked');
+      var vals = Array.prototype.map.call(boxes, function (b) { return b.value; });
+      if (!vals.length) { el.checked = true; toast('Une requête doit avoir au moins une intention.'); return; }
+      q.intents = vals; saveData(); break;
+    case 'q-text':
+      var qq = data.queries.filter(function (x) { return x.id === el.dataset.id; })[0]; if (!qq) return;
+      var v = el.value.trim();
+      if (!v) { el.value = qq.text; return; }
+      if (v !== qq.text) { qq.text = v; saveData(); toast('Requête modifiée (historique conservé).'); }
+      break;
+    case 'comp-select':
+      var c = data.competitors[+el.dataset.idx]; if (!c) return;
+      c.status = el.value; saveData(); render(true); break;
+    case 'comp-domain':
+      var cc = data.competitors[+el.dataset.idx]; if (!cc) return;
+      var dv = cleanDomain(el.value);
+      if (dv && !validDomain(dv)) { toast('Domaine non valide : ' + dv); el.value = cc.domain; return; }
+      cc.domain = dv; el.value = dv; saveData(); break;
+  }
+});
+
+document.addEventListener('submit', function (e) {
+  var f = e.target, kind = f.dataset.form; if (!kind) return;
+  e.preventDefault();
+  var val = function (n) { return (f.querySelector('[name="' + n + '"]') || {}).value || ''; };
+  if (kind === 'fiche') {
+    var dom = cleanDomain(val('domain')), err = '';
+    if (!validDomain(dom)) err = 'Ce domaine ne semble pas valide (exemple : exemple.fr).';
+    else if (clients.some(function (c) { return c.id !== client.id && c.domain === dom; })) err = 'Un autre client utilise déjà ce domaine.';
+    document.getElementById('e-domain').textContent = err;
+    if (err || !val('name').trim()) { if (!val('name').trim()) toast('Le nom de la marque est obligatoire.'); return; }
+    client.name = val('name').trim(); client.domain = dom; client.activity = val('activity').trim();
+    client.aliases = val('aliases').split(',').map(function (s) { return s.trim(); }).filter(Boolean);
+    saveData(); document.title = client.name + ' · GEO visibilité IA'; render(true); toast('Fiche enregistrée.');
+  }
+  if (kind === 'addq') {
+    var text = val('text').trim(), topic = val('topic').trim() || 'Général';
+    var intents = Array.prototype.map.call(f.querySelectorAll('input[name="intent"]:checked'), function (b) { return b.value; });
+    var er = !text ? 'Écrivez la question.' : data.queries.some(function (q) { return norm(q.text) === norm(text); }) ? 'Cette requête existe déjà.' : !intents.length ? 'Cochez au moins une intention.' : '';
+    document.getElementById('e-nq').textContent = er;
+    if (er) { document.getElementById('nq-text').focus(); return; }
+    data.queries.push({ id: uid('q'), text: text, topic: topic, intents: intents });
+    saveData(); render(true); toast('Requête ajoutée. Elle sera posée à la prochaine mesure.', '#vue', 'Vue d\'ensemble');
+    var t = document.getElementById('nq-text'); if (t) t.focus();
+  }
+  if (kind === 'addc') {
+    var name = val('name').trim(), cdom = cleanDomain(val('domain'));
+    var ec = !name ? 'Indiquez le nom de la marque.' : findComp(name) ? 'Cette marque est déjà dans la liste.' : (cdom && !validDomain(cdom)) ? 'Domaine non valide.' : '';
+    document.getElementById('e-nc').textContent = ec; if (ec) return;
+    data.competitors.push({ name: name, domain: cdom, status: 'suivi' }); saveData(); render(true); toast(name + ' ajouté aux concurrents suivis.');
+  }
+  if (kind === 'ga4') {
+    var g = val('ga4').trim();
+    if (g && !/^\d{6,12}$/.test(g)) { toast('L\'identifiant de propriété GA4 est un nombre (ex. 123456789).'); return; }
+    data.settings.ga4 = g; saveData(); render(true); toast(g ? 'GA4 relié. Première lecture demain à 7 h.' : 'GA4 délié.');
+  }
+  if (kind === 'bing') {
+    var file = f.querySelector('input[type=file]').files[0];
+    if (!file) { toast('Choisissez un fichier CSV.'); return; }
+    var rd = new FileReader();
+    rd.onload = function () {
+      var rows = String(rd.result).split(/\r?\n/).filter(function (l) { return l.trim(); }).length - 1;
+      data.imports.push({ name: file.name, rows: Math.max(0, rows), date: new Date().toISOString().slice(0, 19) });
+      saveData(); render(true); toast('Export importé : ' + Math.max(0, rows) + ' lignes.');
+    };
+    rd.readAsText(file);
+  }
+  if (kind === 'report') {
+    var from = val('from'), to = val('to');
+    var pl = Array.prototype.map.call(f.querySelectorAll('input[name="plat"]:checked'), function (b) { return b.value; });
+    var rerr = !from || !to ? 'Choisissez les deux dates.' : from > to ? 'La date de début doit précéder la date de fin.' : !pl.length ? 'Cochez au moins une IA.' : '';
+    document.getElementById('report-err').textContent = rerr; if (rerr) return;
+    data.reports.push({ id: uid('rep'), created: isoDay(new Date()), from: from, to: to, platforms: pl, by: 'Administrateur (dev)' });
+    saveData(); render(true); toast('Rapport généré.');
+  }
+  if (kind === 'delete') {
+    if (cleanDomain(val('confirm')) !== client.domain) { toast('Le domaine saisi ne correspond pas. Rien n\'a été supprimé.'); return; }
+    clients = clients.filter(function (c) { return c.id !== client.id; }); saveClients();
+    try { localStorage.removeItem(DATA_PREFIX + client.id); } catch (er2) {}
+    location.href = 'clients.html';
+  }
+});
+
+window.addEventListener('hashchange', route);
+route();
+})();
+</script>
+</body>
+</html>

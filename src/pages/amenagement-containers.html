@@ -15,9 +15,9 @@
   <meta property="og:locale" content="fr_FR">
 
   <link rel="preconnect" href="https://api.fontshare.com">
-  <link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700,800&display=swap" rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=switzer@300,400,500,600,700,800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/seo-page.css">
-  <link rel="stylesheet" href="assets/css/hub-page.css">
+  <link rel="stylesheet" href="assets/css/calcub-page.css">
 
   <script type="application/ld+json">
   {
@@ -25,7 +25,7 @@
     "@type": "BreadcrumbList",
     "itemListElement": [
       { "@type": "ListItem", "position": 1, "name": "Accueil", "item": "https://www.cubner.com/" },
-      { "@type": "ListItem", "position": 2, "name": "Aménagements" }
+      { "@type": "ListItem", "position": 2, "name": "Aménagement avec Calcub" }
     ]
   }
   </script>
@@ -69,14 +69,14 @@
     <symbol id="i-ball" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m12 7.5 4 3-1.5 4.5h-5L8 10.5z"/><path d="M12 3v4.5M16 10.5l4.5-1.5M14.5 15l2.5 4M9.5 15 7 19M8 10.5 3.5 9"/></symbol>
     <symbol id="i-layers" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 9 5-9 5-9-5z"/><path d="m3 12.5 9 5 9-5"/><path d="m3 17 9 5 9-5"/></symbol>
     <symbol id="i-door" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M6 21V3h12v18"/><path d="M14.5 12h.01"/></symbol>
+    <symbol id="i-euro" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6.5A7 7 0 1 0 18 17.5"/><path d="M4 10h9M4 14h9"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></symbol>
     <symbol id="i-insta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".6" fill="currentColor"/></symbol>
     <symbol id="i-linkedin" viewBox="0 0 24 24" fill="currentColor"><path d="M4 9h4v12H4zM6 3a2 2 0 1 1 0 4 2 2 0 0 1 0-4zM10 9h3.8v1.7h.1c.5-1 1.8-2 3.7-2 4 0 4.4 2.6 4.4 6V21h-4v-5.6c0-1.3 0-3-1.9-3s-2.1 1.4-2.1 2.9V21h-4z"/></symbol>
     <symbol id="i-youtube" viewBox="0 0 24 24" fill="currentColor"><path d="M23 7.2a3 3 0 0 0-2.1-2.1C19 4.6 12 4.6 12 4.6s-7 0-8.9.5A3 3 0 0 0 1 7.2 31 31 0 0 0 .5 12 31 31 0 0 0 1 16.8a3 3 0 0 0 2.1 2.1c1.9.5 8.9.5 8.9.5s7 0 8.9-.5a3 3 0 0 0 2.1-2.1 31 31 0 0 0 .5-4.8 31 31 0 0 0-.5-4.8zM9.7 15V9l5.8 3z"/></symbol>
     <symbol id="i-facebook" viewBox="0 0 24 24" fill="currentColor"><path d="M14 8h3V4h-3c-2.8 0-4.5 1.8-4.5 4.5V11H7v4h2.5v9h4v-9h3l.5-4h-3.5V9c0-.6.4-1 1-1z"/></symbol>
   </defs>
 </svg>
-
-<div class="read-progress" data-progress aria-hidden="true"></div>
 
 <!-- ===================== TOP BAR ===================== -->
 <div class="topbar">
@@ -112,288 +112,314 @@
   </div>
 </header>
 
-<main>
+<main class="cb">
   <div class="container">
 
     <!-- Fil d'Ariane -->
     <nav class="breadcrumb" aria-label="Fil d'Ariane">
-      <a href="/">Accueil</a> / <span aria-current="page">Aménagements</span>
+      <a href="/">Accueil</a> / <span aria-current="page">Aménagement avec Calcub</span>
     </nav>
 
-    <!-- ===================== HERO (panneau bleu + photo, coupe en biais) ===================== -->
-    <section class="hub-hero">
-      <div class="hub-hero__panel">
-        <h1>Aménagement de <em>containers</em> sur&#8209;mesure</h1>
-        <p class="hub-hero__subtitle">Des containers maritimes 20 et 40 pieds transformés en outils de travail, de l'étude technique jusqu'à la mise en service.</p>
-        <div class="hub-hero__actions">
-          <a class="btn btn--red" href="#devis">Décrire mon projet <svg><use href="#i-arrow"/></svg></a>
-          <a class="btn btn--ghost-light" href="#familles">Voir les familles d'usage</a>
-        </div>
-        <dl class="hub-hero__facts">
-          <div><dt>13</dt><dd>familles d'usage</dd></div>
-          <div><dt>20 / 40'</dt><dd>standard ou High Cube</dd></div>
-          <div><dt>Atelier</dt><dd>du gros œuvre à la finition</dd></div>
-        </dl>
+    <!-- ===================== HERO ===================== -->
+    <section class="cb-hero">
+      <img class="cb-hero__bg" src="assets/img/calcub/hero-plan-conteneurs.png" alt="" width="1544" height="410" fetchpriority="high">
+      <div class="cb-hero__content">
+        <img class="cb-hero__logo" src="assets/img/calcub/calcub-symbole.png" alt="CALCUB by Cubner" width="427" height="149">
+        <h1><span class="cb-orange">Transformer</span> et <span class="cb-orange">aménager</span><br>vos conteneurs maritimes</h1>
       </div>
-      <div class="hub-hero__media">
-        <!-- Photo provisoire (Unsplash) : à remplacer par une réalisation CALCUB -->
-        <img src="assets/img/amenagement-containers.jpg" alt="Container maritime transformé en module aménagé avec porte et fenêtres" width="1800" height="1200" fetchpriority="high">
-        <img class="hub-hero__badge" src="assets/img/fabrique-en-france.png" alt="Fabriqué en France" width="202" height="71">
+      <img class="cb-hero__badge" src="assets/img/fabrique-en-france.png" alt="Fabriqué en France" width="202" height="71">
+    </section>
+
+    <!-- ===================== RÉASSURANCE ===================== -->
+    <ul class="cb-assure">
+      <li><span class="cb-assure__icon"><svg><use href="#i-factory"/></svg></span>Production, électricité, chaudronnerie et peinture dans nos ateliers en Dordogne</li>
+      <li><span class="cb-assure__icon"><svg><use href="#i-euro"/></svg></span>Budget maîtrisé et accompagnement personnalisé</li>
+      <li><span class="cb-assure__icon"><svg><use href="#i-plan"/></svg></span>Création sur mesure, adaptée à votre métier et vos contraintes</li>
+      <li><span class="cb-assure__icon"><svg><use href="#i-shield"/></svg></span>Qualité garantie et respect de votre cahier des charges</li>
+    </ul>
+  </div>
+
+  <!-- ===================== RÉALISATIONS ===================== -->
+  <section class="cb-real">
+    <div class="container cb-center">
+      <h2 class="cb-h2">Découvrez nos aménagements<br>de <span class="cb-orange">conteneurs sur mesure</span></h2>
+      <p class="cb-intro">CALCUB adapte et transforme chaque conteneur maritime pour tous les environnements, usages professionnels, événements, industries. Faites le choix de solutions innovantes en France et à l'international.</p>
+    </div>
+    <div class="cb-real__track" tabindex="0" aria-label="Exemples de réalisations">
+      <img src="assets/img/calcub/realisation-rideaux-metalliques.png" alt="Conteneur 40 pieds bleu équipé de trois rideaux métalliques" width="450" height="214" loading="lazy">
+      <img src="assets/img/calcub/realisation-bar-terrasse.png" alt="Conteneur aménagé en bar avec comptoir et terrasse, clients servis" width="462" height="214" loading="lazy">
+      <img src="assets/img/calcub/realisation-affichage-publicitaire.png" alt="Conteneur habillé d'un affichage publicitaire devant une concession automobile" width="462" height="214" loading="lazy">
+      <img src="assets/img/calcub/realisation-bardage-bois.png" alt="Conteneur habillé d'un bardage bois avec porte et fenêtres" width="450" height="214" loading="lazy">
+    </div>
+    <div class="cb-center">
+      <a class="btn btn--red" href="realisations.html">Découvrez toutes nos réalisations</a>
+    </div>
+  </section>
+
+  <div class="container">
+
+    <!-- ===================== ACCOMPAGNEMENT ===================== -->
+    <section class="cb-split" id="accompagnement">
+      <div class="cb-split__text">
+        <h2 class="cb-project"><span class="cb-orange">Votre projet</span> mérite un accompagnement expert à chaque étape</h2>
+        <h3 class="cb-kicker">CALCUB répond à toutes les problématiques</h3>
+        <p>Agroalimentaire, restauration, commerce, habitat, défense, énergie ou événementiel… Nous répondons à chaque besoin d'aménagement de conteneur dans le respect de vos contraintes techniques, réglementaires ou esthétiques grâce à une démarche structurée.</p>
+        <h3 class="cb-kicker">Les étapes de votre projet</h3>
+        <div class="cb-steps">
+          <details name="etapes-projet">
+            <summary>Lancement et pré-étude<svg><use href="#i-plus"/></svg></summary>
+            <p>Nous échangeons sur votre besoin, votre site d'implantation et vos contraintes réglementaires et de délai, puis nous vérifions la faisabilité et le format de conteneur le plus adapté : 20 ou 40 pieds, standard ou High Cube, neuf ou reconditionné.</p>
+          </details>
+          <details name="etapes-projet">
+            <summary>Mise en plan et étude technique<svg><use href="#i-plus"/></svg></summary>
+            <p>Nos équipes conçoivent le plan d'aménagement : structure, isolation, étanchéité, réseaux électriques, plomberie, ventilation et équipements. Vous validez les plans et le devis avant le lancement en fabrication.</p>
+          </details>
+          <details name="etapes-projet">
+            <summary>Suivi de la fabrication<svg><use href="#i-plus"/></svg></summary>
+            <p>Votre conteneur est transformé dans nos ateliers en Dordogne, avec un suivi qualité à chaque étape. Les délais sont communiqués après étude, selon le niveau de personnalisation et le nombre d'unités.</p>
+          </details>
+          <details name="etapes-projet">
+            <summary>Installation et mise en service<svg><use href="#i-plus"/></svg></summary>
+            <p>Nous organisons la livraison et l'installation sur site, avec un accompagnement possible jusqu'à la mise en service des équipements techniques.</p>
+          </details>
+        </div>
+        <script>
+          /* Une seule étape ouverte à la fois (secours pour les navigateurs sans <details name>) */
+          document.querySelectorAll(".cb-steps details").forEach(function (d, i, all) {
+            d.addEventListener("toggle", function () {
+              if (d.open) all.forEach(function (o) { if (o !== d) o.open = false; });
+            });
+          });
+        </script>
+        <a class="btn btn--red" href="#devis">Demander un devis</a>
+      </div>
+      <div class="cb-split__media">
+        <img src="assets/img/calcub/atelier-fabrication.png" alt="Techniciens CALCUB en train de transformer l'intérieur d'un conteneur dans l'atelier" width="684" height="800" loading="lazy">
       </div>
     </section>
 
-    <!-- ===================== ARTICLE + SOMMAIRE ===================== -->
-    <div class="article-layout">
-    <article class="article hub prose" data-article>
+    <!-- ===================== À PROPOS ===================== -->
+    <section class="cb-split cb-split--reverse" id="a-propos">
+      <div class="cb-split__media">
+        <img src="assets/img/calcub/equipe-calcub.png" alt="L'équipe CALCUB devant l'atelier de fabrication" width="684" height="483" loading="lazy">
+      </div>
+      <div class="cb-split__text">
+        <h2 class="cb-h2 cb-h2--left">À propos de <span class="cb-orange">CALCUB</span></h2>
+        <h3 class="cb-kicker">Une équipe d'experts à vos côtés</h3>
+        <p>Notre équipe pluridisciplinaire est constituée d'ingénieurs, de techniciens et de chefs de projet passionnés par la transformation de conteneurs maritimes.</p>
+        <p>Chaque réalisation bénéficie d'un accompagnement personnalisé afin de concrétiser toutes vos idées, même les plus pointues. Notre force : réunir toutes les compétences nécessaires à votre projet sous un seul toit, en Dordogne.</p>
+        <h3 class="cb-kicker">CALCUB, une filiale innovante</h3>
+        <p>CALCUB s'impose comme la référence française de l'aménagement sur mesure de conteneurs pour les secteurs les plus variés : agroalimentaire, habitat, événementiel, industrie, défense, énergie, santé… Filiale industrielle du groupe CUBNER, nous opérons selon une organisation propre alliant production intégrée, ateliers spécialisés, réseau de partenaires qualifiés et process qualité exigeants.</p>
+        <a class="btn btn--red" href="fabrication-savoir-faire.html">Découvrir notre savoir-faire</a>
+      </div>
+    </section>
 
-      <!-- ===================== 1. Du brut à l'outil ===================== -->
-      <section class="section hub-section reveal" id="transformation" data-toc-label="Du brut à l'outil de travail">
-        <div class="hub-section__head">
-          <h2>Du container maritime brut à l'outil de travail</h2>
+    <!-- ===================== AVIS GOOGLE =====================
+         Emplacement du widget d'avis Google (ex. widget Trustindex / Elfsight) :
+         les avis doivent venir de Google, ne pas les recopier à la main. -->
+    <section class="cb-reviews" aria-label="Avis clients Google">
+      <div class="cb-reviews__score">
+        <strong>Excellent</strong>
+        <span class="cb-reviews__stars" aria-hidden="true">★★★★★</span>
+        <span>4,8 / 5 — basée sur 301 avis</span>
+        <span class="cb-reviews__google">Google</span>
+      </div>
+      <!-- AVIS D'EXEMPLE (provisoires) : à remplacer par le widget Google avant la mise en ligne.
+           Ne jamais publier de faux avis : la construction affiche un avertissement tant que data-avis-exemple est présent. -->
+      <div class="cb-reviews__slider" data-avis-exemple>
+        <button class="cb-reviews__nav" type="button" data-dir="-1" aria-label="Avis précédents"><svg><use href="#i-chevron"/></svg></button>
+        <div class="cb-reviews__track" data-reviews-track>
+          <article class="cb-review">
+            <header><span class="cb-review__avatar" style="background:#e8710a">P</span><span><b>Prénom N.</b><small>Avis d'exemple</small></span><span class="cb-review__g" aria-hidden="true">G</span></header>
+            <p class="cb-review__stars"><span>★★★★★</span><svg><use href="#i-shield"/></svg></p>
+            <p class="cb-review__text">Texte d'exemple : ici s'affichera un avis client publié sur Google, avec sa note et sa date.</p>
+          </article>
+          <article class="cb-review">
+            <header><span class="cb-review__avatar" style="background:#0f9d58">P</span><span><b>Prénom N.</b><small>Avis d'exemple</small></span><span class="cb-review__g" aria-hidden="true">G</span></header>
+            <p class="cb-review__stars"><span>★★★★★</span><svg><use href="#i-shield"/></svg></p>
+            <p class="cb-review__text">Texte d'exemple : le widget reprendra automatiquement les derniers avis laissés par nos clients.</p>
+          </article>
+          <article class="cb-review">
+            <header><span class="cb-review__avatar" style="background:#d81b60">P</span><span><b>Prénom N.</b><small>Avis d'exemple</small></span><span class="cb-review__g" aria-hidden="true">G</span></header>
+            <p class="cb-review__stars"><span>★★★★★</span><svg><use href="#i-shield"/></svg></p>
+            <p class="cb-review__text">Texte d'exemple : contenu provisoire destiné à la mise en page, à remplacer avant la mise en ligne.</p>
+          </article>
+          <article class="cb-review">
+            <header><span class="cb-review__avatar" style="background:#1a73e8">P</span><span><b>Prénom N.</b><small>Avis d'exemple</small></span><span class="cb-review__g" aria-hidden="true">G</span></header>
+            <p class="cb-review__stars"><span>★★★★★</span><svg><use href="#i-shield"/></svg></p>
+            <p class="cb-review__text">Texte d'exemple : chaque carte affichera le nom du client, sa note et un extrait de son avis.</p>
+          </article>
+          <article class="cb-review">
+            <header><span class="cb-review__avatar" style="background:#7b1fa2">P</span><span><b>Prénom N.</b><small>Avis d'exemple</small></span><span class="cb-review__g" aria-hidden="true">G</span></header>
+            <p class="cb-review__stars"><span>★★★★★</span><svg><use href="#i-shield"/></svg></p>
+            <p class="cb-review__text">Texte d'exemple : le lien « Lire la suite » ouvrira l'avis complet sur la fiche Google de Cubner.</p>
+          </article>
         </div>
-        <div class="hub-section__body">
-          <p class="lead">Un container maritime brut est une structure fermée, étanche et résistante. Ce n'est qu'une fois transformé qu'il devient un outil de travail : bureau de chantier, laboratoire, poste de sécurité, unité de production, local commercial ou lieu de vie. C'est ce travail de transformation que réalise CALCUB, dans son atelier de fabrication, pour des donneurs d'ordre industriels, des collectivités, des armées, des ONG et des particuliers exigeants.</p>
+        <button class="cb-reviews__nav cb-reviews__nav--next" type="button" data-dir="1" aria-label="Avis suivants"><svg><use href="#i-chevron"/></svg></button>
+        <script>
+          (function () {
+            var track = document.querySelector("[data-reviews-track]");
+            document.querySelectorAll(".cb-reviews__nav").forEach(function (b) {
+              b.addEventListener("click", function () {
+                track.scrollBy({ left: b.getAttribute("data-dir") * track.clientWidth / 2, behavior: "smooth" });
+              });
+            });
+          })();
+        </script>
+      </div>
+    </section>
 
-          <div class="morph" aria-hidden="true">
-            <div class="morph__from">
-              <svg><use href="#i-container"/></svg>
-              <span>Container maritime brut</span>
-            </div>
-            <div class="morph__arrow"><svg><use href="#i-arrow"/></svg></div>
-            <ul class="morph__to">
-              <li>Bureau de chantier</li>
-              <li>Laboratoire</li>
-              <li>Poste de sécurité</li>
-              <li>Unité de production</li>
-              <li>Local commercial</li>
-              <li>Lieu de vie</li>
-            </ul>
+    <!-- ===================== SECTEURS D'ACTIVITÉ ===================== -->
+    <section class="cb-sectors" id="familles">
+      <h2 class="cb-h2 cb-center">Des aménagements pour tous les <span class="cb-orange">secteurs d'activités</span></h2>
+      <!-- Photos provisoires (assets/img/familles/) : à remplacer par les visuels 3D de la maquette. -->
+      <div class="cb-sectors__grid">
+        <article class="cb-card">
+          <img src="assets/img/familles/restauration.jpg" alt="" loading="lazy">
+          <div class="cb-card__body">
+            <h3><small>Conteneur pour</small>restauration &amp; commerce</h3>
+            <p>Développez votre activité avec des concepts de restauration et de commerce innovants en conteneurs maritimes.</p>
+            <p>Nous l'aménageons en snack, bar, restaurant ou boutique, prêt à accueillir vos clients.</p>
+            <a class="cb-card__btn" href="restauration-commerce.html">Découvrir<svg><use href="#i-arrow"/></svg></a>
           </div>
+        </article>
+        <article class="cb-card">
+          <img src="assets/img/familles/chantier.jpg" alt="" loading="lazy">
+          <div class="cb-card__body">
+            <h3><small>Conteneur pour</small>chantier BTP</h3>
+            <p>Le conteneur est une solution idéale pour le stockage et la protection de vos équipements durant vos chantiers.</p>
+            <p>Nous l'aménageons aussi en atelier, vestiaire, sanitaire, salle de réunion ou bureau de chantier.</p>
+            <a class="cb-card__btn" href="chantier-btp.html">Découvrir<svg><use href="#i-arrow"/></svg></a>
+          </div>
+        </article>
+        <article class="cb-card">
+          <img src="assets/img/familles/energie.jpg" alt="" loading="lazy">
+          <div class="cb-card__body">
+            <h3><small>Conteneur pour</small>énergie &amp; environnement</h3>
+            <p>Le conteneur est une solution idéale pour abriter et protéger vos installations techniques sur site.</p>
+            <p>Nous l'aménageons pour le solaire, l'hydrogène, la recharge électrique, le stockage de carburant ou le traitement de l'eau et des déchets.</p>
+            <a class="cb-card__btn" href="energie-environnement.html">Découvrir<svg><use href="#i-arrow"/></svg></a>
+          </div>
+        </article>
+        <article class="cb-card">
+          <img src="assets/img/familles/industrie.jpg" alt="" loading="lazy">
+          <div class="cb-card__body">
+            <h3><small>Conteneur pour</small>industrie &amp; spécifique</h3>
+            <p>Optimisez vos process industriels et logistiques avec nos conteneurs aménagés.</p>
+            <p>Ateliers, laboratoires, shelters techniques ou containers ATEX : des solutions efficaces pour votre entreprise.</p>
+            <a class="cb-card__btn" href="industrie-specifique.html">Découvrir<svg><use href="#i-arrow"/></svg></a>
+          </div>
+        </article>
+        <article class="cb-card">
+          <img src="assets/img/familles/frigorifiques.jpg" alt="" loading="lazy">
+          <div class="cb-card__body">
+            <h3><small>Conteneur</small>frigorifique / reefer</h3>
+            <p>Le conteneur frigorifique est une solution idéale pour conserver vos produits à la bonne température.</p>
+            <p>Nous l'aménageons en laboratoire réfrigéré, grande chambre froide, SAS réfrigéré ou unité de transformation alimentaire.</p>
+            <a class="cb-card__btn" href="frigorifiques-reefers.html">Découvrir<svg><use href="#i-arrow"/></svg></a>
+          </div>
+        </article>
+        <article class="cb-card">
+          <img src="assets/img/familles/agroalimentaire.jpg" alt="" loading="lazy">
+          <div class="cb-card__body">
+            <h3><small>Conteneur pour</small>agroalimentaire</h3>
+            <p>Le conteneur est une solution idéale pour produire, transformer et stocker au plus près de votre exploitation.</p>
+            <p>Nous l'aménageons en laboratoire, local phytosanitaire, unité de maraîchage ou d'hydroponie.</p>
+            <a class="cb-card__btn" href="agroalimentaire.html">Découvrir<svg><use href="#i-arrow"/></svg></a>
+          </div>
+        </article>
+        <article class="cb-card">
+          <img src="assets/img/familles/defense.jpg" alt="" loading="lazy">
+          <div class="cb-card__body">
+            <h3><small>Conteneur pour</small>défense &amp; sécurité</h3>
+            <p>Le conteneur est une solution idéale pour déployer rapidement des moyens sur les terrains les plus exigeants.</p>
+            <p>Nous l'aménageons en base vie militaire, shelter, armurerie, poste de contrôle d'accès ou unité médicale.</p>
+            <a class="cb-card__btn" href="defense-et-securite.html">Découvrir<svg><use href="#i-arrow"/></svg></a>
+          </div>
+        </article>
+        <article class="cb-card">
+          <img src="assets/img/familles/sante.jpg" alt="" loading="lazy">
+          <div class="cb-card__body">
+            <h3><small>Conteneur pour</small>santé &amp; humanitaire</h3>
+            <p>Le conteneur est une solution idéale pour apporter rapidement des services essentiels sur le terrain.</p>
+            <p>Nous l'aménageons en hôpital de campagne, pharmacie mobile, laboratoire médical, réfectoire ou base vie.</p>
+            <a class="cb-card__btn" href="sante-humanitaire.html">Découvrir<svg><use href="#i-arrow"/></svg></a>
+          </div>
+        </article>
+        <article class="cb-card">
+          <img src="assets/img/familles/evenementiel.jpg" alt="" loading="lazy">
+          <div class="cb-card__body">
+            <h3><small>Conteneur pour</small>l'événementiel</h3>
+            <p>Le conteneur est une solution idéale pour le déploiement rapide et la valorisation de votre marque durant vos événements.</p>
+            <p>Nous l'aménageons en billetterie, podium, scène, espace PLV, roadshow ou terrasse.</p>
+            <a class="cb-card__btn" href="evenementiel.html">Découvrir<svg><use href="#i-arrow"/></svg></a>
+          </div>
+        </article>
+        <article class="cb-card">
+          <img src="assets/img/familles/mairie.jpg" alt="" loading="lazy">
+          <div class="cb-card__body">
+            <h3><small>Conteneur pour</small>mairie &amp; collectivité</h3>
+            <p>Le conteneur est une solution idéale pour équiper rapidement vos espaces publics et vos manifestations communales.</p>
+            <p>Nous l'aménageons en local associatif, bibliothèque, sanitaire, vestiaire ou salle de pause.</p>
+            <a class="cb-card__btn" href="mairie-collectivites.html">Découvrir<svg><use href="#i-arrow"/></svg></a>
+          </div>
+        </article>
+        <article class="cb-card">
+          <img src="assets/img/familles/pompier.jpg" alt="" loading="lazy">
+          <div class="cb-card__body">
+            <h3><small>Conteneur pour</small>pompier &amp; SDIS</h3>
+            <p>Le conteneur est une solution idéale pour former vos équipes et sécuriser vos interventions.</p>
+            <p>Nous l'aménageons en centre de formation mobile, caisson à feu, réserve incendie ou bac de rétention.</p>
+            <a class="cb-card__btn" href="pompier-sdis.html">Découvrir<svg><use href="#i-arrow"/></svg></a>
+          </div>
+        </article>
+        <article class="cb-card">
+          <img src="assets/img/familles/habitations.jpg" alt="" loading="lazy">
+          <div class="cb-card__body">
+            <h3><small>Conteneur pour</small>logement &amp; jardin</h3>
+            <p>Le conteneur est une solution idéale pour valoriser votre extérieur avec une extension de maison minimaliste et design.</p>
+            <p>Nous l'aménageons pour vous offrir un studio de jardin, un local piscine ou une chambre d'hôte.</p>
+            <a class="cb-card__btn" href="habitations-logements-jardin.html">Découvrir<svg><use href="#i-arrow"/></svg></a>
+          </div>
+        </article>
+        <article class="cb-card">
+          <img src="assets/img/familles/sport.jpg" alt="" loading="lazy">
+          <div class="cb-card__body">
+            <h3><small>Conteneur pour</small>sport &amp; loisirs</h3>
+            <p>Le conteneur est une solution idéale pour abriter vos équipements sportifs et accueillir vos licenciés dans un cadre moderne.</p>
+            <p>Nous l'aménageons en salle de musculation, vestiaire, tribune ou bloc sanitaire.</p>
+            <a class="cb-card__btn" href="sport-loisirs.html">Découvrir<svg><use href="#i-arrow"/></svg></a>
+          </div>
+        </article>
+        <div class="cb-card cb-card--cta" id="devis">
+          <p class="cb-card__cta-title">Vous avez un besoin spécifique ?</p>
+          <a class="cb-card__btn" href="#">Je décris mon projet</a>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <!-- ===================== 2. Conception ===================== -->
-      <section class="section hub-section reveal" id="conception" data-toc-label="Conception">
-        <div class="hub-section__head">
-          <h2>Repenser la structure pour l'usage final</h2>
-        </div>
-        <div class="hub-section__body">
+    <!-- ===================== TEXTE SEO (contenu de l'Excel, ligne N°1) ===================== -->
+    <section class="cb-seo">
+      <h2 class="cb-h2 cb-h2--left">L'aménagement de containers <span class="cb-orange">sur&#8209;mesure</span></h2>
+      <div class="cb-seo__cols">
+        <div>
+          <h3>Du container maritime brut à l'outil de travail</h3>
+          <p>Un container maritime brut est une structure fermée, étanche et résistante. Ce n'est qu'une fois transformé qu'il devient un outil de travail : bureau de chantier, laboratoire, poste de sécurité, unité de production, local commercial ou lieu de vie. C'est ce travail de transformation que réalise CALCUB, dans son atelier de fabrication, pour des donneurs d'ordre industriels, des collectivités, des armées, des ONG et des particuliers exigeants.</p>
+          <h3>Repenser la structure pour l'usage final</h3>
           <p>Aménager un container ne se limite pas à y percer des ouvertures et à y poser une cloison. Il s'agit de repenser la structure pour l'usage final visé : renforcement ou découpe de l'ossature en acier Corten, traitement de l'isolation thermique et phonique, mise en œuvre de l'étanchéité, intégration des réseaux électriques, de plomberie, de ventilation mécanique ou de traitement d'air selon le cahier des charges. Chaque projet est étudié individuellement, à partir d'un container ISO 20 ou 40 pieds, standard ou High Cube, sec ou déjà réfrigéré, neuf ou reconditionné.</p>
-
-          <div class="base">
-            <p class="base__title">Le container de départ</p>
-            <div class="base__grid">
-              <div class="base__item">
-                <span class="base__label">Longueur</span>
-                <div class="base__opts">
-                  <div class="base__opt"><span class="base__viz"><i class="base__box" style="width:28px;height:18px"></i></span><b>20 pieds</b><small>6,06 m</small></div>
-                  <span class="base__or">ou</span>
-                  <div class="base__opt"><span class="base__viz"><i class="base__box" style="width:56px;height:18px"></i></span><b>40 pieds</b><small>12,19 m</small></div>
-                </div>
-              </div>
-              <div class="base__item">
-                <span class="base__label">Hauteur</span>
-                <div class="base__opts">
-                  <div class="base__opt"><span class="base__viz"><i class="base__box" style="width:34px;height:23px"></i></span><b>Standard</b><small>2,59 m</small></div>
-                  <span class="base__or">ou</span>
-                  <div class="base__opt"><span class="base__viz"><i class="base__box" style="width:34px;height:26px"></i></span><b>High Cube</b><small>2,89 m</small></div>
-                </div>
-              </div>
-              <div class="base__item">
-                <span class="base__label">Type</span>
-                <div class="base__opts">
-                  <div class="base__opt"><span class="base__viz"><svg><use href="#i-container"/></svg></span><b>Sec</b><small>standard</small></div>
-                  <span class="base__or">ou</span>
-                  <div class="base__opt"><span class="base__viz"><svg><use href="#i-snow"/></svg></span><b>Réfrigéré</b><small>reefer</small></div>
-                </div>
-              </div>
-              <div class="base__item">
-                <span class="base__label">État</span>
-                <div class="base__opts">
-                  <div class="base__opt"><span class="base__viz"><svg><use href="#i-sparkle"/></svg></span><b>Neuf</b><small>premier voyage</small></div>
-                  <span class="base__or">ou</span>
-                  <div class="base__opt"><span class="base__viz"><svg><use href="#i-recycle"/></svg></span><b>Reconditionné</b><small>remis en état</small></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ===================== 3. Familles d'usage ===================== -->
-      <section class="section hub-section hub-section--wide reveal" id="familles" data-toc-label="Familles d'usage">
-        <div class="hub-section__head">
-          <h2>Treize familles d'usage</h2>
-        </div>
-        <div class="hub-section__body">
+          <h3>Treize familles d'usage</h3>
           <p>CALCUB couvre un spectre de secteurs plus large que la plupart des acteurs du marché de la transformation container. L'offre se structure autour de grandes familles d'usage, chacune développée par nos équipes selon les contraintes qui lui sont propres : Restauration &amp; Commerce (snack, bar, restaurant, boutique), Chantier &amp; BTP (bureaux, ateliers, vestiaires, sanitaires de chantier), Énergie &amp; Environnement (containers techniques pour le solaire, l'hydrogène, le stockage carburant, le traitement de l'eau et des déchets), Industrie &amp; Spécifique (ateliers, laboratoires, shelters techniques, containers ATEX), Frigorifiques &amp; Reefers, Agroalimentaire, Défense &amp; Sécurité, Santé &amp; Humanitaire, Événementiel, Mairie &amp; Collectivités, Pompier &amp; SDIS, Habitations &amp; Logement, Sport &amp; Loisirs. Chacune de ces familles dispose de sa propre page, détaillant les produits, les équipements de série et les options disponibles.</p>
         </div>
-
-        <!-- ===== FAMILLES D'USAGE (d'après l'arborescence CUBNER / CALCUB) =====
-             Une carte photo par famille, qui mène à la page de la famille (où sont listées ses sous-pages).
-             Photos provisoires (Unsplash) dans assets/img/familles/, à remplacer par des réalisations CALCUB.
-             Liens « href="#" » à remplacer par les URL définitives. -->
-        <div class="families">
-          <a class="fcard" href="restauration-commerce.html">
-            <img src="assets/img/familles/restauration.jpg" alt="" loading="lazy">
-            <span class="fcard__body"><span class="fcard__name">Restauration &amp; Commerce</span><span class="fcard__count">4 solutions<svg><use href="#i-arrow"/></svg></span></span>
-          </a>
-          <a class="fcard" href="chantier-btp.html">
-            <img src="assets/img/familles/chantier.jpg" alt="" loading="lazy">
-            <span class="fcard__body"><span class="fcard__name">Chantier / BTP</span><span class="fcard__count">7 solutions<svg><use href="#i-arrow"/></svg></span></span>
-          </a>
-          <a class="fcard" href="energie-environnement.html">
-            <img src="assets/img/familles/energie.jpg" alt="" loading="lazy">
-            <span class="fcard__body"><span class="fcard__name">Énergie &amp; Environnement</span><span class="fcard__count">14 solutions<svg><use href="#i-arrow"/></svg></span></span>
-          </a>
-          <a class="fcard" href="industrie-specifique.html">
-            <img src="assets/img/familles/industrie.jpg" alt="" loading="lazy">
-            <span class="fcard__body"><span class="fcard__name">Industrie &amp; Spécifique</span><span class="fcard__count">9 solutions<svg><use href="#i-arrow"/></svg></span></span>
-          </a>
-          <a class="fcard" href="frigorifiques-reefers.html">
-            <img src="assets/img/familles/frigorifiques.jpg" alt="" loading="lazy">
-            <span class="fcard__body"><span class="fcard__name">Frigorifiques / Reefers</span><span class="fcard__count">7 solutions<svg><use href="#i-arrow"/></svg></span></span>
-          </a>
-          <a class="fcard" href="agroalimentaire.html">
-            <img src="assets/img/familles/agroalimentaire.jpg" alt="" loading="lazy">
-            <span class="fcard__body"><span class="fcard__name">Agroalimentaire</span><span class="fcard__count">6 solutions<svg><use href="#i-arrow"/></svg></span></span>
-          </a>
-          <a class="fcard" href="defense-et-securite.html">
-            <img src="assets/img/familles/defense.jpg" alt="" loading="lazy">
-            <span class="fcard__body"><span class="fcard__name">Défense &amp; Sécurité</span><span class="fcard__count">12 solutions<svg><use href="#i-arrow"/></svg></span></span>
-          </a>
-          <a class="fcard" href="sante-humanitaire.html">
-            <img src="assets/img/familles/sante.jpg" alt="" loading="lazy">
-            <span class="fcard__body"><span class="fcard__name">Santé &amp; Humanitaire</span><span class="fcard__count">8 solutions<svg><use href="#i-arrow"/></svg></span></span>
-          </a>
-          <a class="fcard" href="evenementiel.html">
-            <img src="assets/img/familles/evenementiel.jpg" alt="" loading="lazy">
-            <span class="fcard__body"><span class="fcard__name">Événementiel</span><span class="fcard__count">6 solutions<svg><use href="#i-arrow"/></svg></span></span>
-          </a>
-          <a class="fcard" href="mairie-collectivites.html">
-            <img src="assets/img/familles/mairie.jpg" alt="" loading="lazy">
-            <span class="fcard__body"><span class="fcard__name">Mairie &amp; Collectivités</span><span class="fcard__count">6 solutions<svg><use href="#i-arrow"/></svg></span></span>
-          </a>
-          <a class="fcard" href="pompier-sdis.html">
-            <img src="assets/img/familles/pompier.jpg" alt="" loading="lazy">
-            <span class="fcard__body"><span class="fcard__name">Pompier / SDIS</span><span class="fcard__count">4 solutions<svg><use href="#i-arrow"/></svg></span></span>
-          </a>
-          <a class="fcard" href="habitations-logements-jardin.html">
-            <img src="assets/img/familles/habitations.jpg" alt="" loading="lazy">
-            <span class="fcard__body"><span class="fcard__name">Habitations, Logements &amp; Jardin</span><span class="fcard__count">7 solutions<svg><use href="#i-arrow"/></svg></span></span>
-          </a>
-          <a class="fcard" href="sport-loisirs.html">
-            <img src="assets/img/familles/sport.jpg" alt="" loading="lazy">
-            <span class="fcard__body"><span class="fcard__name">Sport &amp; Loisirs</span><span class="fcard__count">4 solutions<svg><use href="#i-arrow"/></svg></span></span>
-          </a>
-          <a class="fcard fcard--cta" href="#">
-            <span class="fcard__body"><span class="fcard__name">Votre projet sur mesure</span><span class="fcard__text">Un besoin hors catégorie ? Nos équipes l'étudient.</span><span class="fcard__count">Décrire mon projet<svg><use href="#i-arrow"/></svg></span></span>
-          </a>
-        </div>
-      </section>
-
-      <!-- ===================== 4. Atelier ===================== -->
-      <section class="section hub-section reveal" id="atelier" data-toc-label="Notre atelier">
-        <div class="hub-section__head">
-          <h2>Un même socle industriel</h2>
-        </div>
-        <div class="hub-section__body">
+        <div>
+          <h3>Un même socle industriel</h3>
           <p>Cette diversité d'usages repose sur un même socle industriel : un atelier de fabrication qui maîtrise la découpe et le renforcement de structure acier, l'isolation, l'étanchéité, les revêtements de sol, les menuiseries, le bardage, la peinture industrielle et l'intégration des équipements électriques. Cette maîtrise interne, du gros œuvre container jusqu'à la finition, permet à CALCUB de traiter aussi bien un lot de containers sanitaires standardisés pour un chantier qu'un shelter technique ATEX unitaire pour un site industriel classé.</p>
-        </div>
-
-        <div class="workshop">
-          <p class="workshop__title">Maîtrisé en interne</p>
-          <ul class="workshop__list">
-            <li><svg><use href="#i-frame"/></svg>Découpe et renforcement de structure acier</li>
-            <li><svg><use href="#i-layers"/></svg>Isolation</li>
-            <li><svg><use href="#i-spray"/></svg>Étanchéité</li>
-            <li><svg><use href="#i-floor"/></svg>Revêtements de sol</li>
-            <li><svg><use href="#i-door"/></svg>Menuiseries</li>
-            <li><svg><use href="#i-container"/></svg>Bardage</li>
-            <li><svg><use href="#i-brush"/></svg>Peinture industrielle</li>
-            <li><svg><use href="#i-bolt"/></svg>Équipements électriques</li>
-          </ul>
-          <a class="workshop__link" href="fabrication-savoir-faire.html">Découvrir notre fabrication &amp; savoir-faire<svg><use href="#i-arrow"/></svg></a>
-        </div>
-      </section>
-
-      <!-- ===================== 5. Atouts ===================== -->
-      <section class="section hub-section reveal" id="atouts" data-toc-label="Atouts du container">
-        <div class="hub-section__head">
-          <h2>Les atouts du container maritime</h2>
-        </div>
-        <div class="hub-section__body">
+          <h3>Les atouts du container maritime</h3>
           <p>Le container maritime présente des avantages structurels que peu d'autres solutions constructives modulaires peuvent revendiquer : une ossature en acier capable de résister aux chocs, aux conditions climatiques extrêmes et à la corrosion saline, une géométrie normalisée qui facilite le transport, la manutention et l'empilage, et un coût de structure brute maîtrisé qui laisse une plus grande part du budget à l'aménagement utile. Utilisé aussi bien en solution définitive qu'en solution temporaire ou déplaçable, il répond à des besoins très différents : implantation rapide sur un site isolé, extension provisoire d'un établissement, poste de travail en zone à risque, ou habitat compact et durable.</p>
-
-          <div class="assets">
-            <div class="asset">
-              <h3>Ossature acier</h3>
-              <p>Résiste aux chocs, aux conditions climatiques extrêmes et à la corrosion saline.</p>
-            </div>
-            <div class="asset">
-              <h3>Géométrie normalisée</h3>
-              <p>Transport, manutention et empilage facilités.</p>
-            </div>
-            <div class="asset">
-              <h3>Coût maîtrisé</h3>
-              <p>Une plus grande part du budget pour l'aménagement utile.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ===================== 6. Processus ===================== -->
-      <section class="section hub-section reveal" id="processus" data-toc-label="Processus">
-        <div class="hub-section__head">
-          <h2>Un processus identique, quel que soit le secteur</h2>
-        </div>
-        <div class="hub-section__body">
+          <h3>Un processus identique, quel que soit le secteur</h3>
           <p>Chaque projet CALCUB suit un même processus, quel que soit le secteur : étude technique du besoin et des contraintes réglementaires, conception du plan d'aménagement, fabrication en atelier avec suivi qualité, puis livraison et installation sur site, avec un accompagnement possible jusqu'à la mise en service des équipements techniques. Les délais de fabrication sont communiqués après étude du projet, en fonction du niveau de personnalisation demandé et du nombre d'unités à produire.</p>
+          <h3>Quelle solution pour votre activité ?</h3>
+          <p>Pour identifier la solution la plus adaptée à votre activité, parcourez les différentes familles d'usage présentées ci-dessus ou décrivez directement votre projet à nos équipes : nous vous proposons une étude technique et un devis adaptés à votre secteur, à votre site d'implantation et à vos contraintes de délai.</p>
         </div>
-        <ol class="steps">
-          <li class="step"><svg class="step__icon"><use href="#i-doc"/></svg><span class="step__label">Étape 1</span><strong>Étude technique</strong><span class="step__text">Besoin et contraintes réglementaires</span></li>
-          <li class="step"><svg class="step__icon"><use href="#i-plan"/></svg><span class="step__label">Étape 2</span><strong>Conception</strong><span class="step__text">Plan d'aménagement</span></li>
-          <li class="step"><svg class="step__icon"><use href="#i-factory"/></svg><span class="step__label">Étape 3</span><strong>Fabrication</strong><span class="step__text">En atelier, avec suivi qualité</span></li>
-          <li class="step"><svg class="step__icon"><use href="#i-truck"/></svg><span class="step__label">Étape 4</span><strong>Livraison</strong><span class="step__text">Installation et mise en service</span></li>
-        </ol>
-      </section>
-
-    </article>
-
-      <!-- ===================== SOMMAIRE (généré automatiquement) ===================== -->
-      <aside class="aside">
-        <div class="aside__sticky">
-          <nav class="toc" data-toc aria-label="Sommaire">
-            <div class="toc__head">
-              <span class="toc__title">Sommaire</span>
-              <span class="toc__current" data-toc-current></span>
-              <span class="toc__time"><svg><use href="#i-clock"/></svg><span data-reading-time></span></span>
-              <button class="toc__toggle" aria-label="Afficher le sommaire"><svg><use href="#i-chevron"/></svg></button>
-            </div>
-            <ol data-toc-list></ol>
-            <div class="toc__bar"><i data-progress></i></div>
-          </nav>
-
-          <div class="aside-cta">
-            <h3>Un projet d'aménagement ?</h3>
-            <p>Recevez une étude technique et un devis adaptés à votre secteur.</p>
-            <a class="btn btn--red" href="#devis">Décrire mon projet</a>
-            <a class="aside-cta__phone" href="tel:+33553072682"><svg><use href="#i-phone"/></svg>05 53 07 26 82</a>
-          </div>
-        </div>
-      </aside>
-    </div>
-
-    <!-- ===================== CTA FINAL ===================== -->
-    <section class="final-cta" id="devis">
-      <div>
-        <h2>Quelle solution pour votre <span class="accent">activité</span> ?</h2>
-        <p>Pour identifier la solution la plus adaptée à votre activité, parcourez les différentes familles d'usage présentées ci-dessus ou décrivez directement votre projet à nos équipes : nous vous proposons une étude technique et un devis adaptés à votre secteur, à votre site d'implantation et à vos contraintes de délai.</p>
-      </div>
-      <div class="final-cta__actions">
-        <a class="btn btn--red" href="#">Votre projet sur mesure <svg><use href="#i-arrow"/></svg></a>
-        <a class="btn btn--ghost-light" href="#">Voir nos réalisations</a>
-        <a class="btn btn--ghost-light" href="tel:+33553072682"><svg><use href="#i-phone"/></svg>+33 (0)5 53 07 26 82</a>
       </div>
     </section>
 

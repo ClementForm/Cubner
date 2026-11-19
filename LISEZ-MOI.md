@@ -50,3 +50,29 @@ Titre SEO, Meta description, Mots-clés, Contenu), puis reconstruire.
 Dans le texte : paragraphes séparés par une ligne vide, listes avec des tirets `- `,
 `[GALERIE PHOTOS — réalisations à intégrer]` pour l'emplacement de la galerie, et `FAQ` seul sur une ligne
 suivi de blocs « Question ? / Réponse » pour une FAQ.
+
+## Réalisations CALCUB (à saisir dans WordPress)
+
+Le bouton « Découvrez toutes nos réalisations » (page Aménagements) mène à `realisations.html` :
+bandeau, repères, filtres par secteur et cartes. **Pas de page par réalisation** : un clic sur une carte
+agrandit la photo, avec le titre, le secteur et le résumé en légende, et des flèches pour passer d'une
+réalisation à l'autre (parmi celles du filtre en cours).
+
+| Fichier | Rôle |
+|---|---|
+| `build/realisations-data.js` | Contenu des réalisations (une entrée = une carte) — maquette du contenu WordPress |
+| `build/realisations.js` | Gabarit de la page |
+| `assets/js/realisations.js` | Filtres par secteur et photo agrandie |
+| `assets/css/calcub-page.css` | Styles, section « Page Réalisations » |
+
+### Intégration WordPress : formulaire « Réalisation »
+
+| Champ | Type WordPress | Obligatoire | Où il s'affiche |
+|---|---|---|---|
+| Titre | Titre | Oui | Carte + légende de la photo agrandie |
+| Secteur | Taxonomie `secteur` (13 secteurs) | Oui | Étiquette de la carte, filtres, légende |
+| Résumé | Extrait (1 à 2 phrases) | Oui | Carte + légende |
+| Photo | Image à la une (idéalement 1400 px de large ou plus) | Oui | Carte + photo agrandie |
+
+- Type de contenu sans page publique (`publicly_queryable => false`) : seule la page liste affiche les réalisations.
+- Chaque carte porte `data-secteur="<slug du secteur>"` ; un bouton de filtre par secteur utilisé, avec le nombre de réalisations.

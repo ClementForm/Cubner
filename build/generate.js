@@ -602,6 +602,147 @@ ${opts.relatedHtml || ""}
   return head(p, opts.canon, opts.crumbs, true, faq) + "\n" + body + foot();
 }
 
+/* ------------------------------------------------------------------ PILIER MODULES & BUNGALOWS (DA de la page Aménagement CALCUB) */
+// Même direction artistique que src/pages/amenagement-containers.html (assets/css/calcub-page.css).
+// Tout le texte vient de l'Excel (ligne N°2) : chaque paragraphe est repris tel quel.
+function modulesPilierPage(p, fams) {
+  p.root = "modules";
+  const { main, faq } = splitFaq(p.content);
+  const paras = paragraphs(main).map(fixGallery);
+  const ctaText = paras.pop();
+  const take = re => { const i = paras.findIndex(t => re.test(t)); return i < 0 ? "" : paras.splice(i, 1)[0]; };
+  const famPara = take(/La famille /);
+  const diff = take(/(distingue|différence)/i);
+  const [intro = "", approche = "", ...rest] = paras;
+  const fiche = rest.find(t => /fiche produit/i.test(t)) || "";
+  const atelier = rest.filter(t => t !== fiche);
+  // « L'offre se répartit en trois familles. La famille X … La famille Y … » : une phrase par carte
+  const famSentences = famPara.split(/\s+(?=La famille )/);
+  const famLead = /^La famille /.test(famSentences[0]) ? "" : famSentences.shift();
+  const famImg = ["modules/gamme-chantier.jpg", "modules/gamme-commerces.jpg", "modules/gamme-collectivites.jpg"];
+  const cardOf = (F, i) => {
+    const sen = famSentences.find(s => s.includes(F.label.split(/ [&\/] /)[0])) || F.cat.meta;
+    return `        <article class="cb-card">
+          <img src="assets/img/${famImg[i] || F.img}" alt="" loading="lazy">
+          <div class="cb-card__body">
+            <h3><small>Modules</small>${esc(F.label)}</h3>
+            <p>${inline(sen)}</p>
+            <a class="cb-card__btn" href="${F.file}">Découvrir<svg><use href="#i-arrow"/></svg></a>
+          </div>
+        </article>`;
+  };
+  const crumbs = [{ name: "Accueil", href: "/", url: "" }, { name: "Modules & Bungalows" }];
+  const html = head(p, "modules-bungalows/", crumbs, false, faq)
+    .replace("switzer@400,500,600,700,800", "switzer@300,400,500,600,700,800")
+    .replace('<link rel="stylesheet" href="assets/css/seo-page.css">', '<link rel="stylesheet" href="assets/css/seo-page.css">\n  <link rel="stylesheet" href="assets/css/calcub-page.css">')
+    .replace('<div class="read-progress" data-progress aria-hidden="true"></div>\n', "");
+  const body = `<main class="cb">
+  <div class="container">
+
+    ${breadcrumbHtml(crumbs)}
+
+    <!-- ===================== HERO (photo provisoire Unsplash : à remplacer par une réalisation modules) ===================== -->
+    <section class="cb-hero cb-hero--photo">
+      <img class="cb-hero__bg" src="assets/img/modules/hero-module-bois.jpg" alt="" fetchpriority="high">
+      <div class="cb-hero__content">
+        <img class="cb-hero__logo" src="assets/img/calcub/calcub-symbole.png" alt="CALCUB by Cubner" width="427" height="149">
+        <h1><span class="cb-orange">Modules</span> &amp; <span class="cb-orange">Bungalows</span></h1>
+        <p class="cb-hero__lead">${inline(p.meta)}</p>
+      </div>
+      <img class="cb-hero__badge" src="assets/img/fabrique-en-france.png" alt="Fabriqué en France" width="202" height="71">
+    </section>
+
+    <!-- ===================== RÉASSURANCE ===================== -->
+    <ul class="cb-assure">
+      <li><span class="cb-assure__icon"><svg><use href="#i-frame"/></svg></span>Ossature acier ou bois, isolation thermique et phonique</li>
+      <li><span class="cb-assure__icon"><svg><use href="#i-plan"/></svg></span>Dimensions et assemblages sur mesure</li>
+      <li><span class="cb-assure__icon"><svg><use href="#i-factory"/></svg></span>Fabrication en atelier avec suivi qualité</li>
+      <li><span class="cb-assure__icon"><svg><use href="#i-truck"/></svg></span>Livraison et installation sur site</li>
+    </ul>
+
+    <!-- ===================== INTRO ===================== -->
+    <section class="cb-block cb-intro-split" id="demarche">
+      <div class="cb-intro-split__text">
+        <h2 class="cb-h2 cb-h2--left">Des modules et bungalows <span class="cb-orange">préfabriqués sur mesure</span></h2>
+        <p>${inline(intro)}</p>
+        <a class="btn btn--red" href="#solutions">Voir nos gammes</a>
+      </div>
+      <div class="cb-intro-split__media">
+        <img src="assets/img/modules/modules-assembles.jpg" alt="Bâtiment composé de modules préfabriqués empilés, avec coursives et escaliers extérieurs" loading="lazy">
+      </div>
+    </section>
+
+    <!-- ===================== GAMMES ===================== -->
+    <section class="cb-sectors" id="solutions">
+      <h2 class="cb-h2 cb-center">Nos <span class="cb-orange">gammes de modules</span></h2>${famLead ? `\n      <p class="cb-intro cb-center">${inline(famLead)}</p>` : ""}
+      <!-- Photos provisoires : à remplacer par une réalisation par gamme -->
+      <div class="cb-sectors__grid">
+${fams.map(cardOf).join("\n")}
+        <div class="cb-card cb-card--cta" id="devis">
+          <p class="cb-card__cta-title">Vous avez un besoin spécifique ?</p>
+          <a class="cb-card__btn" href="#">Je décris mon projet</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== APPROCHE ===================== -->
+    <section class="cb-split" id="approche">
+      <div class="cb-split__text">
+        <h2 class="cb-project"><span class="cb-orange">Notre approche</span> un module pensé pour votre usage</h2>
+        <h3 class="cb-kicker">Une ossature, des dimensions libres</h3>
+        <p>${inline(approche)}</p>${fiche ? `
+        <h3 class="cb-kicker">Équipements, options et tarifs</h3>
+        <p>${inline(fiche)}</p>` : ""}
+        <a class="btn btn--red" href="#devis">Demander un devis</a>
+      </div>
+      <div class="cb-split__media">
+        <img src="assets/img/modules/interieur-module.jpg" alt="Intérieur lumineux d'un bâtiment modulaire aménagé en salle de réunion" loading="lazy">
+      </div>
+    </section>
+
+    <!-- ===================== FABRICATION + DIFFÉRENCE ===================== -->
+    <section class="cb-split cb-split--reverse" id="difference">
+      <div class="cb-split__media">
+        <img src="assets/img/calcub/equipe-calcub.png" alt="L'équipe CALCUB devant l'atelier de fabrication" width="684" height="483" loading="lazy">
+      </div>
+      <div class="cb-split__text">
+        <h2 class="cb-h2 cb-h2--left">La différence <span class="cb-orange">CALCUB</span></h2>${atelier.map(t => `
+        <h3 class="cb-kicker">Fabrication et installation</h3>
+        <p>${inline(t)}</p>`).join("")}${diff ? `
+        <h3 class="cb-kicker">Modules et containers dans un même projet</h3>
+        <p>${inline(diff)}</p>` : ""}
+        <a class="btn btn--red" href="fabrication-savoir-faire.html">Découvrir notre savoir-faire</a>
+      </div>
+    </section>
+${faq.length ? `
+    <!-- ===================== FAQ ===================== -->
+    <section class="cb-faq" id="faq">
+      <h2 class="cb-h2 cb-center">Questions <span class="cb-orange">fréquentes</span></h2>
+      <div class="cb-steps cb-faq__list">
+${faq.map(f => `        <details name="faq">
+          <summary>${inline(f.q)}<svg><use href="#i-plus"/></svg></summary>
+          <p>${inline(f.a)}</p>
+        </details>`).join("\n")}
+      </div>
+    </section>
+` : ""}
+    <!-- ===================== CTA FINAL ===================== -->
+    <section class="cb-final">
+      <h2 class="cb-h2">Parlons de votre <span class="cb-orange">projet</span></h2>
+      <p class="cb-intro">${inline(ctaText)}</p>
+      <div class="cb-final__actions">
+        <a class="btn btn--red" href="#devis">Je décris mon projet</a>
+        <a class="btn btn--outline" href="tel:+33553072682"><svg><use href="#i-phone"/></svg>+33 (0)5 53 07 26 82</a>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+`;
+  return html + "\n" + body + foot();
+}
+
 /* ------------------------------------------------------------------ génération */
 const written = [];
 const write = (file, html) => { fs.writeFileSync(path.join(OUT, file), html); written.push(file); };
@@ -646,11 +787,7 @@ for (const b in FAM) {
 }
 // Pilier Modules & Bungalows
 const modFams = Object.values(FAM).filter(F => F.root === "modules");
-write("modules-bungalows.html", categoryPage(PILIER_MODULES, {
-  root: "modules", label: "Modules & Bungalows", isPilier: true, img: "familles/chantier.jpg", icon: "i-container",
-  crumbs: [{ name: "Accueil", href: "/", url: "" }, { name: "Modules & Bungalows" }], canon: "modules-bungalows/",
-  children: modFams.map(F => ({ name: F.label, file: F.file, meta: F.cat.meta, icon: F.icon })), childWord: "gammes",
-}));
+write("modules-bungalows.html", modulesPilierPage(PILIER_MODULES, modFams));
 
 // Page « Nos conteneurs maritimes » (catalogue des gammes, contenu dans build/conteneurs-maritimes.js)
 {
@@ -658,6 +795,12 @@ write("modules-bungalows.html", categoryPage(PILIER_MODULES, {
   write(cm.file, cm.html);
   // Pages SEO des gammes (contenu dans build/seo-gammes-data.js)
   for (const pg of require("./seo-gammes.js")({ SPRITE, TOPBAR, headerFor, FOOTER, esc, escA })) write(pg.file, pg.html);
+}
+
+// Réalisations CALCUB : page liste, clic sur une carte = photo agrandie (contenu dans build/realisations-data.js)
+{
+  const rz = require("./realisations.js")({ SPRITE, TOPBAR, headerFor, FOOTER, esc, escA });
+  write(rz.file, rz.html);
 }
 
 // Plan du site (pour l'utilisateur) + données pour les liens des pages faites à la main
@@ -669,9 +812,11 @@ const map = { families: Object.values(FAM).map(F => ({ key: F.key, root: F.root,
   const fams = Object.values(FAM);
   fs.writeFileSync(path.join(OUT, "plan-du-site.html"), `<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Plan du site — pages CALCUB</title><meta name="robots" content="noindex">
 <link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700&display=swap" rel="stylesheet"><link rel="stylesheet" href="assets/css/seo-page.css"></head>
-<body><main class="container" style="padding:48px 24px 80px"><h1 style="font-size:40px">Plan du site <span class="accent">CALCUB</span></h1>
+<body>${SPRITE}
+${TOPBAR}${headerFor("")}
+<main class="container" style="padding:48px 24px 80px"><h1 style="font-size:40px">Plan du site <span class="accent">CALCUB</span></h1>
 <p style="color:var(--muted)">Page de travail (non indexée) : ${written.length + Object.keys(HANDMADE).length} pages générées depuis ${esc(xlsxFile)}.</p>
-<div class="siblings" style="margin-top:24px"><a class="sibling sibling--all" href="amenagement-containers.html"><span>Aménagement de containers (pilier)</span></a><a class="sibling sibling--all" href="modules-bungalows.html"><span>Modules &amp; Bungalows (pilier)</span></a></div>
+<div class="siblings" style="margin-top:24px"><a class="sibling sibling--all" href="amenagement-containers.html"><span>Aménagement de containers (pilier)</span></a><a class="sibling sibling--all" href="modules-bungalows.html"><span>Modules &amp; Bungalows (pilier)</span></a><a class="sibling sibling--all" href="realisations.html"><span>Nos réalisations</span></a></div>
 ${grp("Aménagements CALCUB", fams.filter(F => F.root === "calcub"))}
 ${grp("Modules &amp; Bungalows", fams.filter(F => F.root === "modules"))}
 </main></body></html>`);

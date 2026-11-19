@@ -39,7 +39,10 @@ module.exports = function verify(data, map, OUT) {
   for (const f of pages) for (const m of fs.readFileSync(path.join(OUT, f), "utf8").matchAll(/href="([^"#:]+\.html)/g))
     if (!fs.existsSync(path.join(OUT, m[1]))) broken.add(`${m[1]} (depuis ${f})`);
 
+  const fakeReviews = pages.filter(f => fs.readFileSync(path.join(OUT, f), "utf8").includes("data-avis-exemple"));
+
   console.log(`\n${pages.length} pages dans site/`);
+  if (fakeReviews.length) console.log(`⚠ Avis d'exemple (provisoires) à remplacer par le widget Google avant la mise en ligne : ${fakeReviews.join(", ")}`);
   console.log(problems.length ? `⚠ Texte : ${problems.length} problème(s)\n  - ${problems.join("\n  - ")}` : "✔ Texte : tout le contenu de l'Excel est présent");
   console.log(broken.size ? `⚠ Liens cassés : ${broken.size}\n  - ${[...broken].join("\n  - ")}` : "✔ Liens internes : aucun lien cassé");
 };

@@ -298,7 +298,7 @@ ${p.usages.map(u => `        <article class="gp-usage">
           ${u.img ? `<img class="gp-usage__img" src="assets/img/${u.img}" alt="" loading="lazy">` : `<span class="gp-usage__icon" aria-hidden="true"><svg><use href="#${u.icon}"/></svg></span>`}
           <div class="gp-usage__body">
             <h3>${esc(u.title)}</h3>
-${u.paras.map(t => `            <p>${md(t)}</p>`).join("\n")}${u.link ? `\n            <a class="gp-usage__link" href="${escA(u.link[0])}">${esc(u.link[1])}<svg aria-hidden="true"><use href="#i-arrow"/></svg></a>` : ""}
+${u.paras.map(t => `            <p>${md(t)}</p>`).join("\n")}${u.link && href(u.link[0]) !== p.file ? `\n            <a class="gp-usage__link" href="${escA(href(u.link[0]))}">${esc(u.link[1])}<svg aria-hidden="true"><use href="#i-arrow"/></svg></a>` : ""}
           </div>
         </article>`).join("\n")}
       </div>

@@ -57,6 +57,7 @@ const SYMBOLS = {
   "i-scale": S("i-scale", '<path d="M12 3v18M7 21h10M5 7h14"/><path d="m5 7-3 6a3 3 0 0 0 6 0zM19 7l-3 6a3 3 0 0 0 6 0z"/>'),
   "i-spark": S("i-spark", '<path d="M12 2v4M12 18v4M2 12h4M18 12h4M5 5l2.5 2.5M16.5 16.5 19 19M5 19l2.5-2.5M16.5 7.5 19 5"/><circle cx="12" cy="12" r="2"/>'),
   "i-check": S("i-check", '<path d="m5 12 5 5L20 7"/>'),
+  "i-cutlery": S("i-cutlery", '<path d="M7 3v18M4.5 3v5a2.5 2.5 0 0 0 5 0V3"/><path d="M17 21V3c-2.2 1.2-3.5 3.6-3.5 6.5V13H17"/>'),
 };
 // Règles (de la plus spécifique à la plus générale)
 const RULES = [

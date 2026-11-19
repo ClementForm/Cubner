@@ -20,46 +20,6 @@
 .theme-cubner .accent { color: var(--calcub-blue); }
 
 /* ==========================================================================
-   EN-TÊTE aux dimensions du site en ligne (cubner-homepage-v2.css) :
-   bandeau 44 px + menu 109 px, logo 216 × 72, liens 16 px espacés de 34 px.
-   Les effets (soulignement orange au survol / page active) sont conservés.
-   ========================================================================== */
-.theme-cubner { --header-h: 109px; }
-.theme-cubner .topbar { font-size: 16px; }
-.theme-cubner .topbar .container { height: 44px; }
-.theme-cubner .topbar__reviews { gap: 9px; }
-.theme-cubner .topbar__stars { font-size: 13px; }
-.theme-cubner .topbar__right { gap: 18px; }
-.theme-cubner .topbar__links { font-weight: 400; }
-.theme-cubner .topbar__phone { gap: 10px; margin-left: 8px; padding: 0 22px; font-size: 18px; font-weight: 600; }
-.theme-cubner .topbar__phone svg { width: 21px; height: 21px; }
-.theme-cubner .topbar__right { gap: 18px; }
-.theme-cubner .topbar__cta { justify-content: center; width: 224px; padding: 0; font-size: 18px; font-weight: 700; }
-.theme-cubner .header { box-shadow: 0 0 14.7px 0 rgb(0 0 0 / 12%); }
-.theme-cubner .logo__img { height: 72px; width: auto; max-width: 216px; object-fit: contain; }
-.theme-cubner .nav { gap: 34px; font-size: 16px; font-weight: 400; }
-.theme-cubner .nav a { padding: 8px 0; }
-.theme-cubner .nav a.is-active { font-weight: 500; }
-.theme-cubner .header__icons { gap: 27px; }
-.theme-cubner .header__icons svg { width: 24px; height: 24px; }
-@media (max-width: 1199px) {
-  .theme-cubner { --header-h: 88px; }
-  .theme-cubner .logo__img { height: 58px; }
-  .theme-cubner .nav { gap: 22px; font-size: 15px; }
-  .theme-cubner .topbar { font-size: 14px; }
-  .theme-cubner .topbar__phone { padding: 0 12px; font-size: 16px; }
-  .theme-cubner .topbar__cta { width: auto; padding: 0 20px; font-size: 16px; }
-}
-@media (max-width: 767px) {
-  .theme-cubner { --header-h: 72px; }
-  .theme-cubner .logo__img { height: 48px; }
-  .theme-cubner .topbar .container { height: 40px; }
-  .theme-cubner .topbar__phone { font-size: 14px; padding: 0 8px; }
-  .theme-cubner .topbar__phone svg { width: 16px; height: 16px; }
-  .theme-cubner .topbar__cta { font-size: 14px; padding: 0 14px; }
-}
-
-/* ==========================================================================
    HERO (≥ 1440 px : composition en absolu, comme en ligne)
    ========================================================================== */
 .cm-hero { position: relative; min-height: 560px; overflow: hidden; /* coupe les câbles au ras de l'en-tête */ }

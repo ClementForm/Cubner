@@ -9,25 +9,35 @@
 // ============================================================================
 const SHOP = "https://www.cubner.com";
 
-// Usages réutilisés (texte des pages en ligne)
+// Usages réutilisés : usages du conteneur brut (stockage, transport, logistique), sans aménagement
 const U = {
-  chantier: { title: "Stockage de chantier", img: "familles/chantier.jpg", link: ["chantier-btp.html", "Aménagements chantier & BTP"], paras: [
+  chantier: { title: "Stockage de chantier et BTP", icon: "i-barrier", link: ["@location-maritime", "Louer un conteneur de chantier"], paras: [
     "Le secteur du BTP et de l’artisanat fait face à un enjeu permanent : **protéger le matériel sensible sur les zones de travaux**.",
-    "L’utilisation d’un conteneur maritime sur un chantier offre un espace de rangement ultra-sécurisé, **étanche et anti-effraction**. Il permet d’abriter l’outillage électroportatif, les matériaux de valeur ou les engins légers à l’abri des intempéries et du vol.",
-    "Une fois les travaux terminés, la structure se déplace facilement en camion-grue **vers le chantier suivant**.",
+    "Un **conteneur maritime de chantier** offre un espace de rangement ultra-sécurisé, **étanche et anti-effraction**. Il abrite l’outillage électroportatif, les matériaux de valeur ou les engins légers à l’abri des intempéries et du vol.",
+    "Une fois les travaux terminés, le conteneur se déplace facilement en camion-grue **vers le chantier suivant**.",
   ] },
-  commerce: { title: "Commerce éphémère", img: "cartes/container-boutique-magasin.jpg", link: ["restauration-commerce.html", "Aménagements restauration & commerce"], paras: [
-    "Pour lancer un concept, tester un emplacement ou créer un **point de vente événementiel**, le conteneur offre une solution rapide, visible et entièrement modulable.",
-    "Transformé en **boutique, showroom, bar ou espace de vente**, il peut intégrer vitrines, comptoirs, éclairage, enseigne, climatisation et équipements sur mesure. Installé sur un festival, une zone commerciale ou un lieu de passage, il permet de créer un espace attractif et identifiable sans recourir à une construction traditionnelle.",
-    "Une fois l’opération terminée, le conteneur peut être déplacé, réutilisé ou transformé pour s’adapter à un nouveau projet.",
+  entreprise: { title: "Stockage professionnel et logistique", icon: "i-shelves", link: ["@40-pieds", "Voir les conteneurs grand volume"], paras: [
+    "Surstock saisonnier, réserve de marchandises, pièces détachées, archives ou matières premières : le conteneur maritime **agrandit votre capacité de stockage** sans construire de bâtiment.",
+    "Posé dans une cour, sur un parking ou sur un site industriel, il accueille vos **palettes Europe** (11 dans un 20 pieds, 25 dans un 40 pieds) et se charge facilement au chariot élévateur.",
   ] },
-  maison: { title: "Extension de maison", img: "familles/habitations.jpg", link: ["habitations-logements-jardin.html", "Aménagements habitations & jardin"], paras: [
-    "Besoin d’une pièce supplémentaire ? Le conteneur aménagé permet de créer une **extension contemporaine et personnalisable** à partir d’une structure robuste et modulaire.",
-    "Bureau, chambre, **studio indépendant**, salle de loisirs ou espace de vie : l’aménagement est conçu selon votre projet avec isolation, électricité, chauffage, climatisation, fenêtres ou baies vitrées. Relié à l’habitation existante, le conteneur peut devenir une **véritable nouvelle pièce**.",
-    "Sa conception modulaire permet également de faire évoluer le projet dans le temps et constitue une alternative originale à une extension réalisée en construction traditionnelle.",
+  transport: { title: "Transport maritime et export", icon: "i-ship", link: ["@specifiques", "Voir les conteneurs spécifiques"], paras: [
+    "Conçu pour le **transport intermodal**, le conteneur maritime passe du navire au camion ou au train sans rupture de charge : idéal pour **expédier des marchandises à l’export** ou rapatrier du matériel.",
+    "Ses dimensions normalisées ISO et son certificat **CSC** permettent de l’empiler, de le lever et de le transporter partout dans le monde.",
+  ] },
+  agriculture: { title: "Stockage agricole", icon: "i-wheat", paras: [
+    "Exploitations agricoles, viticoles ou maraîchères : le conteneur maritime protège le **matériel agricole, les semences, les engrais ou les récoltes** de l’humidité et des nuisibles.",
+    "Sa structure acier **résiste aux conditions extérieures** et se déplace au gré des besoins de l’exploitation.",
+  ] },
+  particulier: { title: "Rangement pour les particuliers", icon: "i-house", link: ["@petits", "Voir les petits conteneurs"], paras: [
+    "Outils de jardin, mobilier, vélos, bois de chauffage ou matériel de loisirs : le conteneur maritime offre un **espace de rangement extérieur robuste et sécurisé**, bien plus durable qu’un abri de jardin.",
+    "Étanche et fermé par des portes verrouillables, il protège durablement vos biens des intempéries et des intrusions.",
+  ] },
+  demenagement: { title: "Déménagement et garde-meubles", icon: "i-truck", link: ["@location-maritime", "Louer un conteneur"], paras: [
+    "Travaux, déménagement ou transition entre deux logements ou locaux : le conteneur sert de **garde-meubles directement sur votre site**, sans aller-retour vers un entrepôt.",
+    "Vous chargez à votre rythme, puis le conteneur est enlevé ou déplacé à la fin de l’opération.",
   ] },
 };
-const STD_USAGES = [U.chantier, U.commerce, U.maison];
+const STD_USAGES = [U.chantier, U.entreprise, U.transport, U.agriculture, U.particulier, U.demenagement];
 
 // FAQ réutilisée (fiches boutique)
 const FAQ_AUTORISATION = ["Faut-il une autorisation pour poser un conteneur ?", [
@@ -69,7 +79,7 @@ module.exports = {
         "Un conteneur maritime standard, polyvalent et robuste, est utilisé à la fois pour le **transport intermodal** et le **stockage de longue durée**.",
         "Les conteneurs sont conçus pour résister aux conditions difficiles en mer, tout en offrant une solution sécurisée pour le stockage des marchandises et des équipements. Leur structure en acier leur permet d’être empilés, optimisant ainsi l’espace dans les ports, les entrepôts et les chantiers.",
       ],
-      hero: { img: "conteneur-maritime-levage.png", contain: true, alt: "Conteneur maritime standard Cubner soulevé par un palonnier" },
+      hero: { img: "produits/conteneur-20-pieds-dry-4.jpg", alt: "Conteneur maritime standard gris anthracite vu de trois quarts sur un parc de stockage", w: 1600, h: 1297 },
       childrenTitle: ["Découvrez toutes nos gammes de", "conteneurs standards"],
       children: [
         ["petits", "Le petit conteneur offre une solution de stockage **ultra-compacte et sécurisée**. Nos modèles s’intègrent facilement dans vos espaces réduits."],
@@ -94,7 +104,7 @@ module.exports = {
       faq: [
         ["Quelle est la différence entre un conteneur dry et un conteneur High Cube ?", [
           "Les deux ont la même longueur et la même largeur. Seule la hauteur change : 2,59 m à l’extérieur pour un dry, 2,90 m pour un High Cube (HC). Ce gain de 30 cm augmente le volume utile : 33,2 m³ contre 37,4 m³ en 20 pieds, 67,7 m³ contre 76,4 m³ en 40 pieds.",
-          "Le High Cube est idéal pour les marchandises hautes ou pour un projet d’aménagement où la hauteur sous plafond compte.",
+          "Le High Cube est idéal pour les marchandises hautes, le stockage en rayonnages ou les biens légers mais volumineux.",
         ]],
         ["Quelles sont les dimensions d’un conteneur maritime 20 pieds et 40 pieds ?", [
           "Un conteneur 20 pieds dry mesure 6,06 m × 2,44 m × 2,59 m à l’extérieur, pour 5,90 m × 2,35 m × 2,39 m à l’intérieur (33,2 m³).",
@@ -167,7 +177,7 @@ module.exports = {
       h1: ["Conteneurs", "20 pieds"],
       lead: "Le conteneur 20 pieds offre un volume de stockage standard.",
       intro: [
-        "Robustes et étanches, ses **33 m³** s’adaptent facilement à tous vos projets. Le choix idéal pour **sécuriser votre matériel**, vos marchandises ou **aménager un nouvel espace**.",
+        "Robustes et étanches, ses **33 m³** s’adaptent facilement à tous vos projets. Le choix idéal pour **sécuriser votre matériel**, vos marchandises ou **expédier vos biens à l’export**.",
         "Conteneurs maritimes standards **CORTEN, étanches et sécurisés** — livraison possible partout en France.",
       ],
       hero: { img: "produits/conteneur-20-pieds-dry-1.jpg", alt: "Conteneur maritime 20 pieds dry gris anthracite vu de trois quarts, portes fermées", w: 1600, h: 1180 },
@@ -177,8 +187,8 @@ module.exports = {
       sheet: "conteneur-20-pieds-dry",
       guideTitle: ["Quel conteneur 20 pieds", "choisir ?"],
       guide: [
-        ["20 pieds dry : le format de référence", "Le 20 pieds dry est le conteneur maritime le plus répandu : **33,2 m³**, 13,87 m² au sol et **11 palettes Europe**, pour 2,2 tonnes à vide. Il convient au stockage comme à la plupart des projets d’aménagement."],
-        ["20 pieds High Cube : 30 cm de plus", "Avec 2,90 m de haut à l’extérieur et 2,70 m à l’intérieur, le **High Cube** offre **37,4 m³**. Un plus pour les marchandises hautes, les rayonnages ou un aménagement confortable (bureau, studio, atelier)."],
+        ["20 pieds dry : le format de référence", "Le 20 pieds dry est le conteneur maritime le plus répandu : **33,2 m³**, 13,87 m² au sol et **11 palettes Europe**, pour 2,2 tonnes à vide. Il convient au stockage sur site comme au transport de marchandises."],
+        ["20 pieds High Cube : 30 cm de plus", "Avec 2,90 m de haut à l’extérieur et 2,70 m à l’intérieur, le **High Cube** offre **37,4 m³**. Un plus pour les marchandises hautes, les rayonnages ou le stockage sur plusieurs niveaux."],
         ["20 pieds half height : les charges lourdes", "Le **half height** (1,30 m de haut, 15,1 m³) est conçu pour les matériaux denses : il atteint sa charge maximale avant de remplir son volume."],
         ["Neuf ou occasion ?", "Le **premier voyage** bénéficie d’une garantie d’étanchéité à vie sur les conteneurs dry (selon les CGV). Pour un budget maîtrisé, le [20 pieds d’occasion](@occasion) est inspecté avant expédition."],
       ],
@@ -215,7 +225,7 @@ module.exports = {
       h1: ["Conteneurs", "40 pieds"],
       lead: "Le conteneur 40 pieds offre un volume de stockage maximal et très rentable.",
       intro: [
-        "Ses **67 m³** répondent à vos plus grands besoins de logistique. Pour **stocker de gros volumes**, sécuriser du matériel encombrant ou **créer de larges aménagements**.",
+        "Ses **67 m³** répondent à vos plus grands besoins de logistique. Pour **stocker de gros volumes**, sécuriser du matériel encombrant ou **centraliser vos stocks** sur un même site.",
         "Conteneurs maritimes standards **CORTEN, étanches et sécurisés** — livraison possible partout en France.",
       ],
       hero: { lineup: true },
@@ -226,7 +236,7 @@ module.exports = {
       guideTitle: ["Quel conteneur 40 pieds", "choisir ?"],
       guide: [
         ["40 pieds dry : le grand volume", "Avec 12,19 m de long, le 40 pieds dry offre **67,7 m³**, 28,3 m² au sol et **25 palettes Europe**. C’est le format le plus rentable au mètre cube pour stocker de gros volumes."],
-        ["40 pieds High Cube : la hauteur en plus", "Le **High Cube** atteint 2,90 m de haut à l’extérieur (2,70 m à l’intérieur) pour **76,4 m³**. Il est très apprécié pour les grands aménagements : bureaux, ateliers, espaces de vie."],
+        ["40 pieds High Cube : la hauteur en plus", "Le **High Cube** atteint 2,90 m de haut à l’extérieur (2,70 m à l’intérieur) pour **76,4 m³**. Il est très apprécié pour les marchandises légères mais encombrantes et le stockage en racks."],
         ["Pallet wide : optimisé pour les palettes", "Les modèles **pallet wide** sont conçus pour le chargement de palettes Europe. Le **45 pieds pallets wide High Cube**, long de 13,72 m et large de 2,50 m, accueille jusqu’à **33 palettes Europe** pour 89 m³."],
         ["Accès et livraison", "Un 40 pieds est livré par semi-remorque : vérifiez en amont la largeur d’accès, le rayon de braquage et la place nécessaire au déchargement. Pour un accès traversant ou latéral, voyez nos [conteneurs spécifiques](@specifiques) double door et open side."],
       ],
@@ -273,13 +283,13 @@ module.exports = {
       guideTitle: ["Louer, acheter", "ou financer ?"],
       guide: [
         ["La location", "Idéale pour un **besoin ponctuel** : chantier, période de forte activité, stockage le temps de travaux. Vous disposez du conteneur sans l’acheter, et le rendez à la fin du projet."],
-        ["L’achat", "Pour un usage **durable** ou un projet d’aménagement, l’achat reste la solution la plus économique dans le temps. Les conteneurs dry premier voyage bénéficient d’une garantie d’étanchéité à vie (selon les CGV)."],
+        ["L’achat", "Pour un usage **durable** ou un stockage permanent, l’achat reste la solution la plus économique dans le temps. Les conteneurs dry premier voyage bénéficient d’une garantie d’étanchéité à vie (selon les CGV)."],
         ["La location avec option d’achat (LOA)", "Le **leasing avec option d’achat** étale le coût sur plusieurs années via un organisme financeur partenaire ; Cubner reste votre interlocuteur pour le matériel et la livraison."],
         ["Bien préparer l’emplacement", "Prévoyez une surface **plane et stable**, et un accès adapté au camion de livraison (largeur, hauteur libre, rayon de braquage). Nos équipes étudient ces contraintes avec vous avant la livraison."],
       ],
       usagesTitle: ["Pourquoi louer un", "conteneur maritime ?"],
-      usages: [U.chantier, U.commerce,
-        { title: "Stockage temporaire", icon: "i-container", paras: [
+      usages: [U.chantier, U.demenagement,
+        { title: "Stockage temporaire", icon: "i-clock", paras: [
           "Travaux dans vos locaux, surstock saisonnier, archives, déménagement : le conteneur loué complète vos espaces **le temps nécessaire**.",
           "Structure acier, portes sécurisées et étanchéité : vos biens restent protégés, sur votre site.",
         ] }],
@@ -332,27 +342,27 @@ module.exports = {
       ],
       usagesTitle: ["Les usages d’un", "conteneur frigorifique"],
       usages: [
-        { title: "Métiers de bouche", img: "familles/restauration.jpg", link: ["restauration-commerce.html", "Aménagements restauration & commerce"], paras: [
-          "Avec un ou plusieurs conteneurs, vous pouvez réaliser un **restaurant éphémère** durant la période estivale ou un restaurant définitif, à l’architecture originale.",
+        { title: "Métiers de bouche", icon: "i-cutlery", paras: [
+          "Restaurateurs, traiteurs, bouchers, glaciers ou grossistes : le conteneur frigorifique apporte une **capacité de stockage froid supplémentaire** pour vos matières premières et vos préparations, en froid positif comme négatif.",
           "Pour produire de la glace rapidement et en grande quantité, Cubner propose aussi une solution de production avec des conteneurs reefer, que nous appelons aussi **conteneurs de surgélation**.",
         ] },
-        { title: "Agriculture", img: "familles/agroalimentaire.jpg", link: ["agroalimentaire.html", "Aménagements agroalimentaire"], paras: [
+        { title: "Agriculture", icon: "i-wheat", paras: [
           "Nos clients agriculteurs recherchent un **lieu de stockage sain et sécurisé** pour y entreposer leur production. Le leader mondial des plants truffiers travaille par exemple avec Cubner pour y stocker ses précieuses productions.",
           "Apiculture, horticulture, arboriculture, pisciculture, pépinières : autant de métiers susceptibles d’utiliser nos solutions **IceCubner**. Et votre conteneur frigorifique reste une solution mobile, surtout en 10 pieds.",
         ] },
-        { title: "Métiers de la mer", icon: "i-water", paras: [
+        { title: "Métiers de la mer", icon: "i-ship", paras: [
           "Ostréiculteurs et marins-pêcheurs utilisent nos IceCubner pour stocker leurs denrées et leurs productions, avec des besoins en **froid positif et négatif**.",
           "Facile d’utilisation, robuste et modulable, cette **chambre froide mobile** se place à l’intérieur comme à l’extérieur.",
         ] },
-        { title: "Industrie et spécifiques", img: "familles/industrie.jpg", link: ["industrie-specifique.html", "Aménagements industrie & spécifique"], paras: [
+        { title: "Industrie et pharmacie", icon: "i-flask", paras: [
           "Nos clients stockent déjà des **composants électroniques**, des appareils spécifiques, des œuvres d’art, des peintures, des produits chimiques et technologiques dans nos conteneurs frigorifiques.",
           "De 12 m³ à 84 m³ de stockage, et plus si nécessaire, **de –60 °C jusqu’à +35 °C** selon les modèles.",
         ] },
-        { title: "Loisirs et événementiel", img: "familles/evenementiel.jpg", link: ["evenementiel.html", "Aménagements événementiel"], paras: [
+        { title: "Loisirs et événementiel", icon: "i-ticket", link: ["@location-frigorifique", "Louer une chambre froide mobile"], paras: [
           "Pour un événement ponctuel ou récurrent, une période de forte affluence, un salon ou un mariage, optez pour la **chambre froide mobile IceCubner**.",
           "Une solution **plug and play** robuste et facile d’utilisation, pour des besoins en température positive ou négative.",
         ] },
-        { title: "Armée", img: "familles/defense.jpg", link: ["defense-et-securite.html", "Aménagements défense & sécurité"], paras: [
+        { title: "Armée", icon: "i-shield", paras: [
           "Nos IceCubner sont déjà déployés dans les **zones extrêmes ou de conflits**, en Afrique et dans le cercle polaire, avec un groupe froid résistant aux climats hostiles et tropicaux.",
           "Équipée d’un groupe électrogène, la chambre froide devient totalement autonome et conserve munitions, missiles et équipements militaires à la **température optimale**.",
         ] },
@@ -406,11 +416,11 @@ module.exports = {
       ],
       usagesTitle: ["Pourquoi louer une", "chambre froide mobile ?"],
       usages: [
-        { title: "Événements et saisons", img: "familles/evenementiel.jpg", link: ["evenementiel.html", "Aménagements événementiel"], paras: [
+        { title: "Événements et saisons", icon: "i-ticket", paras: [
           "Salon, festival, mariage, période de forte affluence : la chambre froide mobile IceCubner s’installe pour la durée de l’**événement ponctuel ou récurrent**.",
         ] },
-        { title: "Métiers de bouche", img: "familles/restauration.jpg", link: ["restauration-commerce.html", "Aménagements restauration & commerce"], paras: [
-          "Restaurant éphémère pendant la saison estivale, traiteur, production de glace : un **complément de froid** sans investissement lourd.",
+        { title: "Métiers de bouche", icon: "i-cutlery", paras: [
+          "Saison estivale, traiteur, production de glace, hausse ponctuelle des commandes : un **complément de froid** sans investissement lourd.",
         ] },
         { title: "Relais de votre chambre froide", icon: "i-snow", paras: [
           "Travaux, rénovation ou panne de votre installation : le conteneur frigorifique loué **prend le relais** pour conserver vos produits à la bonne température.",
@@ -462,9 +472,9 @@ module.exports = {
           "Le conteneur open top possède une **grande ouverture sur sa toiture**, souvent sous forme de bâche amovible, qui facilite le chargement et le stockage d’équipements de grande longueur.",
           "Il convient aux projets industriels, au BTP ou à la logistique de pièces ne pouvant pas passer par les portes arrière standard.",
         ] },
-        { title: "Double porte (Double Door)", icon: "i-layers", paras: [
+        { title: "Double porte (Double Door)", icon: "i-locker", paras: [
           "Le conteneur double door se caractérise par une **ouverture complète à chaque extrémité**.",
-          "Il offre un **accès traversant**, qui simplifie la gestion des flux de marchandises et l’aménagement d’espaces de stockage.",
+          "Il offre un **accès traversant**, qui simplifie la gestion des flux de marchandises : chargement d’un côté, déchargement de l’autre.",
         ] },
         { title: "Flat Rack & ISOTANK", icon: "i-tank", paras: [
           "Le **flat rack**, à parois d’extrémité rabattables, permet le transport d’équipements encombrants dépassant les dimensions d’un conteneur dry.",
@@ -502,7 +512,7 @@ module.exports = {
       h1: ["Conteneurs", "d’occasion"],
       lead: "Des conteneurs contrôlés, prêts à l’emploi, pour un budget maîtrisé.",
       intro: [
-        "L’occasion permet de **sécuriser rapidement un stockage** ou de démarrer un projet d’aménagement sans attendre un neuf.",
+        "Le **conteneur maritime d’occasion** permet de **sécuriser rapidement un stockage**, de protéger du matériel sur un chantier ou de transporter des marchandises à moindre coût.",
         "Cubner propose des formats **10, 20 et 40 pieds**, avec livraison possible partout en France. Consultez nos [garanties occasions](https://www.cubner.com/garanties-cubner-occasions/) pour connaître le niveau de contrôle de chaque unité. Pour un conteneur neuf, découvrez la [gamme standards](@standards).",
       ],
       hero: { lineup: true },
@@ -514,10 +524,10 @@ module.exports = {
       ],
       guideTitle: ["Occasion ou", "premier voyage ?"],
       guide: [
-        ["Le conteneur d’occasion", "Il a déjà servi au transport maritime. Chaque unité est **inspectée avant expédition** ; les conditions de garantie applicables sont celles indiquées au devis et dans les CGV. C’est la solution la plus économique pour un stockage ou une base d’aménagement."],
+        ["Le conteneur d’occasion", "Il a déjà servi au transport maritime. Chaque unité est **inspectée avant expédition** ; les conditions de garantie applicables sont celles indiquées au devis et dans les CGV. C’est la solution la plus économique pour un stockage durable."],
         ["Le conteneur premier voyage", "Il n’a effectué qu’**une seule traversée** depuis sa fabrication. Les conteneurs dry premier voyage bénéficient d’une **garantie d’étanchéité à vie**, sous réserve des conditions générales de vente."],
         ["Mêmes dimensions", "Un 20 pieds d’occasion reprend les cotes d’un 20 pieds neuf : 6,06 m × 2,44 m × 2,59 m à l’extérieur pour 33,2 m³. Retrouvez toutes les dimensions sur nos pages [20 pieds](@20-pieds) et [40 pieds](@40-pieds)."],
-        ["Pour quel projet ?", "Stockage sur chantier, site temporaire, réserve de matériel : l’occasion est idéale. Pour un aménagement très visible (commerce, habitation), le premier voyage offre un meilleur état de surface."],
+        ["Pour quel projet ?", "Stockage sur chantier, site temporaire, réserve de matériel : l’occasion est idéale. Pour un conteneur installé en vue (devant un commerce, chez un particulier), le premier voyage offre un meilleur état de surface."],
       ],
       usagesTitle: ["Pourquoi choisir un", "conteneur d’occasion ?"],
       usages: [
@@ -525,13 +535,13 @@ module.exports = {
           "Chaque conteneur d’occasion est présenté avec **transparence** sur son historique et son état général.",
           "Consultez la page Garanties Cubner occasions pour comprendre ce que nous contrôlons avant livraison et les engagements associés à votre achat.",
         ] },
-        { title: "Stockage & chantier", img: "familles/chantier.jpg", link: ["chantier-btp.html", "Aménagements chantier & BTP"], paras: [
+        { title: "Stockage & chantier", icon: "i-barrier", paras: [
           "L’occasion est idéale pour **sécuriser rapidement du matériel** sur un chantier ou un site temporaire, à coût maîtrisé.",
           "Structure acier, étanchéité et portes sécurisées : vous obtenez un espace de rangement fiable sans attendre la fabrication d’un neuf.",
         ] },
-        { title: "Base d’aménagement", img: "amenagement-containers.jpg", link: ["amenagement-containers.html", "Découvrir nos aménagements"], paras: [
-          "Un conteneur d’occasion peut servir de **base solide** pour un bureau de chantier, un espace de vente temporaire ou un projet Calcub.",
-          "Découvrez nos aménagements pour transformer votre conteneur en **espace de travail ou de vie**.",
+        { title: "Agriculture & entreprises", icon: "i-wheat", paras: [
+          "Matériel agricole, récoltes, surstock, archives ou pièces détachées : le **conteneur d’occasion** offre un volume de stockage étanche au **meilleur rapport qualité-prix**.",
+          "Mêmes dimensions qu’un neuf : **11 palettes Europe** en 20 pieds, **25** en 40 pieds.",
         ] },
       ],
       faq: [
@@ -544,8 +554,8 @@ module.exports = {
         ["Quels formats de conteneurs d’occasion proposez-vous ?", [
           "Cubner propose des conteneurs d’occasion en 10, 20 et 40 pieds, avec livraison possible partout en France.",
         ]],
-        ["Peut-on aménager un conteneur d’occasion ?", [
-          "Oui : un conteneur d’occasion fait une base solide pour un bureau de chantier, un local de stockage ou un espace de vente temporaire. Découvrez nos [aménagements de conteneurs](amenagement-containers.html).",
+        ["Quels sont les usages d’un conteneur maritime d’occasion ?", [
+          "Le conteneur d’occasion sert principalement au stockage : matériel de chantier, outillage, récoltes et matériel agricole, surstock d’entreprise, archives ou garde-meubles. Il reste aussi apte au transport de marchandises lorsque son certificat CSC est valide.",
         ]],
         FAQ_LIVRAISON,
       ],
@@ -578,15 +588,15 @@ module.exports = {
       ],
       usagesTitle: ["Les usages d’un", "conteneur de stockage"],
       usages: [
-        { title: "Particuliers & jardin", img: "familles/habitations.jpg", link: ["habitations-logements-jardin.html", "Aménagements habitations & jardin"], paras: [
+        { title: "Particuliers & jardin", icon: "i-house", paras: [
           "Rangement outils, mobilier, vélo ou matériel de loisirs : le conteneur de stockage s’installe sur une **faible emprise au sol**.",
           "Structure acier **étanche**, porte sécurisée : un espace discret et durable à proximité de la maison.",
         ] },
-        { title: "Artisans & chantiers", img: "familles/chantier.jpg", link: ["chantier-btp.html", "Aménagements chantier & BTP"], paras: [
+        { title: "Artisans & chantiers", icon: "i-tools", paras: [
           "Sur un chantier, le conteneur protège l’**outillage et les matériaux de valeur** contre le vol et les intempéries.",
           "Formats compacts de 5 à 15 pieds : faciles à positionner, puis à déplacer vers le prochain site.",
         ] },
-        { title: "Entreprises & commerces", img: "cartes/container-boutique-magasin.jpg", link: ["restauration-commerce.html", "Aménagements restauration & commerce"], paras: [
+        { title: "Entreprises & commerces", icon: "i-shelves", paras: [
           "Surstock, archives, pièces détachées ou équipements saisonniers : le conteneur de stockage **complète vos locaux** sans travaux lourds.",
           "Une solution modulaire, évolutive et sécurisée en zone urbaine ou industrielle.",
         ] },
@@ -634,11 +644,11 @@ module.exports = {
       ],
       usagesTitle: ["Les usages d’un", "conteneur off-shore"],
       usages: [
-        { title: "Plateformes & énergie offshore", img: "familles/energie.jpg", link: ["energie-environnement.html", "Aménagements énergie & environnement"], paras: [
+        { title: "Plateformes & énergie offshore", icon: "i-ship", paras: [
           "Stockage d’équipements, maintenance et logistique mer : le conteneur off-shore accompagne les opérations en **environnement marin**.",
           "Formats 10 et 20 pieds pour s’adapter aux contraintes de manutention et d’emprise sur site.",
         ] },
-        { title: "Industrie & défense", img: "familles/defense.jpg", link: ["defense-et-securite.html", "Aménagements défense & sécurité"], paras: [
+        { title: "Industrie & défense", icon: "i-shield", paras: [
           "Sites sensibles, zones isolées ou industries lourdes : une **structure acier robuste**, pensée pour durer.",
           "Cubner vous conseille sur le modèle adapté à votre déploiement et à vos contraintes logistiques.",
         ] },

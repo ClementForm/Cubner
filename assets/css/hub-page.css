@@ -8,7 +8,7 @@
 .hub-hero {
   position: relative; isolation: isolate; overflow: hidden;
   display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
-  min-height: 540px; border-radius: 18px; background: var(--calcub-navy); color: #fff;
+  min-height: 540px; border-radius: 18px; background: #00518c; color: #fff;
   /* même débord que le hero des pages produit */
   width: min(1360px, calc(100vw - 32px));
   margin-left: calc(50% - min(680px, 50vw - 16px));
